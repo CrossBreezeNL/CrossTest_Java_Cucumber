@@ -1,0 +1,2 @@
+set TAGS=%1
+mvn exec:java -B -Dexec.classpathScope=test -Dexec.mainClass=io.cucumber.core.cli.Main -Dexec.args="./src/test/resources --glue com.xbreeze.xtest.steps --tags '(%TAGS%)' --plugin 'pretty' --plugin 'json:target/unit-test-results.json' "

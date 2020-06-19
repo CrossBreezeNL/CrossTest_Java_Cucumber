@@ -1,0 +1,23 @@
+<ServerConfigs>
+	<DatabaseServerConfigs>
+		<DatabaseServerConfig 
+				name="test" 
+				JDBCUrl="jdbc:sqlserver://localhost:1436;databaseName=TestDB"				
+				 username="tester" 
+				password ="test123" />
+	</DatabaseServerConfigs>
+	<ProcessServerConfigs>
+		<ProcessServerConfig 
+				name="demo" 
+				executionClass="com.xbreeze.xtest.process.informaticapowercenter.execution.InformaticaPowerCenterExecutor"
+				serverUrl="http://10.1.0.5:7333/wsh/services/BatchServices/DataIntegration">
+				<Properties>
+					<Property name="UserName" value="Infademo" />
+					<Property name="Password" value="ZBvi9LD8Yk9T63QEgHxK" />
+					<Property name="Domain" value="InfaDemo"/>
+					<Property name="Repository" value="InfaDemo-RS"/>
+					<Property name="IntegrationService" value = "InfaDemo_IS"/>
+				</Properties>
+		</ProcessServerConfig>
+	</ProcessServerConfigs>
+</ServerConfigs>

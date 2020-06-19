@@ -1,0 +1,166 @@
+<!--
+    Copyright (c) 2019 CrossBreeze
+   
+     This file is part of CrossTest.
+   
+        CrossTest is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+   
+        CrossTest is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+   
+        You should have received a copy of the GNU General Public License
+        along with CrossTest.  If not, see <https://www.gnu.org/licenses/>.
+        
+    Contributors:
+        Willem Otten - CrossBreeze
+        Harmen Wessels - CrossBreeze
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.x-breeze.test</groupId>
+	<artifactId>CucumberDataComparison</artifactId>
+	<properties>
+  		<crosstest.version>1.0.3</crosstest.version>  		
+  	</properties>
+  	<version>${crosstest.version}</version>	
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>CucumberDataComparison is part of CrossTest, a test library for data solutions, implementing Gherkin/Cucumber.</description>
+	<url>http://x-test.nl</url>	
+	<licenses>
+	  <license>
+	    <name>The GNU General Public License, Version 3</name>
+	    <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+	  </license>
+	</licenses>
+	<developers>
+	    <developer>
+	      <name>Willem Otten</name>
+	      <email>Willem@x-breeze.com</email>
+	      <organization>CrossBreeze</organization>
+	      <organizationUrl>http://x-breeze.com</organizationUrl>
+	    </developer>
+	    <developer>
+	      <name>Harmen Wessels</name>
+	      <email>Harmen@x-breeze.com</email>
+	      <organization>CrossBreeze</organization>
+	      <organizationUrl>http://x-breeze.com</organizationUrl>
+	    </developer>
+	     <developer>
+	      <name>Jacob Siemaszko</name>
+	      <email>Jacob@x-breeze.com</email>
+	      <organization>CrossBreeze</organization>
+	      <organizationUrl>http://x-breeze.com</organizationUrl>
+	    </developer>
+  	</developers>
+  	<scm>
+	  <connection>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</connection>
+	  <developerConnection>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</developerConnection>
+	  <url>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</url>
+	</scm>
+	<repositories>
+		<repository>
+			<id>CrossTest</id>
+			<url>https://pkgs.dev.azure.com/x-breeze/CrossTest_Public/_packaging/CrossTest/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+	  <snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	  <repository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	  </repository>
+	</distributionManagement>
+<profiles>
+		<profile>
+			<id>release</id>
+				<build>
+					<plugins>
+						<plugin>
+						<!--  build jar file with sources (Sonatype requirement) -->
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-source-plugin</artifactId>
+						  <executions>
+						    <execution>
+						      <id>attach-sources</id>
+						      <goals>
+						        <goal>jar</goal>
+						      </goals>
+						    </execution>
+						  </executions>
+						</plugin>
+					<plugin>
+						<!--  Build jar file with javadocs (Sonatype requirement) -->
+					  <groupId>org.apache.maven.plugins</groupId>
+					  <artifactId>maven-javadoc-plugin</artifactId>
+					  <configuration>
+				          <show>protected</show>
+				          <failOnError>false</failOnError>
+				          <source>1.8</source>
+			          </configuration>
+					  <executions>
+					    <execution>
+					      <id>attach-javadocs</id>
+					      <goals>
+					        <goal>jar</goal>
+					      </goals>
+					    </execution>
+					  </executions>
+					</plugin>		 
+				    <plugin>
+				    	<!--  Sign artifacts with gpg (Sonatype requirement) -->
+				      <groupId>org.apache.maven.plugins</groupId>
+				      <artifactId>maven-gpg-plugin</artifactId>
+				      <version>1.5</version>
+				      <executions>
+				        <execution>
+				          <id>sign-artifacts</id>
+				          <phase>verify</phase>
+				          <goals>
+				            <goal>sign</goal>
+				          </goals>
+				        </execution>
+				      </executions>
+				    </plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<build>
+		<sourceDirectory>src\main\java</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+		</plugins>	
+	</build>
+
+</project>

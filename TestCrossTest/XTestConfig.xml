@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XTestConfig xmlns:xi="http://www.w3.org/2001/XInclude" debug="true">
+	<CompositeObjects>
+		<CompositeObject name="Customer">
+			<ContextTables>
+				<ContextTable tableName="CUST_SAT" databaseConfigName="source"/>						
+			</ContextTables>
+			<KeyTables>
+				<KeyTable tableName="CUST_HUB" databaseConfigName="source"/>
+			</KeyTables>
+		</CompositeObject>
+		 <CompositeObject name="savingsAccount">
+         <ContextTables>
+            <ContextTable tableName="AA_RH_SVG_AC" databaseConfigName="dwfr8"/>                  
+         </ContextTables>
+         <KeyTables>
+            <KeyTable tableName="AA_RHS_SVG_AC" databaseConfigName="dwfr8"/>
+         </KeyTables>
+      </CompositeObject>
+   <CompositeObject name="insurancePolicy">
+      <ContextTables>
+         <ContextTable tableName="AB_RHS_INS_POLCY" databaseConfigName="dwfr37"/>
+         <ContextTable tableName="AB_RHS_INS_POLCY_BK" databaseConfigName="dwfr37"/>
+         <ContextTable tableName="AB_RHS_INS_POLCY_AMT_AND_PCT" databaseConfigName="dwfr37"/>
+         <ContextTable tableName="AB_RHS_INS_POLCY_CODE_AND_FS" databaseConfigName="dwfr37"/>
+      </ContextTables>
+      <KeyTables>
+         <KeyTable tableName="AB_RH_INS_POLCY" databaseConfigName="dwfr37"/>
+      </KeyTables>
+   </CompositeObject>
+   <CompositeObject name="insuranceCCSPolicy">
+
+      <ContextTables>
+         <ContextTable tableName="AB_RHS_INS_POLCY_BK" databaseConfigName="dwfr37"/>
+         <ContextTable tableName="AB_RHS_CCS_INS_POLCY" databaseConfigName="dwfr37"/>
+      </ContextTables>
+      <KeyTables>
+         <KeyTable tableName="AB_RH_INS_POLCY" databaseConfigName="dwfr37"/>
+      </KeyTables>
+   </CompositeObject>
+	</CompositeObjects>
+	<DatabaseConfigs>
+		<DatabaseConfig 
+			name="source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="demo"
+			quoteObjectNames="true"
+			>			
+			</DatabaseConfig>
+			<DatabaseConfig 
+			name="SQLTestIRCM" 
+			databaseServerConfigName="test"			
+			schema="Zipper"
+			commandTimeOut ="4"
+			>			
+			</DatabaseConfig>
+			<DatabaseConfig 
+			name="dwfr37" 
+			databaseServerConfigName="test"			
+			schema="source"
+			>			
+			</DatabaseConfig>
+		<DatabaseConfig 
+			name="target" 
+			databaseServerConfigName="test"		
+			schema="target" />		
+	</DatabaseConfigs>
+	<DatabaseServerConfigs>		
+		<!--  Get the server configuration from a separate config file -->
+		<xi:include href="XTestServerConfig.xml" xpointer="//DatabaseServerConfig"/>		
+	</DatabaseServerConfigs>
+	<ObjectTemplates>
+		<ObjectTemplate name="datavault">
+			<Attributes>
+				<Attribute name="LOAD_DTS" value="2019-10-29 0:29:41.995992" />
+			</Attributes>
+		</ObjectTemplate>
+		<ObjectTemplate name="demo">
+			<Attributes>				
+				<Attribute name="IsActive" value="1" />
+			</Attributes>
+		</ObjectTemplate>
+	</ObjectTemplates>
+	<ProcessConfigs>
+		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_m_"/>
+	</ProcessConfigs>
+	<ProcessServerConfigs>
+		<!--  Get the server configuration from a separate config file -->
+		<xi:include href="XTestServerConfig.xml" xpointer="//ProcessServerConfig"/>
+	</ProcessServerConfigs>
+</XTestConfig>
