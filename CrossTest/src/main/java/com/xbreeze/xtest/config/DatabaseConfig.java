@@ -33,7 +33,7 @@ public class DatabaseConfig {
 	private DatabaseServerConfig _databaseServerConfig;
 	private String _templateName = "";
 	private ObjectTemplateConfig _template;
-	private boolean _quoteObjectNames;
+	private boolean _quoteObjectNames;	
 	private Integer _commandTimeOut = 0;
 	
 	public DatabaseConfig(String name, String JDBCUrl, String username, String password, String schema) {

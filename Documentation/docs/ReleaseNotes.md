@@ -20,6 +20,14 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.4 <sup>02-07-2020</sup>
+> New release
+> !!! success "Enhanced features"
+>     * [ ] Database server configuration
+>         - [X] set SQL command template on server connection to set current database, this since not all JDBC drivers and RDBMS platforms implement this the same
+>     * [ ] Database steps
+>         - [X] Trim char fields to be able to compare result without trailing spaces
+>         - [X] Output SQL exception on data insert e.g. PK violations
 
 - [ ] 1.0.3 <sup>17-06-2020</sup>
 > New release

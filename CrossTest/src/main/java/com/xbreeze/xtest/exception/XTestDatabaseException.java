@@ -22,6 +22,8 @@
  *******************************************************************************/
 package com.xbreeze.xtest.exception;
 
+import java.sql.SQLException;
+
 public class XTestDatabaseException extends XTestException {
 
 	public XTestDatabaseException(String message) {
@@ -32,5 +34,17 @@ public class XTestDatabaseException extends XTestException {
 	 * 
 	 */
 	private static final long serialVersionUID = -6149738804056104288L;
+	
+	public static XTestDatabaseException createXTestDatabaseException(String message, SQLException exc) {
+		if (exc.getMessage() != null) {
+			message = message.concat(": ").concat(exc.getMessage());
+		}
+		if (exc.getNextException() != null) {
+			if (exc.getNextException().getMessage() != null) {
+				message = message.concat(": ").concat(exc.getNextException().getMessage());
+			}
+		}
+		return new XTestDatabaseException(message);		
+	}
 
 }

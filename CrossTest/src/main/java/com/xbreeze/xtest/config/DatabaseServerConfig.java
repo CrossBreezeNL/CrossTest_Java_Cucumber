@@ -30,13 +30,15 @@ public class DatabaseServerConfig {
 	private String _JDBCDriver;
 	private String _username;
 	private String _password;
+	private String _setSchemaTemplate;
 	
-	public DatabaseServerConfig(String name, String JDBCUrl, String userName, String password, String JDBCDriver) {
+	public DatabaseServerConfig(String name, String JDBCUrl, String userName, String password, String JDBCDriver, String setSchemaTemplate) {
 		this._name = name;
 		this._JDBCUrl = JDBCUrl;
 		this._username = userName;
 		this._password = password;				
 		this._JDBCDriver = JDBCDriver;
+		this._setSchemaTemplate = setSchemaTemplate;
 	}
 	
 	public DatabaseServerConfig() {
@@ -105,5 +107,20 @@ public class DatabaseServerConfig {
 	 */
 	public void setPassword(String password) {
 		this._password = password;
-	}	
+	}
+	
+	/**
+	 * @return the _setSchemaTemplate
+	 */
+	@XmlAttribute(name="setSchemaTemplate")
+	public String getSetSchemaTemplate() {
+		return _setSchemaTemplate;
+	}
+	/**
+	 * @param setSchemaTemplate the _setSchemaTemplate to set
+	 */
+	public void setSetSchemaTemplate(String setSchemaTemplate) {
+		this._setSchemaTemplate = setSchemaTemplate;
+	}
+	
 }

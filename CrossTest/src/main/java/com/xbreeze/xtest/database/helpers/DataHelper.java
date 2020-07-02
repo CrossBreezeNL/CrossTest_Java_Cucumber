@@ -29,6 +29,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -168,7 +169,7 @@ public class DataHelper {
 				if(exc.getNextException() != null) {
 					logger.info(String.format("Next exception: %s", exc.getNextException().toString()));
 				}				
-				throw new XTestDatabaseException(exc.getMessage());
+				throw XTestDatabaseException.createXTestDatabaseException("Error inserting data", exc);
 			}
 		}
 	}
@@ -433,11 +434,19 @@ public class DataHelper {
 			}
 			
 			else if (
-					(dataType == java.sql.Types.VARCHAR) || (dataType == java.sql.Types.CHAR) ||
-					(dataType == java.sql.Types.NVARCHAR) || (dataType == java.sql.Types.NCHAR) ||
-					(dataType == java.sql.Types.LONGNVARCHAR) || (dataType == java.sql.Types.LONGVARCHAR) 
+					(dataType == java.sql.Types.VARCHAR) || 
+					(dataType == java.sql.Types.NVARCHAR) ||
+					(dataType == java.sql.Types.LONGNVARCHAR) || 
+					(dataType == java.sql.Types.LONGVARCHAR) 
 				) {
 				return strVal;
+			}
+			//In case of char datatype, trim result obtained from database
+			else if (
+					(dataType == java.sql.Types.CHAR) ||
+					(dataType == java.sql.Types.NCHAR)  
+				) {
+				return strVal.trim();
 			}
 			
 			else if (dataType == java.sql.Types.BIGINT) {
@@ -491,7 +500,7 @@ public class DataHelper {
 	} catch (SQLException exc) {
 		//TODO handle exception
 		//exc.printStackTrace();
-		throw new XTestDatabaseException(exc.getMessage());
+		throw  XTestDatabaseException.createXTestDatabaseException("Exception while setting field", exc);
 	}
 	}
 	
@@ -599,17 +608,48 @@ public class DataHelper {
 			throw new XTestDatabaseException(e.getMessage());
 		}
 	    
-	    //If a schema was given on the database config, try to set it as a default catalog
+	    //If a schema was given on the database config, try to set it as a default catalog or schema
 	    //behaviour is DB platform specific
 	    if (dbConfig.getSchema().trim().length() > 0) {
-		    try {
-		    	//Set the catalog based on the schema
-		    	logger.info(String.format("Setting default catalog to %s", dbConfig.getSchema()));
-				conn.setCatalog(dbConfig.getSchema());				
-		    }
-		    catch (SQLException exc){
-		    	logger.info(String.format("Could not set catalog based on schema %s: %s", dbConfig.getSchema(), exc.getMessage()));
-		    }
+	    	//If a custom statement is specified for set schema, subsitute database name in template and execute statement
+	    	if (dbConfig.getDatabaseServerConfig().getSetSchemaTemplate() != null) {	    		
+	    		String stmtText = dbConfig.getDatabaseServerConfig().getSetSchemaTemplate().replace("{SCHEMA}",dbConfig.getSchema());
+	    		logger.info(String.format("Setting default catalog using setSchema template, statement is %s", stmtText));
+	    		try {
+	    		  Statement stmt = conn.createStatement() ;
+	    		  stmt.executeUpdate (stmtText);
+	    		  stmt.close(); 
+	    		}
+	    		catch (SQLException exc) {
+	    			throw new XTestDatabaseException(String.format("Could not set default catalog using setSchema template: %s", exc.getMessage()));	    			
+	    		}
+	    	}
+	    	//If no custom statement is specified, try to set db using setSchema and setCatalog
+	    	else {
+		    	boolean schemaSet = false;
+		    	boolean dbSet = false; 
+			    try {
+			    	//Set the catalog based on the schema
+			    	logger.info(String.format("Setting default catalog to %s", dbConfig.getSchema()));
+					conn.setCatalog(dbConfig.getSchema());
+					dbSet = true;
+			    }
+			    catch (SQLException | AbstractMethodError exc){
+			    	logger.info(String.format("Could not set catalog based on schema %s: %s", dbConfig.getSchema(), exc.getMessage()));		    	
+			    }
+			    
+			    try {
+		    		logger.info(String.format("Setting default schema to: %s", dbConfig.getSchema()));
+		    		conn.setSchema(dbConfig.getSchema());
+		    		schemaSet = true;
+		    	}
+		    	catch (SQLException | AbstractMethodError excs) {
+		    		logger.info(String.format("Could not set schema to %s: %s", dbConfig.getSchema(), excs.getMessage()));
+		    		if (dbSet == false && schemaSet == false) {
+		    			throw new XTestDatabaseException(String.format("Could not set default catalog or schema to %s", dbConfig.getSchema()));
+		    		}
+		    	}
+	    	}
 	    }
 	    logger.info(String.format("Connected to database %s", dbConfig.getName()));
 	    return conn;

@@ -32,11 +32,13 @@ The configuration can be [splitted in multiple files](./config_include.md)
 	</DatabaseConfigs>
 	<DatabaseServerConfigs>
         <!-- The JDBC driver used should be available on the class path and is loaded at runtime -->
+		<!-- With the setSchemaTemplate attribute a template can be set for a SQL statement used to set the current schema or database. {SCHEMA} will be replaced by the schema attribute from the database config -->
 		<DatabaseServerConfig 
 			name="test" 
 			JDBCUrl="jdbc:sqlserver://localhost:1436;databaseName=TestDB" 
 			username="USERNAME" 
-			password ="PASSWORD" />  		
+			password ="PASSWORD"
+			setSchemaTemplate="DATABASE {SCHEMA};" />  		
 	</DatabaseServerConfigs>
 	<ObjectTemplates>
         <!-- Object template can be used to add prefix, suffix and default attributes to a database config -->		
