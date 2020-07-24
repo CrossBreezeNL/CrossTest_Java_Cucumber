@@ -2,9 +2,9 @@
 	<DatabaseServerConfigs>
 		<DatabaseServerConfig 
 				name="test" 
-				JDBCUrl="jdbc:sqlserver://localhost:1436;databaseName=TestDB"				
+				JDBCUrl="jdbc:sqlserver://localhost:1433;databaseName=TestDB"				
 				 username="tester" 
-				password ="test123" />
+				password ="P@$$w0rd" />
 	</DatabaseServerConfigs>
 	<ProcessServerConfigs>
 		<ProcessServerConfig 

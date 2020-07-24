@@ -6,8 +6,9 @@
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
-	<crosstest.version>1.0.4</crosstest.version>  		
-  	</properties>  	
+	<crosstest.version>1.0.4</crosstest.version>
+	<cucumber.version>4.8.1</cucumber.version>
+  </properties>
   <dependencies>
   		<dependency>
 			<groupId>com.x-breeze.test</groupId>
@@ -23,14 +24,13 @@
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java8</artifactId>
-			<version>4.7.2</version>
-			<scope>test</scope>
+			<version>${cucumber.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
 		<dependency>
 		    <groupId>io.cucumber</groupId>
 		    <artifactId>cucumber-junit</artifactId>
-		    <version>4.7.2</version>		   
+		    <version>${cucumber.version}</version> 
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<dependency>
@@ -43,11 +43,14 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13</version>
-			<scope>test</scope>
 		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
-		
+
+		<!-- We use the cucumber reporting plugin to generate a nice report. We use version 3, since 4 is not compatible with cucumber 4.* -->
+		<dependency>
+			<groupId>de.monochromata.cucumber</groupId>
+			<artifactId>reporting-plugin</artifactId>
+			<version>3.0.18</version>
+		</dependency>
 
   </dependencies>
 

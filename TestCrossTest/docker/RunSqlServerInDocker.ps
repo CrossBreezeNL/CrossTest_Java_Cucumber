@@ -1,2 +1,0 @@
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Cr0sZ!Br33Ze" -e 'MSSQL_PID=Developer' -p 1433:1433 --name=MsSql2019 -d mcr.microsoft.com/mssql/server:2019-latest
-docker exec -it MsSql2019 /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Cr0sZ!Br33Ze
