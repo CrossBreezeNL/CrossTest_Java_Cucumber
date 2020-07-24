@@ -2,93 +2,27 @@
 
 Feature: Write to and retrieve from database tables
 
-  Scenario Outline: Insert data in table and check result <scenario>
+  @Positive
+  Scenario: Insert data in table
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:
       | CUST_ID | CREATE_DD  |
       | 1234    | 2019-11-01 |
-      | 431     |            |
     And I retrieve the contents of the source CUST_HUB table
     Then I expect the following result:
-      | CUST_ID          | CREATE_DD  |
-      | 1234             | 2019-11-01 |
-      | <expectedOutput> |            |
-
-    @Positive
-    Examples:
-      | scenario   | expectedOutput |
-      | No error   | 431            |
-
-    @Negative
-    Examples:
-      | scenario   | expectedOutput |
-      | With error | 432            |
+      | CUST_ID | CREATE_DD  |
+      | 1234    | 2019-11-01 |
 
   @Positive
-  Scenario: Insert only null
+  Scenario: Insert and retrieve a null
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:
       | CUST_ID | CREATE_DD |
-      | 1234    |           |
+      | 431     |           |
     And I retrieve the contents of the source CUST_HUB table
     Then I expect the following result:
       | CUST_ID | CREATE_DD |
-      | 1234    |           |
-
-  @Positive
-  Scenario: Apply date and null
-    Given the source table CUST_HUB is empty
-    When I insert the following data in source table CUST_HUB:
-      | CUST_ID | CREATE_DD  |
-      | 1234    | 2019-11-01 |
-      | 431     |            |
-    And I retrieve the contents of the source CUST_HUB table
-    Then I expect the following result:
-      | CUST_ID | CREATE_DD  |
-      | 1234    | 2019-11-01 |
-      | 431     |            |
-
-  @Positive
-  Scenario: Ignore unspecified column in output
-    Given the source table CUST_HUB is empty
-    When I insert the following data in source table CUST_HUB:
-      | CUST_ID | CREATE_DD  |
-      | 1234    | 2019-11-01 |
-    And I retrieve the contents of the source CUST_HUB table
-    Then I expect the following result:
-      | CUST_ID |
-      | 1234    |
-
-  @Negative
-  Scenario: Fail on invalid column
-    Given the source table CUST_HUB is empty
-    When I insert the following data in source table CUST_HUB:
-      | CUST_ID | CREATE_DD  |
-      | 1234    | 2019-11-01 |
-    And I execute the following query on source:
-      """
-      SELECT * FROM Source.CUST_HUB
-      """
-    Then I expect the following result:
-      | CUST_ID | CREATE_D   |
-      | 1234    | 2019-11-01 |
-
-  @Positive
-  Scenario: get duplicate records
-    Given the source table cUST_HUB is empty
-    When I insert the following data in source table CUST_HUB:
-      | CUST_ID | CREATE_DD  |
-      | 1234    | 2019-11-01 |
-      | 1234    | 2019-11-01 |
-      | 1234    | 2019-11-01 |
-      | 1235    | 2019-11-01 |
-    And I retrieve the contents of the source CUST_HUB table
-    Then I expect the following result:
-      | CUST_ID | CREATE_DD  |
-      | 1234    | 2019-11-01 |
-      | 1234    | 2019-11-01 |
-      | 1234    | 2019-11-01 |
-      | 1235    | 2019-11-01 |
+      | 431     |           |
 
   @Positive
   # Note that for this scenario to succeed, when editing in Eclipse the Eclipse file encoding needs to be UTF-8
@@ -120,3 +54,4 @@ Feature: Write to and retrieve from database tables
       | Boolean  | 1                   |
       | Varchar  | Some text           |
       | Char     | Not25Chars          |
+      | Date     | 2019-11-01          |

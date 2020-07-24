@@ -246,7 +246,8 @@ public class ResultContext {
 				for (String s: list.get(0).keySet()) {
 					columnNames.addLast(s.toLowerCase());
 				}				
-				resultSetDataIsEqual(expectedRowSet, columnNames);			}
+				resultSetDataIsEqual(expectedRowSet, columnNames);
+			}
 					
 		} catch (SQLException e) {
 			throw new XTestException(e.getMessage());
@@ -288,88 +289,86 @@ public class ResultContext {
 			throw new XTestDatabaseException(e.getMessage());
 		}
 	}
+
+	private LinkedList<LinkedList<String>> getRecordsToReport(String baseSetName, HashMap<String, RecordInformation> baseHashes, RowSet baseRows, String compareWithSetName, HashMap<String, RecordInformation> compareWithHashes, boolean doCompareOccurences, StringBuilder findingsSB)
+			throws XTestException {
+		LinkedList<LinkedList<String>> recordsToReport = new LinkedList<>();
+		for (String baseHash:baseHashes.keySet()) {
+			// If an base hash can't be found in the compare-with-hashset, we have one or multiple base-set-rows which aren't found in the compare-with-set.
+			if (!compareWithHashes.containsKey(baseHash)) {
+				int currentRowNumber = 0;
+				int reportedRowsCount = 0;
+				LinkedList<Integer> recordNumbersToReport = baseHashes.get(baseHash).getRecords();
+				// Loop through the expected records which match the current hash, and report the records.
+				try {
+					// Perform the first in an if because we shouldn't call .next when the rowset is empty.
+					baseRows.beforeFirst();
+					while (baseRows.next()) {
+						// Increase the row counter.
+						currentRowNumber++;
+						// If the current row number is in the list of records to report, report it.
+						if (recordNumbersToReport.contains(currentRowNumber)) {
+							findingsSB.append(String.format("%s record %d not found in %s result ", baseSetName, currentRowNumber, compareWithSetName)).append("\n");
+							logger.info(String.format("%s record %d not found in %s result ", baseSetName, currentRowNumber, compareWithSetName));
+							recordsToReport.addLast(this._dataHelper.rowSetRecordToList(baseRows));
+							reportedRowsCount++;
+
+							// Break out of the while loop if we have reported all rows.
+							if (reportedRowsCount == recordNumbersToReport.size())
+								break;
+						}
+					}
+
+					// If we haven't reported the rows whe should have, throw an exception.
+					if (reportedRowsCount != recordNumbersToReport.size()) {
+						logger.severe("We haven't reported all records which can't be found!");
+					}
+				}
+				catch(SQLException exc) {
+					throw new XTestException(String.format("Error getting records from %s results: %s", baseSetName, exc.getMessage()));
+				}
+			}
+			// If an expected hash can be found in the actual set, but the number of occurrences doesn't match, report it.
+			else if (doCompareOccurences && baseHashes.get(baseHash).getOccurences() != compareWithHashes.get(baseHash).getOccurences()) {
+				int rowToFind = baseHashes.get(baseHash).getRecords().getFirst();
+				findingsSB.append(String.format("%s record %d has a different number of duplicate rows in the %s and %s result (%d rows vs %d rows).", baseSetName, rowToFind, baseSetName, compareWithSetName, baseHashes.get(baseHash).getOccurences(), compareWithHashes.get(baseHash).getOccurences())).append("\n");
+				logger.info(String.format("%s record %d has a different number of duplicate rows in the %s and %s result (%d rows vs %d rows).", baseSetName, rowToFind, baseSetName, compareWithSetName, baseHashes.get(baseHash).getOccurences(), compareWithHashes.get(baseHash).getOccurences()));
+			}
+		}
+		//If records were found, add header
+		if (recordsToReport.size() > 0) {
+			recordsToReport.addFirst(this._dataHelper.rowSetHeader(baseRows));
+		}
+		else {
+			recordsToReport = null;
+		}
+		return recordsToReport;
+	}
 	
 	private void resultSetDataIsEqual(RowSet expectedResult, LinkedList<String> fieldsToCheck) throws XTestException, CucumberDataComparisonException {
 		
-		HashMap<String, RecordInformation> actualHashes = this._dataHelper.getHashSet(_result, fieldsToCheck);
+		HashMap<String, RecordInformation> actualHashes = this._dataHelper.getHashSet(this._result, fieldsToCheck);
 		HashMap<String, RecordInformation> expectedHashes = this._dataHelper.getHashSet(expectedResult, fieldsToCheck);
-		LinkedList<LinkedList<String>> expectedNotFound = new LinkedList<>();
-		LinkedList<LinkedList<String>> foundNotExpected = new LinkedList<>();
 		
-		String findings = "";
-		//Both hashsets should have the same nr of records
+		StringBuilder findingsSB = new StringBuilder();
+		// Both hashsets should have the same nr of records
 		if (actualHashes.size() != expectedHashes.size()) {
-			findings.concat(String.format("Expected %d unique records but found %d unique records ", expectedHashes.size(), actualHashes.size()));
+			findingsSB.append(String.format("Expected %d unique records but found %d unique records ", expectedHashes.size(), actualHashes.size())).append("\n");
+			logger.info(String.format("Expected %d unique records but found %d unique records ", expectedHashes.size(), actualHashes.size()));
 		}
 		
 		//Check if all records expected are found
 		//Add rows not found to the expectedNotfound table
-		try {
-			for (String expectedHash:expectedHashes.keySet()) {
-				if (!actualHashes.containsKey(expectedHash)) {
-					int currentRow = 1;
-					int rowToFind = expectedHashes.get(expectedHash).getRecords().getFirst();
-					findings = findings.concat(String.format("Expected record %d not found in actual result ", rowToFind));					
-					if (expectedResult.first()) {
-						while (currentRow <= rowToFind) {
-							if (currentRow==rowToFind) {
-								expectedNotFound.addLast(this._dataHelper.rowSetRecordToList(expectedResult));
-							}							
-							expectedResult.next();
-							currentRow++;
-						}
-					}					
-				}
-				else if (expectedHashes.get(expectedHash).getOccurences() != actualHashes.get(expectedHash).getOccurences()) {
-					int rowToFind = expectedHashes.get(expectedHash).getRecords().getFirst();
-					findings = findings.concat(String.format("Expected record %d has a different number of duplicate rows in the expected and actual result (%d rows vs %d rows).", rowToFind, expectedHashes.get(expectedHash).getOccurences(), actualHashes.get(expectedHash).getOccurences()));					
-				}
-			}
-			//If records were found, add header
-			if (expectedNotFound.size() > 0) {
-				expectedNotFound.addFirst(this._dataHelper.rowSetHeader(expectedResult));
-			}
-			else {
-				expectedNotFound = null;
-			}
-		}
-		catch(SQLException exc) {
-			throw new XTestDatabaseException(String.format("Error getting records from expected results: %s", exc.getMessage()));
-		}
+		logger.info("Comparing expected against actual");
+		LinkedList<LinkedList<String>> expectedNotFound =  getRecordsToReport("expected", expectedHashes, expectedResult, "actual", actualHashes, true, findingsSB);
 		
 		//Check if all records found are expected
-		try {
-			for (String actualHash:actualHashes.keySet()) {
-				if (!expectedHashes.containsKey(actualHash)) {
-					int currentRow = 1;
-					int rowToFind = actualHashes.get(actualHash).getRecords().getFirst();
-					
-					findings = findings.concat(String.format("Actual record %d not found in expected result", rowToFind));
-					if (_result.first()) {
-						while (currentRow <= rowToFind) {
-							if (currentRow==rowToFind) {
-								foundNotExpected.addLast(this._dataHelper.rowSetRecordToList(_result));
-							}							
-							_result.next();
-							currentRow++;
-						}
-					}					
-				}				
-			}
-			//If records were found, add header
-			if (foundNotExpected.size() > 0) {
-				foundNotExpected.addFirst(this._dataHelper.rowSetHeader(_result));
-			}
-			else {
-				foundNotExpected = null;
-			}	
-		}
-		catch(SQLException exc) {
-			throw new XTestDatabaseException(String.format("Error getting records from actual results: %s", exc.getMessage()));
-		}
+		logger.info("Comparing actual against expected");
+		LinkedList<LinkedList<String>> foundNotExpected = getRecordsToReport("actual", actualHashes, this._result, "expected", expectedHashes, false, findingsSB);
 		
 		//Findings should be an empty string
-		if (!findings.equals("")) {
+		String findings = findingsSB.toString();
+		if (findings.length() > 0) {
 			throw new CucumberDataComparisonException(findings, expectedNotFound, foundNotExpected);
 		}
 	}

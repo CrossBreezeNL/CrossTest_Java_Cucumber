@@ -35,7 +35,7 @@ public class CucumberDataComparisonException extends AssertionError {
 	private LinkedList<LinkedList<String>> foundNotExpected;
 	private String shortMessage;
 	public CucumberDataComparisonException(String message, LinkedList<LinkedList<String>> expectedNotFound, LinkedList<LinkedList<String>> foundNotExpected) {
-		super(buildFullMessage(expectedNotFound, foundNotExpected));
+		super(buildFullMessage(message, expectedNotFound, foundNotExpected));
 		this.expectedNotFound = expectedNotFound;
 		this.foundNotExpected = foundNotExpected;
 		this.shortMessage = message;
@@ -52,22 +52,31 @@ public class CucumberDataComparisonException extends AssertionError {
 		return this.foundNotExpected;
 	}
 	
-	private static String buildFullMessage(LinkedList<LinkedList<String>> expectedNotFound, LinkedList<LinkedList<String>> foundNotExpected) {
-		String message = "Differences found: \n";
+	private static String buildFullMessage(String findings, LinkedList<LinkedList<String>> expectedNotFound, LinkedList<LinkedList<String>> foundNotExpected) {
+		StringBuffer message = new StringBuffer();
+		message.append("Differences found:\n");
+
 		if (expectedNotFound != null && expectedNotFound.size() > 0) {
-			message = message.concat("Expected not found: \n");
-			message = message.concat(transformRecordsToMessage(expectedNotFound));
+			message.append("Expected not found: \n");
+			message.append(transformRecordsToMessage(expectedNotFound));
+			message.append("\n");
 		}
 		
 		if (foundNotExpected != null && foundNotExpected.size() > 0) {
-			message = message.concat("Found not expected: \n");
-			message = message.concat(transformRecordsToMessage(foundNotExpected));
+			message.append("Found not expected: \n");
+			message.append(transformRecordsToMessage(foundNotExpected));
+			message.append("\n");
 		}
-		return message;
+
+		if (findings != null && findings.length() > 0) {
+			message.append(findings);
+		}
+
+		return message.toString();
 	}
 	
 	private static String transformRecordsToMessage(LinkedList<LinkedList<String>> diffTable) {
-		String message = "";
+		StringBuffer message = new StringBuffer();
 		LinkedList<Integer> fieldLengths = new LinkedList<>();
 		//Loop over columns
 		for (int i = 0;i < diffTable.get(0).size(); i++) {
@@ -85,11 +94,11 @@ public class CucumberDataComparisonException extends AssertionError {
 				String fieldValue = record.get(i);
 				int fieldPadding = fieldLengths.get(i) + 1;
 				 
-				message = message.concat("| ").concat(String.format("%1$-" + fieldPadding + "s", fieldValue));
+				message.append("| ").append(String.format("%1$-" + fieldPadding + "s", fieldValue));
 			}
-			message = message.concat("|\n");
+			message.append("|\n");
 		}
-		return message;
+		return message.toString();
 	}
 	
 	

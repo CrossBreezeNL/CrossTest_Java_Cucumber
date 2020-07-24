@@ -27,7 +27,7 @@
 	<groupId>com.x-breeze.test</groupId>
 	<artifactId>CrossTestCore</artifactId>
 	<properties>
-  		<crosstest.version>1.0.4</crosstest.version>
+  		<crosstest.version>1.0.5</crosstest.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
   	<version>${crosstest.version}</version>	
@@ -43,19 +43,19 @@
 	<developers>
 	    <developer>
 	      <name>Willem Otten</name>
-	      <email>Willem@x-breeze.com</email>
+	      <email>willem@x-breeze.com</email>
 	      <organization>CrossBreeze</organization>
 	      <organizationUrl>http://x-breeze.com</organizationUrl>
 	    </developer>
 	    <developer>
 	      <name>Harmen Wessels</name>
-	      <email>Harmen@x-breeze.com</email>
+	      <email>harmen@x-breeze.com</email>
 	      <organization>CrossBreeze</organization>
 	      <organizationUrl>http://x-breeze.com</organizationUrl>
 	    </developer>
 	    <developer>
 	      <name>Jacob Siemaszko</name>
-	      <email>Jacob@x-breeze.com</email>
+	      <email>jacob@x-breeze.com</email>
 	      <organization>CrossBreeze</organization>
 	      <organizationUrl>http://x-breeze.com</organizationUrl>
 	    </developer>
