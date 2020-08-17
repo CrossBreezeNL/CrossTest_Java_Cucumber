@@ -391,7 +391,7 @@ public class DataHelper {
 				catch (IllegalArgumentException exc) {
 					//If not parseable as timestamp, process as date.
 					Date dateVal = Date.valueOf(fieldValue);
-					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String timeVal =df.format(dateVal);
 					crs.updateTimestamp(fieldPosition,Timestamp.valueOf(timeVal));	
 				}
@@ -477,16 +477,15 @@ public class DataHelper {
 			}
 			else if (dataType == java.sql.Types.TIMESTAMP) {
 				
-			
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				try {
 					// try to parse the field value as a timestamp
 					Timestamp tsVal = crs.getTimestamp(fieldPosition);
-					return String.valueOf(tsVal);
+					return df.format(tsVal);
 				}
 				catch (IllegalArgumentException exc) {
 					//If not parseable as timestamp, process as date.
-					Date dateVal = crs.getDate(fieldPosition);
-					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+					Date dateVal = crs.getDate(fieldPosition);					
 					return df.format(dateVal);
 					
 				}
