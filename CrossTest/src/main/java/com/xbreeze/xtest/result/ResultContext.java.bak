@@ -231,7 +231,6 @@ public class ResultContext {
 			CachedRowSet expectedRowSet = factory.createCachedRowSet();
 			// Set the metadata of the cached rowset to the same as one the actual rowset.
 			expectedRowSet.setMetaData((RowSetMetaData)actualRowSet.getMetaData());
-			expectedRowSet.setTypeMap(actualRowSet.getTypeMap());
 			this._dataHelper.populateCachedRowSetFromDataTable(expectedRowSet, expectedResults, false, true, true, databaseConfig);
 			//CachedRowSet ExpectedRowSet = DataHelper.dataTableToRowSet(ResultContext.getResultContext().getTableName(), expectedResults, ResultContext.getResultContext().getConnection(), true, false, ResultContext.getResultContext().getDatabaseConfig());
 			

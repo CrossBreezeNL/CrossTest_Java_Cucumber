@@ -87,26 +87,17 @@
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="quoteObjectNames" type="xs:boolean"/>
     <xs:attribute name="schema" type="xs:string"/>
-    <xs:attribute name="template" type="xs:string"/>    
+    <xs:attribute name="template" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="databaseServerConfig">
-  	<xs:sequence>
-     <xs:element name="CustomDataTypes" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="CustomDataType" type="databaseCustomDataTypeConfig" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
+    <xs:sequence/>
     <xs:attribute name="JDBCDriver" type="xs:string"/>
     <xs:attribute name="JDBCUrl" type="xs:string"/>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="password" type="xs:string"/>
     <xs:attribute name="username" type="xs:string"/>
     <xs:attribute name="setSchemaTemplate" type="xs:string"/>
-    
   </xs:complexType>
 
   <xs:complexType name="objectTemplateConfig">
@@ -164,12 +155,5 @@
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="value" type="xs:string"/>
   </xs:complexType>
-
-  <xs:complexType name="databaseCustomDataTypeConfig">
-    <xs:sequence/>
-    <xs:attribute name="dataType" type="xs:string"/>
-    <xs:attribute name="className" type="xs:string"/>
-  </xs:complexType>
-
 </xs:schema>
 

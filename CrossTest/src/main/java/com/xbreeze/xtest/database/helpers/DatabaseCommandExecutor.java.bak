@@ -79,7 +79,6 @@ public class DatabaseCommandExecutor {
 			if (dbConfig.getCommandTimeOut() > 0) {
 				crs.setQueryTimeout(dbConfig.getCommandTimeOut());
 			}
-			crs.setTypeMap(connection.getTypeMap());
 			crs.execute(connection);
 			//crs.setUrl(connection.getMetaData().getURL());
 			return crs;
