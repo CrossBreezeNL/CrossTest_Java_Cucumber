@@ -1,4 +1,4 @@
-@Unit @Database @Debug
+@Unit @Database
 Feature: Apply prefix and suffix to table names
 
   Scenario Outline: Apply template name: <scenario>
