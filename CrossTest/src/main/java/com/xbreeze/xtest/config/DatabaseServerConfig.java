@@ -51,6 +51,7 @@ public class DatabaseServerConfig {
 	
 	public DatabaseServerConfig() {
 		super();
+		this._customDataTypes = new ArrayList<>();
 	}	
 	
 	@XmlAttribute(name="name")

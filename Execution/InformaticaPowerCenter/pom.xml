@@ -25,7 +25,7 @@
   <groupId>com.x-breeze.test</groupId>
   <artifactId>CrossTestInformaticaPowerCenter</artifactId>
   <properties>
-  	<crosstest.version>1.0.5</crosstest.version>
+  	<crosstest.version>1.0.6</crosstest.version>
   </properties>
   <version>${crosstest.version}</version>
   <name>${project.groupId}:${project.artifactId}</name>

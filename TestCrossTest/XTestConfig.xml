@@ -45,10 +45,73 @@
 			databaseServerConfigName="test"			
 			schema="source"
 			commandTimeOut ="4"
-			template="demo"
+			template="source_plain"
 			quoteObjectNames="true"
-			>			
-			</DatabaseConfig>
+			/>			
+			
+			<DatabaseConfig 
+			name="prefix_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="source_singleprefix"
+			quoteObjectNames="true"
+			/>		
+			
+			<DatabaseConfig 
+			name="suffix_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="source_singlesuffix"
+			quoteObjectNames="true"
+			/>		
+			
+			<DatabaseConfig 
+			name="prefix_parent_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="source_parentwithprefix"
+			quoteObjectNames="true"
+			/>		
+			
+			<DatabaseConfig 
+			name="suffix_parent_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="source_parentwithsuffix"
+			quoteObjectNames="true"
+			/>	
+			
+			<DatabaseConfig 
+			name="overwrite_prefix_parent_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="source_overwriteparentwithprefix"
+			quoteObjectNames="true"
+			/>		
+			
+			<DatabaseConfig 
+			name="overwrite_suffix_parent_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="source_overwriteparentwithsuffix"
+			quoteObjectNames="true"
+			/>	
+			
+			<DatabaseConfig 
+			name="composed_prefix_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut ="4"
+			template="source_child_addprefix"
+			quoteObjectNames="true"
+			/>	
+			
 			<DatabaseConfig 
 			name="SQLTestIRCM" 
 			databaseServerConfigName="test"			
@@ -77,11 +140,23 @@
 				<Attribute name="LOAD_DTS" value="2019-10-29 0:29:41.995992" />
 			</Attributes>
 		</ObjectTemplate>
-		<ObjectTemplate name="demo">
+		<ObjectTemplate name="demo" prefix="src_" suffix="_tmp">
 			<Attributes>				
 				<Attribute name="IsActive" value="1" />
 			</Attributes>
 		</ObjectTemplate>
+		<ObjectTemplate name="source_plain"/>
+		<ObjectTemplate name="source_singleprefix" prefix="singleprefix_"/>
+		<ObjectTemplate name="source_singlesuffix" suffix="_singlesuffix"/>
+		<ObjectTemplate name="source_parentwithprefix" parent="source_singleprefix"/>
+		<ObjectTemplate name="source_parentwithsuffix" parent="source_singlesuffix"/>
+		<ObjectTemplate name="source_overwriteparentwithprefix" parent="source_singleprefix" prefix="childprefix_"/>
+		<ObjectTemplate name="source_overwriteparentwithsuffix" parent="source_singlesuffix" suffix="_childsuffix"/>
+		<ObjectTemplate name="source_singlesuffix" suffix="_singlesuffix"/>
+		<ObjectTemplate name="source_parent_addprefix" appendPrefix="parentprefix_"/>
+		<ObjectTemplate name="source_child_addprefix" appendPrefix="childprefix_" parent="source_parent_addprefix"/>
+		
+			
 	</ObjectTemplates>
 	<ProcessConfigs>
 		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_m_"/>

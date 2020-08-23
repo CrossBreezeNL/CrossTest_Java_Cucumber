@@ -126,6 +126,11 @@ public class DatabaseConfig {
 	
 	
 	public String getQualifiedTableName(String tableName) {
+		// Apply template naming if needed
+		if (this._template != null) {
+			tableName = this._template.applyTemplateToName(tableName);
+		}
+		
 		if (_schema.equalsIgnoreCase("")) {
 			if (_quoteObjectNames) {
 				return String.format("\"%s\"", tableName);

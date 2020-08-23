@@ -2,7 +2,7 @@
 	<DatabaseServerConfigs>
 		<DatabaseServerConfig 
 				name="test" 
-				JDBCUrl="jdbc:sqlserver://localhost:1433;databaseName=TestDB"				
+				JDBCUrl="jdbc:sqlserver://localhost;instanceName=localDev2017;databaseName=TestDB"				
 				 username="tester" 
 				password ="P@$$w0rd" />
 	</DatabaseServerConfigs>
