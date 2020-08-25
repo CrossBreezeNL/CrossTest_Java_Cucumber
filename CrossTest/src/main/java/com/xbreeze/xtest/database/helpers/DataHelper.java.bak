@@ -23,6 +23,7 @@
 package com.xbreeze.xtest.database.helpers;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -30,6 +31,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -53,6 +55,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.logging.Logger;
 
 import com.xbreeze.xtest.config.DatabaseConfig;
+import com.xbreeze.xtest.config.DatabaseCustomDataTypeConfig;
 import com.xbreeze.xtest.exception.XTestDatabaseException;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.result.ResultContext;
@@ -269,13 +272,13 @@ public class DataHelper {
 						if (!cellValue.equalsIgnoreCase("")) {
 							hasRelevantValueSet = true;
 						}
-						setFieldValue(rowSet, i, cellValue, rmd.getColumnType(i));
+						setFieldValue(rowSet, i, cellValue, rmd.getColumnType(i), dbConfig);
 						recordKey = recordKey.concat("|").concat(cellValue);
 					}
 					else {
 						//If field is not specified, check for default value otherwise set to null						
 						if (dbConfig.getTemplate() != null && dbConfig.getTemplate().getDefaultValue(rmd.getColumnName(i)) != null) {
-							setFieldValue(rowSet, i, dbConfig.getTemplate().getDefaultValue(rmd.getColumnName(i)), rmd.getColumnType(i));
+							setFieldValue(rowSet, i, dbConfig.getTemplate().getDefaultValue(rmd.getColumnName(i)), rmd.getColumnType(i), dbConfig);
 						}						
 						else {
 							rowSet.updateNull(i);
@@ -289,7 +292,9 @@ public class DataHelper {
 					//Insert the new row
 					logger.info("Inserting row in rowSet");
 					for (int i=1;i <= rowSet.getMetaData().getColumnCount();i++) {
-						logger.info(String.format("Field value for field %s is %s", rowSet.getMetaData().getColumnName(i), String.valueOf(rowSet.getObject(i))));
+						if (rowSet.getMetaData().getColumnType(i) != java.sql.Types.STRUCT) {
+							logger.info(String.format("Field value for field %s is %s", rowSet.getMetaData().getColumnName(i), String.valueOf(rowSet.getObject(i))));
+						}
 					}
 					rowSet.insertRow();
 					if (distinct) {
@@ -324,7 +329,7 @@ public class DataHelper {
 	 * @param dataType Datatype of the field
 	 * @throws XTestDatabaseException
 	 */
-	private void setFieldValue (RowSet crs, int fieldPosition, String fieldValue, int dataType) throws XTestDatabaseException{
+	private void setFieldValue (RowSet crs, int fieldPosition, String fieldValue, int dataType, DatabaseConfig dbConfig) throws XTestDatabaseException{
 		try {
 			//For teradata: access fields on index and not on name
 			//https://teradata-docs.s3.amazonaws.com/doc/connectivity/jdbc/reference/current/jdbcug_chapter_4.html
@@ -389,7 +394,7 @@ public class DataHelper {
 					crs.updateTimestamp(fieldPosition,tsVal);
 				}
 				catch (IllegalArgumentException exc) {
-					//If not parseable as timestamp, process as date.
+					//If not parseable as timestamp, process as datetime.
 					Date dateVal = Date.valueOf(fieldValue);
 					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String timeVal =df.format(dateVal);
@@ -397,7 +402,29 @@ public class DataHelper {
 				}
 				
 			}
-			
+			else if (dataType == java.sql.Types.STRUCT) {
+				//Syntax of value is supposed to be "Class type {<value1>, <value2>,...}
+				//Then class can be extracted from fieldValue and then instantiated with the rest
+				//Struct can be many things but support is implemented for Teradata Period datatypes				
+				if (fieldValue.indexOf("{") == -1 || fieldValue.indexOf("}") == -1) {
+					throw new XTestDatabaseException(String.format("Value specified for field %s with custom datatype should be speficied as \"Class type {<value1>, <value2>,...}\"", fieldName));
+				}
+				//Get custom data type from field value and dynamically instantiate instance of the appropriate class
+				String customDataType = fieldValue.substring(0,fieldValue.indexOf("{")).trim();
+				Class<?> c = dbConfig.getDatabaseServerConfig().getCustomDataTypeConfig(customDataType).getClassRef();				
+				CustomDataType val;
+				try {
+					val = (CustomDataType)c.getDeclaredConstructor().newInstance();
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					throw new XTestDatabaseException(String.format("Could not create an instance of class %s for the custom data type %s", c.getName(),customDataType));
+				}	
+				
+				String[] arguments = fieldValue.substring(fieldValue.indexOf("{")+1, fieldValue.indexOf("}")).split(",");
+				val.initalize(arguments);
+				crs.updateObject(fieldPosition, val);
+				
+			}
 			else {
 				throw new XTestDatabaseException(String.format("Unsupported datatype %d for field %s", dataType, fieldName));
 			}
@@ -485,11 +512,17 @@ public class DataHelper {
 				}
 				catch (IllegalArgumentException exc) {
 					//If not parseable as timestamp, process as date.
+					logger.info(String.format("Got illegal argument exception obtaining %s as timestamp, trying to read in as date", fieldName));
 					Date dateVal = crs.getDate(fieldPosition);					
 					return df.format(dateVal);
 					
 				}
 				
+			}
+			else if (dataType == java.sql.Types.STRUCT) {
+				//Struct can be many things but support is implemented for Teradata Period datatypes
+				Struct val = (Struct) crs.getObject(fieldPosition);
+				return val.toString();
 			}
 			
 			else {
@@ -548,7 +581,11 @@ public class DataHelper {
 				String val = crs.getString(i);
 				if (crs.wasNull()) {
 					record.addLast("");
-				} else {
+				}
+				else if (crs.getMetaData().getColumnType(i)==java.sql.Types.STRUCT){
+					record.addLast(((Struct)crs.getObject(i)).toString());
+				} 
+				else {
 					record.addLast(val);
 				}
 			}
@@ -650,6 +687,21 @@ public class DataHelper {
 		    	}
 	    	}
 	    }
+	    
+	    //Set custom type map custom data types defined in config		
+	 	HashMap<String, Class<?>> cTypes  = new HashMap<>();
+	 	for(DatabaseCustomDataTypeConfig cdt: dbConfig.getDatabaseServerConfig().getCustomDataTypes()) {
+			
+				
+				cTypes.put(cdt.getDataType(), cdt.getClassRef());
+				
+			
+	 	}
+		try {
+			conn.setTypeMap(cTypes);
+		}catch (SQLException exc){
+			throw new XTestDatabaseException(String.format("Could not set custom typemap on connection %s: %s", dbConfig.getName(), exc.getMessage()));
+		}
 	    logger.info(String.format("Connected to database %s", dbConfig.getName()));
 	    return conn;
 	}

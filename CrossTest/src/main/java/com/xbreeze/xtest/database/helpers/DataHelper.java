@@ -406,11 +406,11 @@ public class DataHelper {
 				//Syntax of value is supposed to be "Class type {<value1>, <value2>,...}
 				//Then class can be extracted from fieldValue and then instantiated with the rest
 				//Struct can be many things but support is implemented for Teradata Period datatypes				
-				if (fieldValue.indexOf("{") == -1 || fieldValue.indexOf("}") == -1) {
-					throw new XTestDatabaseException(String.format("Value specified for field %s with custom datatype should be speficied as \"Class type {<value1>, <value2>,...}\"", fieldName));
+				if (fieldValue.indexOf("(") == -1 || fieldValue.indexOf(")") == -1) {
+					throw new XTestDatabaseException(String.format("Value specified for field %s with custom datatype should be speficied as \"(<value1>, <value2>,...)\"", fieldName));
 				}
 				//Get custom data type from field value and dynamically instantiate instance of the appropriate class
-				String customDataType = fieldValue.substring(0,fieldValue.indexOf("{")).trim();
+				String customDataType = crs.getMetaData().getColumnTypeName(fieldPosition);			
 				Class<?> c = dbConfig.getDatabaseServerConfig().getCustomDataTypeConfig(customDataType).getClassRef();				
 				CustomDataType val;
 				try {
@@ -420,7 +420,7 @@ public class DataHelper {
 					throw new XTestDatabaseException(String.format("Could not create an instance of class %s for the custom data type %s", c.getName(),customDataType));
 				}	
 				
-				String[] arguments = fieldValue.substring(fieldValue.indexOf("{")+1, fieldValue.indexOf("}")).split(",");
+				String[] arguments = fieldValue.substring(fieldValue.indexOf("(")+1, fieldValue.indexOf(")")).split(",");
 				val.initalize(arguments);
 				crs.updateObject(fieldPosition, val);
 				
@@ -586,7 +586,7 @@ public class DataHelper {
 					record.addLast(((Struct)crs.getObject(i)).toString());
 				} 
 				else {
-					record.addLast(val);
+					record.addLast(val.trim());
 				}
 			}
 		}

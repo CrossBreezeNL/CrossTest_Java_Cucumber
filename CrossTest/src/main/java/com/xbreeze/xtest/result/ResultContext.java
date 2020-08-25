@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.sql.RowSet;
@@ -40,8 +39,8 @@ import javax.sql.rowset.RowSetProvider;
 import com.xbreeze.xtest.CucumberDataComparison.Exceptions.CucumberDataComparisonException;
 import com.xbreeze.xtest.config.DatabaseConfig;
 import com.xbreeze.xtest.database.helpers.DataHelper;
-import com.xbreeze.xtest.database.helpers.RecordInformation;
 import com.xbreeze.xtest.database.helpers.DatabaseCommandExecutor;
+import com.xbreeze.xtest.database.helpers.RecordInformation;
 import com.xbreeze.xtest.exception.XTestDatabaseException;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.exception.XTestResultComparisonException;
