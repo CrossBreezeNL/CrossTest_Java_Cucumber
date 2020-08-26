@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.x-breeze.test</groupId>
   <artifactId>TeradataCustomDataTypes</artifactId>
-  <version>1.0.6</version>
+  <properties>
+  	<crosstest.version>1.0.6</crosstest.version>  		
+  </properties>
+  <version>${crosstest.version}</version>	
+  <name>${project.groupId}:${project.artifactId}</name>
   <description>CrossTest is a test library for data solutions, implementing Gherkin/Cucumber.</description>
 	<url>http://x-test.nl</url>	
 	<licenses>
@@ -51,7 +55,7 @@
 	<dependency>
 		<groupId>com.x-breeze.test</groupId>
 		<artifactId>CrossTestCore</artifactId>
-		<version>1.0.6</version>
+		<version>${crosstest.version}</version>
 	</dependency>
   </dependencies>
   <profiles>

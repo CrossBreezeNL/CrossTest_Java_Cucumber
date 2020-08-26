@@ -20,6 +20,28 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.6 <sup>26-08-2020</sup>
+> New release
+> !!! success "Enhanced features"
+>     * [ ] Database server configuration
+>         - [X] Added support for configuring custom data types.
+>     * [ ] Object template configuration
+>         - [X] Implemented support for configuring prefix and suffix on table names
+>     * [ ] Database steps
+>         - [X] Implemented support for Teradata custom data type Period (Date) and Period (Timestamp)
+> !!! warning "Bug fixes"
+>     * [ ] Database steps
+>         - [X] Fixed issue with timestamp datatype that in case of a time of 00:00:00 in actual or expected result the time was incorrectly interpreted as 12:00pm
+>     * [ ] Result
+>         - [X] Trimmed result in case of actual/expected differences on char fields to prevent padding to max length in output
+
+
+- [ ] 1.0.5 <sup>28-07-2020</sup>
+> New release
+> !!! warning "Bug fixes"
+>     * [ ] Result
+>         - [X] Improved output in case where expected result has records that are duplicate in the actal result
+
 - [ ] 1.0.4 <sup>02-07-2020</sup>
 > New release
 > !!! success "Enhanced features"
