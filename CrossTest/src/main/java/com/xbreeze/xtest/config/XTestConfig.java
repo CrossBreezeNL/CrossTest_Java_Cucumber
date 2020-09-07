@@ -90,6 +90,7 @@ public class XTestConfig {
 	private ArrayList<ProcessServerConfig> _processServerConfigs;
 	private ArrayList<CompositeObjectConfig> _compositeObjects;
 	private ArrayList<ObjectTemplateConfig> _objectTemplates;
+	private ArrayList<CredentialProviderConfig> _credentialProviders;
 	private Boolean _debug = false; 
 	
 	private XTestConfig() {
@@ -99,6 +100,7 @@ public class XTestConfig {
 		_processServerConfigs = new ArrayList<>();		
 		_compositeObjects = new ArrayList<>();
 		_objectTemplates = new ArrayList<>();
+		_credentialProviders = new ArrayList<>();
 	}
 	
 	public static XTestConfig getConfig() throws XTestException {
@@ -386,6 +388,19 @@ public class XTestConfig {
 		throw new XTestProcessException(String.format("Process server config [%s] does not exist", configName));
 	}
 	
+	
+	public CredentialProviderConfig getCredentialProviderConfig(String configName) throws XTestException {
+		if (configName==null || configName.equalsIgnoreCase("")) {
+			return null;
+		}
+		for (CredentialProviderConfig cpc:_credentialProviders) {
+			if (cpc.getName().equalsIgnoreCase(configName))
+				return cpc;
+		}
+		//Throw exception if config was not found
+		throw new XTestException(String.format("Credential provider config [%s] does not exist", configName));		
+	}
+	
 	@XmlAttribute(name="debug", required = false)
 	public Boolean getDebug() {
 		return this._debug;
@@ -449,8 +464,21 @@ public class XTestConfig {
 		return this._objectTemplates;
 	}
 	
+	
+	
 	public void setObjectTemplateConfigs(ArrayList<ObjectTemplateConfig> objectTemplateConfigs) {
 		this._objectTemplates = objectTemplateConfigs;
+	}
+	
+	
+	@XmlElement(name="CredentialProvider")
+	@XmlElementWrapper(name="CredentialProviders")
+	public ArrayList<CredentialProviderConfig> getCredentialProviderConfigs() {
+		return this._credentialProviders;
+	}
+	
+	public void setCredentialProviderConfigs(ArrayList<CredentialProviderConfig> credentialProviders) {
+		this._credentialProviders = credentialProviders;
 	}
 	
 	public CompositeObjectConfig getCompositeObjectConfig(String objectName) throws XTestDatabaseException {

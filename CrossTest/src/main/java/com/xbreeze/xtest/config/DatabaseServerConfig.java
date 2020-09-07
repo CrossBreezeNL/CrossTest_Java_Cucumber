@@ -37,15 +37,19 @@ public class DatabaseServerConfig {
 	private String _username;
 	private String _password;
 	private String _setSchemaTemplate;
+	private String _credentialProvider;
+	
+	
 	private ArrayList<DatabaseCustomDataTypeConfig> _customDataTypes;
 	
-	public DatabaseServerConfig(String name, String JDBCUrl, String userName, String password, String JDBCDriver, String setSchemaTemplate) {
+	public DatabaseServerConfig(String name, String JDBCUrl, String userName, String password, String JDBCDriver, String setSchemaTemplate, String credentialProvider) {
 		this._name = name;
 		this._JDBCUrl = JDBCUrl;
 		this._username = userName;
 		this._password = password;				
 		this._JDBCDriver = JDBCDriver;
 		this._setSchemaTemplate = setSchemaTemplate;
+		this._credentialProvider = credentialProvider;
 		this._customDataTypes = new ArrayList<>();
 	}
 	
@@ -132,6 +136,15 @@ public class DatabaseServerConfig {
 		this._setSchemaTemplate = setSchemaTemplate;
 	}
 	
+	@XmlAttribute(name="credentialProvider")
+	public String getCredentialProvider() {
+		return _credentialProvider;
+	}
+
+	public void setCredentialProvider(String credentialProvider) {
+		this._credentialProvider = credentialProvider;
+	}
+	
 	@XmlElement(name="CustomDataType")
 	@XmlElementWrapper(name="CustomDataTypes")
 	public ArrayList<DatabaseCustomDataTypeConfig> getCustomDataTypes(){
@@ -140,6 +153,7 @@ public class DatabaseServerConfig {
 	public void setCustomDataTypes(ArrayList<DatabaseCustomDataTypeConfig> customDataTypes) {
 		this._customDataTypes = customDataTypes;
 	}
+	
 	
 	public DatabaseCustomDataTypeConfig getCustomDataTypeConfig(String dataType) throws XTestDatabaseException {
 		for (DatabaseCustomDataTypeConfig cfg: _customDataTypes) {

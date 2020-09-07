@@ -24,16 +24,16 @@ package com.xbreeze.xtest.config;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class ProcessServerConfigProperty {
+public class ConfigProperty {
 	private String _name;
 	private String _value;
 	
-	public ProcessServerConfigProperty(String name, String value) {
+	public ConfigProperty(String name, String value) {
 		this._name = name;
 		this._value = value;
 	}
 	
-	public ProcessServerConfigProperty() {
+	public ConfigProperty() {
 		super();
 	}
 		

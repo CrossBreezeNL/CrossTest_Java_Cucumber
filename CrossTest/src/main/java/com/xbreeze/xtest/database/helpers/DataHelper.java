@@ -58,6 +58,7 @@ import com.xbreeze.xtest.config.DatabaseConfig;
 import com.xbreeze.xtest.config.DatabaseCustomDataTypeConfig;
 import com.xbreeze.xtest.exception.XTestDatabaseException;
 import com.xbreeze.xtest.exception.XTestException;
+import com.xbreeze.xtest.modules.security.CredentialProvider_Helper;
 import com.xbreeze.xtest.result.ResultContext;
 
 import io.cucumber.datatable.DataTable;
@@ -66,10 +67,12 @@ public class DataHelper {
 	
 	static final Logger logger = Logger.getLogger(DataHelper.class.getName());
 	private ResultContext _resultContext;
+	private CredentialProvider_Helper _credentialProviderHelper;
 	private HashMap<String, Connection> _connections;
 
-	public DataHelper(ResultContext resultContext) {
+	public DataHelper(ResultContext resultContext, CredentialProvider_Helper credentialProviderHelper) {
 		this._resultContext = resultContext;
+		this._credentialProviderHelper = credentialProviderHelper;
 		_connections = new HashMap<>();
 	}
 	
@@ -621,15 +624,30 @@ public class DataHelper {
 	}
 	
 	
+	private String getResolvedCredential(DatabaseConfig dbConfig, String credential) throws XTestDatabaseException {
+		//If no credential provider was given, return the credential unprocessed
+		if (dbConfig.getDatabaseServerConfig().getCredentialProvider() == null || dbConfig.getDatabaseServerConfig().getCredentialProvider().equalsIgnoreCase("")) {
+			return credential;
+		} else {
+			//Resolve the credential via the credentialprovider
+			try {
+				return this._credentialProviderHelper.resolveCredential(dbConfig.getDatabaseServerConfig().getCredentialProvider(), credential);
+			}catch(XTestException exc) {
+				throw new XTestDatabaseException(String.format("Could not resolve %s using credential provider %s: %s", credential, dbConfig.getDatabaseServerConfig().getCredentialProvider(), exc.getMessage()));
+			}
+		}
+	}
+	
 	private Connection getNewConnection(DatabaseConfig dbConfig) throws XTestDatabaseException {
 		Connection conn = null;
 	    Properties connectionProps = new Properties();
 	    //Set username and password if given
 	    if (dbConfig.getDatabaseServerConfig().getUsername() != null) {
-	    	connectionProps.put("user", dbConfig.getDatabaseServerConfig().getUsername());
+	    	
+	    	connectionProps.put("user", getResolvedCredential(dbConfig, dbConfig.getDatabaseServerConfig().getUsername()));
 	    }
 	    if (dbConfig.getDatabaseServerConfig().getPassword() != null) {		    
-	    	connectionProps.put("password", dbConfig.getDatabaseServerConfig().getPassword());
+	    	connectionProps.put("password", getResolvedCredential(dbConfig, dbConfig.getDatabaseServerConfig().getPassword()));
 	    }
 	    
 	    try {

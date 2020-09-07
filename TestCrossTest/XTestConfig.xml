@@ -39,12 +39,19 @@
       </KeyTables>
    </CompositeObject>
 	</CompositeObjects>
+	<CredentialProviders>
+		<CredentialProvider name="testProvider" providerClass="com.xbreeze.xtest.test.TestCredentialProvider">
+			<Properties>
+				<Property name="testProperty" value="The test value" />
+			</Properties>
+		</CredentialProvider>
+	</CredentialProviders>
 	<DatabaseConfigs>
 		<DatabaseConfig 
 			name="source" 
 			databaseServerConfigName="test"			
 			schema="source"
-			commandTimeOut ="4"
+			commandTimeOut ="4"			
 			template="source_plain"
 			quoteObjectNames="true"
 			/>			

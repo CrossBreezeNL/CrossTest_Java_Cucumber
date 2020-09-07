@@ -4,7 +4,8 @@
 				name="test" 
 				JDBCUrl="jdbc:sqlserver://localhost;instanceName=localDev2017;databaseName=TestDB"				
 				 username="tester" 
-				password ="P@$$w0rd" />
+				password ="P@$$w0rd"
+				credentialProvider="testProvider" />
 	</DatabaseServerConfigs>
 	<ProcessServerConfigs>
 		<ProcessServerConfig 

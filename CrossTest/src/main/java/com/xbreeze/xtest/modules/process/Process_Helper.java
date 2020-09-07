@@ -3,29 +3,57 @@ package com.xbreeze.xtest.modules.process;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
+import com.xbreeze.xtest.config.ConfigProperty;
+import com.xbreeze.xtest.config.DatabaseConfig;
+import com.xbreeze.xtest.config.ProcessConfig;
+import com.xbreeze.xtest.config.ProcessServerConfig;
 import com.xbreeze.xtest.config.XTestConfig;
+import com.xbreeze.xtest.exception.XTestDatabaseException;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.exception.XTestProcessException;
+import com.xbreeze.xtest.modules.security.CredentialProvider_Helper;
 import com.xbreeze.xtest.process.execution.ProcessExecutor;
 
 public class Process_Helper {
 
 	private XTestConfig _config;
+	private CredentialProvider_Helper _credentialProviderHelper;
+	
 	private HashMap<String, ProcessExecutor> _executors;
 	
-	public Process_Helper() throws XTestException{
+	public Process_Helper(CredentialProvider_Helper credentialProviderHelper) throws XTestException{
 		this._config = XTestConfig.getConfig();
+		this._credentialProviderHelper = credentialProviderHelper;
 		this._executors = new HashMap<>();
 	}
 	
 	public void RunTemplatedProcess(String processConfig, String processName) throws Throwable{	
 		getProcessExecutor(processConfig).runProcess(_config.getProcessConfig(processConfig), processName);		
 	}
+	
+	private String getResolvedCredential(ProcessServerConfig psConfig, String credential) throws XTestProcessException {
+		//If no credential provider was given, return the credential unprocessed
+		if (psConfig.getCredentialProvider() == null || psConfig.getCredentialProvider().equalsIgnoreCase("")) {
+			return credential;
+		} else {
+			//Resolve the credential via the credentialprovider
+			try {
+				return this._credentialProviderHelper.resolveCredential(psConfig.getCredentialProvider(), credential);
+			}catch(XTestException exc) {
+				throw new XTestProcessException(String.format("Could not resolve %s using credential provider %s: %s", credential, psConfig.getCredentialProvider(), exc.getMessage()));
+			}
+		}
+	}
 		
 	private ProcessExecutor getProcessExecutor(String processConfig) throws XTestProcessException{
 		if (!_executors.containsKey(processConfig)) {
 			//Initialize executor and add to collection
 			try {
+				ProcessServerConfig pc = _config.getProcessConfig(processConfig).getProcessServerConfig();
+				//Process all properties via the credentialprovider if specified
+				for(ConfigProperty cp:pc.getProperties()) {
+					cp.setValue(getResolvedCredential(pc, cp.getValue()));
+				}				
 				Class<?> c = this.getClass().getClassLoader().loadClass(_config.getProcessConfig(processConfig).getProcessServerConfig().getExecutionClass());
 				ProcessExecutor pe = (ProcessExecutor)c.getDeclaredConstructor().newInstance();
 				_executors.put(processConfig, pe);
