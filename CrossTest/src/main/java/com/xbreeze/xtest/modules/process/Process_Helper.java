@@ -3,12 +3,9 @@ package com.xbreeze.xtest.modules.process;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import com.xbreeze.xtest.config.ConfigProperty;
-import com.xbreeze.xtest.config.DatabaseConfig;
-import com.xbreeze.xtest.config.ProcessConfig;
 import com.xbreeze.xtest.config.ProcessServerConfig;
+import com.xbreeze.xtest.config.SecurableConfigProperty;
 import com.xbreeze.xtest.config.XTestConfig;
-import com.xbreeze.xtest.exception.XTestDatabaseException;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.exception.XTestProcessException;
 import com.xbreeze.xtest.modules.security.CredentialProvider_Helper;
@@ -31,16 +28,16 @@ public class Process_Helper {
 		getProcessExecutor(processConfig).runProcess(_config.getProcessConfig(processConfig), processName);		
 	}
 	
-	private String getResolvedCredential(ProcessServerConfig psConfig, String credential) throws XTestProcessException {
+	private String getResolvedCredential(String credentialProvider, String credential) throws XTestProcessException {
 		//If no credential provider was given, return the credential unprocessed
-		if (psConfig.getCredentialProvider() == null || psConfig.getCredentialProvider().equalsIgnoreCase("")) {
+		if (credentialProvider == null || credentialProvider.equalsIgnoreCase("")) {
 			return credential;
 		} else {
 			//Resolve the credential via the credentialprovider
 			try {
-				return this._credentialProviderHelper.resolveCredential(psConfig.getCredentialProvider(), credential);
+				return this._credentialProviderHelper.resolveCredential(credentialProvider, credential);
 			}catch(XTestException exc) {
-				throw new XTestProcessException(String.format("Could not resolve %s using credential provider %s: %s", credential, psConfig.getCredentialProvider(), exc.getMessage()));
+				throw new XTestProcessException(String.format("Could not resolve %s using credential provider %s: %s", credential, credentialProvider, exc.getMessage()));
 			}
 		}
 	}
@@ -51,8 +48,8 @@ public class Process_Helper {
 			try {
 				ProcessServerConfig pc = _config.getProcessConfig(processConfig).getProcessServerConfig();
 				//Process all properties via the credentialprovider if specified
-				for(ConfigProperty cp:pc.getProperties()) {
-					cp.setValue(getResolvedCredential(pc, cp.getValue()));
+				for(SecurableConfigProperty cp:pc.getProperties()) {
+					cp.setValue(getResolvedCredential(cp.getCredentialProvider(), cp.getValue()));
 				}				
 				Class<?> c = this.getClass().getClassLoader().loadClass(_config.getProcessConfig(processConfig).getProcessServerConfig().getExecutionClass());
 				ProcessExecutor pe = (ProcessExecutor)c.getDeclaredConstructor().newInstance();

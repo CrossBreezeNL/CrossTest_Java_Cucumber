@@ -34,14 +34,12 @@ public class ProcessServerConfig {
 	String _name;
 	String _serverUrl;
 	String _executionClass;
-	String _credentialProvider;
-	ArrayList<ConfigProperty> _properties;
+	ArrayList<SecurableConfigProperty> _properties;
 	
-	public ProcessServerConfig(String name, String executionClass, String serverUrl, String credentialProvider) {
+	public ProcessServerConfig(String name, String executionClass, String serverUrl) {
 		_name = name;
 		_serverUrl = serverUrl;
-		_executionClass = executionClass;
-		_credentialProvider = credentialProvider;
+		_executionClass = executionClass;		
 		_properties = new ArrayList<>();
 	}
 	
@@ -58,8 +56,8 @@ public class ProcessServerConfig {
 		return this._name;
 	}
 	
-	public void setProperty(String propertyKey, String propertyValue) {
-		_properties.add(new ConfigProperty(propertyKey, propertyValue));
+	public void setProperty(String propertyKey, String propertyValue, String credentialProvider) {
+		_properties.add(new SecurableConfigProperty(propertyKey, propertyValue, credentialProvider));
 	}
 	
 	public String getProperty(String propertyKey) throws XTestProcessException {
@@ -85,27 +83,18 @@ public class ProcessServerConfig {
 		return _executionClass;
 	}
 	
-	@XmlAttribute(name="credentialProvider")
-	public String getCredentialProvider() {
-		return _credentialProvider;
-	}
-
-	public void setCredentialProvider(String credentialProvider) {
-		this._credentialProvider = credentialProvider;
-	}
-
-	
+		
 	public void setExecutionClass(String executionClass) {
 		this._executionClass = executionClass;		
 	}
 	
 	@XmlElement(name="Property")
 	@XmlElementWrapper(name="Properties")
-	public ArrayList<ConfigProperty> getProperties() {
+	public ArrayList<SecurableConfigProperty> getProperties() {
 		return this._properties;
 	}
 	
-	public void setProperties(ArrayList<ConfigProperty> properties) {
+	public void setProperties(ArrayList<SecurableConfigProperty> properties) {
 		this._properties = properties;
 	}
 }

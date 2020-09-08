@@ -14,10 +14,19 @@
 				serverUrl="http://10.1.0.5:7333/wsh/services/BatchServices/DataIntegration">
 				<Properties>
 					<Property name="UserName" value="Infademo" />
-					<Property name="Password" value="ZBvi9LD8Yk9T63QEgHxK" />
+					<Property name="Password" value="ZBvi9LD8Yk9T63QEgHxK"/>
 					<Property name="Domain" value="InfaDemo"/>
 					<Property name="Repository" value="InfaDemo-RS"/>
 					<Property name="IntegrationService" value = "InfaDemo_IS"/>
+				</Properties>
+		</ProcessServerConfig>
+		<ProcessServerConfig 
+				name="executordemo" 
+				executionClass="com.xbreeze.xtest.test.TestProcessExecutor"
+				serverUrl="http://dummyURL">
+				<Properties>
+					<Property name="UserName" value="testuser" />					
+					<Property name="Password" value="abc123" credentialProvider="testProvider"/>
 				</Properties>
 		</ProcessServerConfig>
 	</ProcessServerConfigs>

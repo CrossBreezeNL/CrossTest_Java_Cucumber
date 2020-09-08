@@ -25,8 +25,8 @@ package com.xbreeze.xtest.config;
 import javax.xml.bind.annotation.XmlAttribute;
 
 public class ConfigProperty {
-	private String _name;
-	private String _value;
+	protected String _name;
+	protected String _value;
 	
 	public ConfigProperty(String name, String value) {
 		this._name = name;

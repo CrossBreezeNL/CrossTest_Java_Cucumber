@@ -182,15 +182,23 @@
       <xs:element name="Properties" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="Property" type="configProperty" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="Property" type="securableConfigProperty" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
-    <xs:attribute name="credentialProvider" type="xs:string"/>
     <xs:attribute name="executionClass" type="xs:string"/>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="serverUrl" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="securableConfigProperty">
+    <xs:complexContent>
+      <xs:extension base="configProperty">
+        <xs:sequence/>
+        <xs:attribute name="credentialProvider" type="xs:string"/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 </xs:schema>
 
