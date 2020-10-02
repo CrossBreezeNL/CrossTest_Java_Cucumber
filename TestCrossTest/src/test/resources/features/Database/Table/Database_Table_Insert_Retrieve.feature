@@ -55,7 +55,7 @@ Feature: Write to and retrieve from database tables
       | Char     | Not25Chars          |
       | Date     | 2019-11-01          |
 
-  @Negative @Debug
+  @Negative
   Scenario: Char unexpected result comparison
     Given the source table DataTypeTest is empty
     When I insert the following data in source table DataTypeTest:

@@ -1,4 +1,4 @@
-@Unit @Process @Debug
+@Unit @Process
 Feature: Invoke a custom process executor with a securable config property
 
   @Positive

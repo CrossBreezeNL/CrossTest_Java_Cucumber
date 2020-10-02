@@ -56,6 +56,13 @@
 			quoteObjectNames="true"
 			/>			
 			
+
+		<DatabaseConfig 
+			name="NoDB" 
+			databaseServerConfigName="testdbcontext"
+			quoteObjectNames="false"
+			/>			
+			
 			<DatabaseConfig 
 			name="prefix_source" 
 			databaseServerConfigName="test"			
