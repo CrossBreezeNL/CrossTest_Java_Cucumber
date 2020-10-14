@@ -63,8 +63,7 @@ Feature: Use different databases
   
 
   
-  @Positive
-  @Debug
+  @Positive  
   Scenario: set db context from scenario
   	Given I execute the following statement on NoDB:
   	"""

@@ -23,6 +23,26 @@ Feature: Write to and retrieve from database tables
       | CUST_ID | CREATE_DD |
       |     431 |           |
 
+  @Positive
+  Scenario: Do select on empty table
+    Given the source table CUST_HUB is empty
+    When I retrieve the contents of the source CUST_HUB table
+    Then I expect the following result:
+      | CUST_ID | CREATE_DD |
+      
+
+	@Negative
+	@Debug
+  Scenario: Expect empty result but get a record back
+    Given the source table CUST_HUB is empty
+    When I insert the following data in source table CUST_HUB:
+      | CUST_ID | CREATE_DD |
+      |     431 |           |
+    And I retrieve the contents of the source CUST_HUB table
+    Then I expect the following result:
+      | CUST_ID | CREATE_DD |
+      
+      
   # Note that for this scenario to succeed, when editing in Eclipse the Eclipse file encoding needs to be UTF-8
   # https://stackoverflow.com/questions/9180981/how-to-support-utf-8-encoding-in-eclipse
   @Positive

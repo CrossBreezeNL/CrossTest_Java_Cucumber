@@ -188,14 +188,15 @@ public class DataHelper {
 	 */
 	public String getSQLSelectFrom(DataTable dataTable, String tableName, DatabaseConfig dbConfig) {
 		String sqlStatement = null;
-		List<Map<String, String>> list = dataTable.asMaps(String.class, String.class);
+		
+		List<List<String>> list = dataTable.asLists();
 		if (list.size() > 0) {
 		
 			//Create a select that results in an empty result in order to get 
 			//proper column definitions
 			String columnList = "";
 			//Get column names from first row
-			Set<String> columnNames = list.get(0).keySet();		
+			List<String> columnNames = list.get(0);		
 			
 			for (String col:columnNames){
 				columnList = columnList.concat(dbConfig.getFormattedColumnName(col)).concat(",");					
@@ -205,6 +206,7 @@ public class DataHelper {
 			columnList = columnList.substring(0,columnList.length() - 1);		
 			sqlStatement = "SELECT ".concat(columnList).concat(" FROM ").concat(tableName);
 		}
+		
 		return sqlStatement;
 	}
 	

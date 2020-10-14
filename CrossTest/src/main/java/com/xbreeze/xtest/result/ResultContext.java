@@ -239,11 +239,11 @@ public class ResultContext {
 			//Compare metadata
 			resultSetMetaDataIsEqual(expectedRowSet);		
 			//Get list of fields to compare
-			List<Map<String, String>> list = expectedResults.asMaps(String.class, String.class);
+			List<List<String>> list = expectedResults.asLists();
 			if (list.size() > 0) {
 				//Get column names from first row			}
 				LinkedList<String>columnNames = new LinkedList<>();
-				for (String s: list.get(0).keySet()) {
+				for (String s: list.get(0)) {
 					columnNames.addLast(s.toLowerCase());
 				}				
 				resultSetDataIsEqual(expectedRowSet, columnNames);

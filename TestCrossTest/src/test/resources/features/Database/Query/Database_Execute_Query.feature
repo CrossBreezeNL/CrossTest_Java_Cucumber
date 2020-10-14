@@ -57,6 +57,29 @@ Feature: Execute a query or statement on a database
       | firstField |
       | 1          |
 
+ @Positive 
+  Scenario: Compare on empty result of select
+    When I execute the following query on source:
+      """
+      SELECT 1 as firstField
+      WHERE 1 = 0
+			
+      """
+    Then I expect the following result:
+      | firstField |
+  
+ @Negative
+ @Debug
+  Scenario: Expect empty result but get data back
+    When I execute the following query on source:
+      """
+      SELECT 1 as firstField      
+			
+      """
+    Then I expect the following result:
+      | firstField |
+      
+
 	@Negative
 	Scenario: Test the command timeout
 		When I execute the following query on source:
@@ -67,9 +90,9 @@ Feature: Execute a query or statement on a database
 
 			"""
 
-  @Positive
   # Note that for this scenario to succeed, when editing in Eclipse the Eclipse file encoding needs to be UTF-8
   # https://stackoverflow.com/questions/9180981/how-to-support-utf-8-encoding-in-eclipse
+  @Positive
   Scenario: Insert and select data using a update statement
     Given the source table Table with strangé character$ is empty
     When I execute the following statement on source:

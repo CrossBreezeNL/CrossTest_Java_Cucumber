@@ -17,6 +17,12 @@
 		</dependency>		
   		<dependency>
 			<groupId>com.x-breeze.test</groupId>
+			<artifactId>CrossTestCore</artifactId>
+			<version>${crosstest.version}</version>
+		</dependency>		
+		
+  		<dependency>
+			<groupId>com.x-breeze.test</groupId>
 			<artifactId>CrossTest</artifactId>
 			<version>${crosstest.version}</version>
 		</dependency>		
