@@ -1,5 +1,6 @@
 package com.xbreeze.xtest.modules.result;
 
+import com.xbreeze.xtest.config.XTestConfig;
 import com.xbreeze.xtest.database.helpers.DataHelper;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.modules.data.database.Database_Helper;
@@ -9,8 +10,8 @@ import io.cucumber.datatable.DataTable;
 
 public class Result_Helper extends Database_Helper{
 	
-	public Result_Helper(ResultContext resultContext, DataHelper dataHelper) throws XTestException {
-		super(resultContext, dataHelper);
+	public Result_Helper(ResultContext resultContext, DataHelper dataHelper, XTestConfig config) throws XTestException {
+		super(resultContext, dataHelper, config);
 	}
 	
 	public void CompareExpectedAndActualResult(DataTable results) throws Throwable{

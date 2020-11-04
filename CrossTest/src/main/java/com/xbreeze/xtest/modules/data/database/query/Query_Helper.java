@@ -1,6 +1,7 @@
 package com.xbreeze.xtest.modules.data.database.query;
 
 import com.xbreeze.xtest.database.helpers.DatabaseCommandExecutor;
+import com.xbreeze.xtest.config.XTestConfig;
 import com.xbreeze.xtest.database.helpers.DataHelper;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.modules.data.database.Database_Helper;
@@ -12,8 +13,8 @@ import javax.sql.rowset.CachedRowSet;
 
 public class Query_Helper extends Database_Helper {
 
-	public Query_Helper(ResultContext resultContext, DataHelper dataHelper) throws XTestException {
-		super(resultContext, dataHelper);
+	public Query_Helper(ResultContext resultContext, DataHelper dataHelper, XTestConfig config) throws XTestException {
+		super(resultContext, dataHelper, config);
 	}
 	
 	public void ExecuteTheFollowingQueryOnConnection(String dbConfig,String query) throws XTestDatabaseException {

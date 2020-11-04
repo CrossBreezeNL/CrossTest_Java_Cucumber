@@ -2,6 +2,7 @@ package com.xbreeze.xtest.modules.data.database.dbtable;
 
 import com.xbreeze.xtest.config.CompositeObjectConfig;
 import com.xbreeze.xtest.config.CompositeObjectTableConfig;
+import com.xbreeze.xtest.config.XTestConfig;
 import com.xbreeze.xtest.database.helpers.DataHelper;
 import com.xbreeze.xtest.database.helpers.DatabaseCommandExecutor;
 import com.xbreeze.xtest.exception.XTestDatabaseException;
@@ -13,8 +14,8 @@ import io.cucumber.datatable.DataTable;
 
 public class DbTable_Helper extends Database_Helper{
 	
-	public DbTable_Helper(ResultContext resultContext, DataHelper dataHelper) throws XTestException {
-		super(resultContext, dataHelper);
+	public DbTable_Helper(ResultContext resultContext, DataHelper dataHelper, XTestConfig config) throws XTestException {
+		super(resultContext, dataHelper, config);
 	}
 
 	public void DeleteTemplatedTableData(String dbConfig,String tableName) throws Throwable {

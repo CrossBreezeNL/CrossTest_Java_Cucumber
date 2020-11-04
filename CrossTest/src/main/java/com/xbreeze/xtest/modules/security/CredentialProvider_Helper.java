@@ -17,9 +17,9 @@ public class CredentialProvider_Helper {
 	private HashMap<String, CredentialProvider> _credentialProviders;
 	private XTestConfig _config;
 	
-	public CredentialProvider_Helper() throws XTestException{
+	public CredentialProvider_Helper(XTestConfig cfg) throws XTestException{
 		this._credentialProviders = new HashMap<>();		
-		_config = XTestConfig.getConfig();		
+		_config = cfg.getConfig();		
 	}
 	
 	/**

@@ -18,8 +18,8 @@ public class Process_Helper {
 	
 	private HashMap<String, ProcessExecutor> _executors;
 	
-	public Process_Helper(CredentialProvider_Helper credentialProviderHelper) throws XTestException{
-		this._config = XTestConfig.getConfig();
+	public Process_Helper(CredentialProvider_Helper credentialProviderHelper, XTestConfig cfg) throws XTestException{
+		this._config = cfg.getConfig();
 		this._credentialProviderHelper = credentialProviderHelper;
 		this._executors = new HashMap<>();
 	}
