@@ -3,7 +3,7 @@
   <groupId>com.x-breeze.test</groupId>
   <artifactId>TeradataCustomDataTypes</artifactId>
   <properties>
-  	<crosstest.version>1.0.8</crosstest.version>  		
+  	<crosstest.version>1.0.9</crosstest.version>  		
   </properties>
   <version>${crosstest.version}</version>	
   <name>${project.groupId}:${project.artifactId}</name>

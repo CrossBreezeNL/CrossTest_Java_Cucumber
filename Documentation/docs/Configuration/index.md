@@ -19,9 +19,22 @@ The configuration can be [splitted in multiple files](./config_include.md)
 			</KeyTables>
 		</CompositeObject>
 	</CompositeObjects>
+	<CredentialProviders>
+		<!-- A credentialprovider can be used to obtain credentials such as usernames or passwords. By implementing a custom credential Provider -->
+		<!-- you can have configuration files without plain text username and passwords stored -->
+		<!-- A credential provider can be created in a project by implementing the com.xbreeze.xtest.modules.security.CredentialProvider interface. -->
+		<!-- By adding a entry for the custom credential provider in the config such as below the credentialprocider is dynamically loaded at runtime. -->
+		<!-- To activate the credentialprovider, set it on a database server config or on a property in a process server config.  -->
+		<CredentialProvider name="testProvider" providerClass="com.xbreeze.xtest.test.TestCredentialProvider">
+			<Properties>
+				<!-- Set of properties passed to the credential provider during initialization -->			
+				<Property name="testProperty" value="The test value" />
+			</Properties>
+		</CredentialProvider>
+	</CredentialProviders>
 	<DatabaseConfigs>	
-		<!-- the command timeout is in seconds and specifieds how long CrossTest waits for a command to finish. if not specified CrossTest uses the JDBC settings if any or waits indefinitely-->	
-		<!-- if quoteObjectNames is set to true (default is no) alle table and column names are enclosed in double quotes, except for those in executing sql queries or statements, since these can be typed using quotes where desired-->
+		<!-- the command timeout is in seconds and specifieds how long CrossTest waits for a command to finish. if not specified CrossTest uses the JDBC  --> <!-- settings if any or waits indefinitely-->	
+		<!-- if quoteObjectNames is set to true (default is no) alle table and column names are enclosed in double quotes, except for those in executing sql --> <!-- queries or statements, since these can be typed using quotes where desired-->
 		<DatabaseConfig 
 			name="demo" 
 			databaseServerConfigName="test"		
@@ -38,7 +51,8 @@ The configuration can be [splitted in multiple files](./config_include.md)
 			JDBCUrl="jdbc:sqlserver://localhost:1436;databaseName=TestDB" 
 			username="USERNAME" 
 			password ="PASSWORD"
-			setSchemaTemplate="DATABASE {SCHEMA};" />  		
+			setSchemaTemplate="DATABASE {SCHEMA};"
+			credentialProvider="testProvider" />  		
 	</DatabaseServerConfigs>
 	<ObjectTemplates>
         <!-- Object template can be used to add prefix, suffix and default attributes to a database config -->		
@@ -63,7 +77,7 @@ The configuration can be [splitted in multiple files](./config_include.md)
 			serverUrl="http://10.1.0.5:7333/wsh/services/BatchServices/DataIntegration">
 				<Properties>
 					<Property name="UserName" value="USER" />
-					<Property name="Password" value="PASSWORD" />
+					<Property name="Password" value="PASSWORD" credentialProvider="testProvider"/>
 					<Property name="Domain" value="InfaDemo"/>
 					<Property name="Repository" value="InfaDemo-RS"/>
 					<Property name="IntegrationService" value = "InfaDemo_IS"/>

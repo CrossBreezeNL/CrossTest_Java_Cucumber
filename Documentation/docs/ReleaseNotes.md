@@ -20,6 +20,24 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.9 <sup>4-11-2020</sup>
+> New release
+> !!! success "Enhanced features"
+>     * [ ] Configuration
+>         - [X] Configuration file is no longer statically loaded on class load but loads as instance singleton. This mainly affects setups where CrossTest is used within a Java server based test framework such as FitNesse.
+
+- [ ] 1.0.8 <sup>14-10-2020</sup>
+> New release
+> !!! warning "Bug fixes"
+>     * [ ] Result
+>         - [X] Fixed issue when comparing to an empty result set
+
+- [ ] 1.0.7 <sup>08-09-2020</sup>
+> New release
+> !!! success "Enhanced features"
+>     * [ ] Database and Process server configuration
+>         - [X] Added support for configuring a custom credential provider
+
 - [ ] 1.0.6 <sup>26-08-2020</sup>
 > New release
 > !!! success "Enhanced features"
@@ -34,7 +52,6 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 >         - [X] Fixed issue with timestamp datatype that in case of a time of 00:00:00 in actual or expected result the time was incorrectly interpreted as 12:00pm
 >     * [ ] Result
 >         - [X] Trimmed result in case of actual/expected differences on char fields to prevent padding to max length in output
-
 
 - [ ] 1.0.5 <sup>28-07-2020</sup>
 > New release

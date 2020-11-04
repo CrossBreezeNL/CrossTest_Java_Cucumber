@@ -82,7 +82,7 @@ import com.ximpleware.XPathParseException;
 @XmlAccessorType(XmlAccessType.NONE)
 public class XTestConfig {
 
-	private static  XTestConfig _CONFIG = null;
+	private XTestConfig _config = null;
 	static final Logger logger = Logger.getLogger("");
 	private ArrayList<DatabaseConfig> _databaseConfigs;
 	private ArrayList<DatabaseServerConfig> _databaseServerConfigs;
@@ -93,7 +93,7 @@ public class XTestConfig {
 	private ArrayList<CredentialProviderConfig> _credentialProviders;
 	private Boolean _debug = false; 
 	
-	private XTestConfig() {
+	public XTestConfig() throws XTestException {
 		_databaseConfigs = new ArrayList<>();
 		_databaseServerConfigs = new ArrayList<>();
 		_processConfigs = new ArrayList<>();
@@ -101,16 +101,19 @@ public class XTestConfig {
 		_compositeObjects = new ArrayList<>();
 		_objectTemplates = new ArrayList<>();
 		_credentialProviders = new ArrayList<>();
+		
+		
 	}
 	
-	public static XTestConfig getConfig() throws XTestException {
-		if (_CONFIG == null) {
-			_CONFIG = fromFile("XTestConfig.xml");
+	public XTestConfig getConfig() throws XTestException {
+		if (_config == null) {
+			_config = fromFile("XTestConfig.xml");
+			logger.info("Read config from XTestConfig.xml");
 		}
-		return _CONFIG;
+		return _config;
 	}
 	
-	private static XTestConfig fromFile(String file) throws XTestException{
+	private XTestConfig fromFile(String file) throws XTestException{
 		XTestConfig cfg = null;
 		// Setup the global LogManager.
 		LogManager logManager = LogManager.getLogManager();

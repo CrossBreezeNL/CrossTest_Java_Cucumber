@@ -14,11 +14,11 @@ public class Database_Helper{
 	protected ResultContext _resultContext;
 	protected DataHelper _dataHelper;
 	
-	public Database_Helper(ResultContext resultContext, DataHelper dataHelper) throws XTestException {
+	public Database_Helper(ResultContext resultContext, DataHelper dataHelper, XTestConfig cfg) throws XTestException {
 		this._resultContext = resultContext;
 		this._dataHelper = dataHelper;
 		resultContext.setDataHelper(dataHelper);
-		_config = XTestConfig.getConfig();
+		_config = cfg.getConfig();
 	}
 	
 	protected Connection getConnection(String dbConfig) throws XTestDatabaseException{

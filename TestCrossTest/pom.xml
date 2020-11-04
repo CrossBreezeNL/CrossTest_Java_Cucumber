@@ -6,7 +6,7 @@
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
-	<crosstest.version>1.0.7</crosstest.version>
+	<crosstest.version>1.0.9</crosstest.version>
 	<cucumber.version>4.8.1</cucumber.version>
   </properties>
   <dependencies>
