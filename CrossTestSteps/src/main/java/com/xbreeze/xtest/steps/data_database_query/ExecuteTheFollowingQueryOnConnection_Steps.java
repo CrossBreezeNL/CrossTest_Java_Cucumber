@@ -15,7 +15,7 @@ import io.cucumber.java.en.When;
         }
 
         @When("^I execute the following query on ([a-zA-Z0-9_@$#-]+):$")
-        public void When_EN_I_execute_the_following_query_on__azAZ09_64_(
+        public void When_EN_ExecuteTheFollowingQueryOnConnection_4759E04D_DA97_4747_BFDD_47C6916C3F38(
             String database_config,
             String query_text
         ) throws Throwable

@@ -38,6 +38,7 @@ import javax.sql.rowset.RowSetProvider;
 
 import com.xbreeze.xtest.CucumberDataComparison.Exceptions.CucumberDataComparisonException;
 import com.xbreeze.xtest.config.DatabaseConfig;
+import com.xbreeze.xtest.config.ObjectTemplateConfig;
 import com.xbreeze.xtest.database.helpers.DataHelper;
 import com.xbreeze.xtest.database.helpers.DatabaseCommandExecutor;
 import com.xbreeze.xtest.database.helpers.RecordInformation;
@@ -103,6 +104,8 @@ public class ResultContext {
 	public DatabaseConfig getDatabaseConfig() {
 		return this._dbconfig;
 	}
+	
+	
 	
 	/**
 	 * Stores the value of a field from the current result set to a variable with specified name

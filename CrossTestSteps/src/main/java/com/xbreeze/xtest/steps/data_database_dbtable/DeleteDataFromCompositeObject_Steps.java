@@ -15,7 +15,7 @@ import io.cucumber.java.en.Given;
         }
 
         @Given("^the object (.+) is empty$")
-        public void Given_EN_the_object__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64___is_empty(
+        public void Given_EN_DeleteDataFromCompositeObject_97715AEA_B8A3_46F8_8CFE_83B1B6B41FBC(
             String composite_object
         ) throws Throwable
         {

@@ -282,9 +282,16 @@ public class DataHelper {
 					}
 					else {
 						//If field is not specified, check for default value otherwise set to null						
-						if (dbConfig.getTemplate() != null && dbConfig.getTemplate().getDefaultValue(rmd.getColumnName(i)) != null) {
-							setFieldValue(rowSet, i, dbConfig.getTemplate().getDefaultValue(rmd.getColumnName(i)), rmd.getColumnType(i), dbConfig);
-						}						
+						if (dbConfig.getTemplate() != null) {
+							if (dbConfig.getTemplate().getDefaultValue(rmd.getColumnName(i)) != null) {						
+								setFieldValue(rowSet, i, dbConfig.getTemplate().getDefaultValue(rmd.getColumnName(i)), rmd.getColumnType(i), dbConfig);						
+							}
+							else if (dbConfig.getTemplate().hasAutoIncrement(rmd.getColumnName(i))) {
+								setFieldValue(rowSet, i, String.valueOf(dbConfig.getTemplate().getNextIncrementValue(rmd.getColumnName(i))), rmd.getColumnType(i), dbConfig);
+							} else {
+								rowSet.updateNull(i);
+							}
+						}
 						else {
 							rowSet.updateNull(i);
 						}

@@ -148,3 +148,20 @@ Loads data into the tables that are configured for the composite object, either 
   | 1  | 'FirstRow'       |
   | 2  | 'SecondRow' |
 ```
+## Insert data into table using template
+Insert data into a table and overrule the template that is defined on the databaseconfig
+
+### Sentences
+| Type          | Language         | Sentence      |
+|:---           |:---              |:---           |
+| When | en | ^I insert the following data in ([a-zA-Z0-9_@$#-]+) table (.+) using template ([a-zA-Z0-9_@$#-]+):$ |
+
+### Arguments
+| Parameter    | Datatype          | Description          |
+|:---          |:---               |:---                  |
+|database config | String | The name of the database config |
+|table name | String | The name of the table to insert data into |
+|object template | String | The name of the object template to apply |
+|data to insert | DataTable | The data to load into the table. See [TestDataTable](../Tables#testdatatable). |
+
+### Examples

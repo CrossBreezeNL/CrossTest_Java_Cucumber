@@ -16,7 +16,7 @@ import io.cucumber.java.nl.Dan;
         }
 
         @Then("I expect the following results:")
-        public void Then_EN_I_expect_the_following_results(
+        public void Then_EN_CompareExpectedAndActualResult_AA2AEE5E_7E89_4007_9AC5_7498C31C672A(
             DataTable expected_results
         ) throws Throwable
         {
@@ -26,7 +26,7 @@ import io.cucumber.java.nl.Dan;
         }
 
         @Dan("verwacht ik het volgende resultaat:")
-        public void Then_NL_verwacht_ik_het_volgende_resultaat(
+        public void Then_NL_CompareExpectedAndActualResult_37C08280_EDCD_4BA6_B348_5504806874F1(
             DataTable expected_results
         ) throws Throwable
         {
@@ -36,7 +36,7 @@ import io.cucumber.java.nl.Dan;
         }
 
         @Then("I expect the following result:")
-        public void Then_EN_I_expect_the_following_result(
+        public void Then_EN_CompareExpectedAndActualResult_0178899F_F9A8_413D_AF7D_8E43E215F3BE(
             DataTable expected_results
         ) throws Throwable
         {

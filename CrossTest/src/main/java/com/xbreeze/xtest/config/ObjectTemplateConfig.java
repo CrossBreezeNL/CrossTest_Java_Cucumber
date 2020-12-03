@@ -120,6 +120,19 @@ public class ObjectTemplateConfig {
 		return this.getRecursivePrefix().concat(this.getRecursiveAppendPrefix()).concat(name).concat(this.getRecursiveSuffix());
 	}
 	
+	private ObjectTemplateAttributeConfig getTemplateAttribute(String fieldName) {
+		for (ObjectTemplateAttributeConfig attribute:this._attributes) {
+			if (attribute.getName().equalsIgnoreCase(fieldName)) {
+				return attribute;
+			}
+		}
+		if (_parent != null) {
+			return _parent.getTemplateAttribute(fieldName);
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	 * Get a default value for a specified field. If the field is specified in the object template or in one of its parents
 	 * the default value is returned from te first level it is found
@@ -127,13 +140,37 @@ public class ObjectTemplateConfig {
 	 * @return the default value or null if not found
 	 */
 	public String getDefaultValue(String fieldName) {
-		for (ObjectTemplateAttributeConfig attribute:this._attributes) {
-			if (attribute.getName().equalsIgnoreCase(fieldName)) {
-				return attribute.getValue();
-			}
+		ObjectTemplateAttributeConfig objAttributeConfig = getTemplateAttribute (fieldName);
+		if (objAttributeConfig != null) {
+			return objAttributeConfig.getValue();
 		}
-		if (_parent != null) {
-			return _parent.getDefaultValue(fieldName);
+		return null;
+	}
+	
+	/**
+	 * Return whether a field is specified as auto increment in the object template or its predecessors 
+	 * @param fieldName the field to verify
+	 * @return True if auto increment spec is found, false otherwise
+	 */
+	
+	public boolean hasAutoIncrement(String fieldName) {
+		ObjectTemplateAttributeConfig objAttributeConfig = getTemplateAttribute (fieldName);
+		if (objAttributeConfig != null) {
+			return objAttributeConfig.isAutoIncrement();
+		}
+		return false;
+	}
+	
+	/**
+	 * Gets the next value to use for a auto increment field
+	 * @param fieldName the field to get the next increment value for
+	 * @return the next value to insert
+	 */
+	
+	public Integer getNextIncrementValue(String fieldName) {
+		ObjectTemplateAttributeConfig objAttributeConfig = getTemplateAttribute (fieldName);
+		if (objAttributeConfig != null) {
+			return objAttributeConfig.getNextValue();
 		}
 		return null;
 	}
@@ -163,6 +200,63 @@ public class ObjectTemplateConfig {
 			return _parent.getRecursiveSuffix();
 		}
 		return "";
+	}
+	
+	/**
+	 * Set a value for a field of a attribute if the field is not yet specified for this object template config, it is added
+	 * If an ancestor contains the field, the values inherited from the ancestor are copied to the current template config and
+	 * the value for the property is then replaced with the given value
+	 * @param fieldName the field name to change the default value for
+	 * @param property the property to set, should be value, seed or increment
+	 * @param propertyValue the value to set
+	 */
+	public void setObjectTemplateAttributeProperty (String fieldName, String property, String propertyValue) throws XTestException{
+		//Check if the property to be set is valid
+		if (
+					(!property.equalsIgnoreCase("value")) && 
+					(!property.equalsIgnoreCase("seed")) &&
+					(!property.equalsIgnoreCase("increment"))
+			) {
+			throw new XTestException(String.format("attempting to set property % for object template %s, field %s. Only properties that can be set are value, seed and increment", property, this._name, fieldName));
+		}
+		
+		ObjectTemplateAttributeConfig attributeConfig = null;
+		//First try to find the the field in the collection of object template attributes
+		for (ObjectTemplateAttributeConfig objAttribute:this._attributes) {
+			if (objAttribute.getName().equalsIgnoreCase(fieldName)) {
+				attributeConfig = objAttribute;
+			}
+		}
+		//If not found, create a copy from one if found in a ancestor and add to the collection of this template
+		if (attributeConfig == null) {
+			attributeConfig = new ObjectTemplateAttributeConfig();
+			attributeConfig.setName(fieldName);
+			ObjectTemplateAttributeConfig objAttributeConfigFromAncestor = getTemplateAttribute (fieldName);
+			if (objAttributeConfigFromAncestor != null) {
+				//copy value, seed and increment
+				attributeConfig.setValue(objAttributeConfigFromAncestor.getValue());
+				attributeConfig.setSeed(objAttributeConfigFromAncestor.getSeed());
+				attributeConfig.setIncrement(objAttributeConfigFromAncestor.getIncrement());
+			}
+			this._attributes.add(attributeConfig);			
+		}
+		
+		//Now override the value
+		if (property.equalsIgnoreCase("value")) {
+			attributeConfig.setValue(propertyValue);
+		}
+		try {
+			if (property.equalsIgnoreCase("seed")) {			
+				attributeConfig.setSeed(Integer.valueOf(propertyValue));
+			}
+			if (property.equalsIgnoreCase("increment")) {			
+				attributeConfig.setIncrement(Integer.valueOf(propertyValue));
+			}
+		}
+		catch (NumberFormatException exc) {
+			throw new XTestException(String.format("Trying to set %s for field %s in object template %s to illegal value %s", property, fieldName, this._name, propertyValue));
+		}
+		
 	}
 	
 	

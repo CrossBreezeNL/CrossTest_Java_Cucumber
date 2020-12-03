@@ -15,7 +15,7 @@ import io.cucumber.java.en.Given;
         }
 
         @Given("^I store the contents of the field (.+) into variable ([a-zA-Z0-9_@$#]+)$")
-        public void Given_EN_I_store_the_contents_of_the_field__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64___into_variable__azAZ09_64_(
+        public void Given_EN_StoreContentsOfFieldInVariable_FDBBB7C4_57A9_40AD_B95F_F68D7A5E3E70(
             String field_name,
             String variable_name
         ) throws Throwable

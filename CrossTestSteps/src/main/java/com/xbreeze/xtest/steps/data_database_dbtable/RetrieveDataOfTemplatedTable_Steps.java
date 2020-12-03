@@ -15,7 +15,7 @@ import io.cucumber.java.en.When;
         }
 
         @When("^I retrieve the contents of the ([a-zA-Z0-9_@$#-]+) (.+) (?:table|view)$")
-        public void When_EN_I_retrieve_the_contents_of_the__azAZ09_64___azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64___tableview(
+        public void When_EN_RetrieveDataOfTemplatedTable_D8FAAFB9_9EDA_448A_9F47_9ED4F4DBAAF3(
             String database_config,
             String table_name
         ) throws Throwable

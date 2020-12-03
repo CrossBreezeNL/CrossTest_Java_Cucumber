@@ -69,7 +69,6 @@ Feature: Execute a query or statement on a database
       | firstField |
   
  @Negative
- @Debug
   Scenario: Expect empty result but get data back
     When I execute the following query on source:
       """

@@ -2,6 +2,8 @@ package com.xbreeze.xtest.modules.data.database.dbtable;
 
 import com.xbreeze.xtest.config.CompositeObjectConfig;
 import com.xbreeze.xtest.config.CompositeObjectTableConfig;
+import com.xbreeze.xtest.config.DatabaseConfig;
+import com.xbreeze.xtest.config.ObjectTemplateConfig;
 import com.xbreeze.xtest.config.XTestConfig;
 import com.xbreeze.xtest.database.helpers.DataHelper;
 import com.xbreeze.xtest.database.helpers.DatabaseCommandExecutor;
@@ -24,6 +26,29 @@ public class DbTable_Helper extends Database_Helper{
 	
 	public void InsertDataIntoTable(String dbConfig,String tableName, DataTable table) throws Throwable{
 		this._dataHelper.writeDataTableToDatabase(tableName, table, _config.getDatabaseConfig(dbConfig), false, true);
+	}
+	
+	public void InsertDataIntoTableUsingTemplate (
+            String dbConfig,String tableName, String objectTemplate, DataTable table) throws Throwable {
+			
+			//Temporary overwrite config for table
+			DatabaseConfig databaseConfig = _config.getDatabaseConfig(dbConfig);
+			ObjectTemplateConfig originalTemplate = databaseConfig.getTemplate();
+			ObjectTemplateConfig newTemplate = _config.getObjectTemplateConfig(objectTemplate);
+			databaseConfig.setTemplate(newTemplate);
+			databaseConfig.setTemplateName(newTemplate.getName());
+			
+			//Then insert data
+			InsertDataIntoTable (dbConfig, tableName, table);
+			
+			//Restore config
+			databaseConfig.setTemplate(originalTemplate);
+			if (originalTemplate != null) {
+				databaseConfig.setTemplateName(originalTemplate.getName());
+			} else {
+				databaseConfig.setTemplateName(null);
+			}
+		
 	}
 	
 	public void RetrieveDataOfTemplatedTable(String dbConfig, String tableName) throws XTestDatabaseException{

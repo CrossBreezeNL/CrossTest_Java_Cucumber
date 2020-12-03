@@ -15,7 +15,7 @@ import io.cucumber.java.en.Given;
         }
 
         @Given("^the ([a-zA-Z0-9_@$#-]+) table (.+) is empty$")
-        public void Given_EN_the__azAZ09_64__table__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64___is_empty(
+        public void Given_EN_DeleteTemplatedTableData_E5D5FEE2_8DC3_49A3_9EAC_3FD646E35940(
             String database_config,
             String table_name
         ) throws Throwable

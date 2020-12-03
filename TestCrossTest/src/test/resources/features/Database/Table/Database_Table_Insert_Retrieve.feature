@@ -32,7 +32,6 @@ Feature: Write to and retrieve from database tables
       
 
 	@Negative
-	@Debug
   Scenario: Expect empty result but get a record back
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:

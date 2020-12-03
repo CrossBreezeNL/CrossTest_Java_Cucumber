@@ -15,7 +15,7 @@ import io.cucumber.java.en.Given;
         }
 
         @Given("^I have a key table named (.+) in ([a-zA-Z0-9_@$#-]+) for object (.+)$")
-        public void Given_EN_I_have_a_key_table_named__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64___in__azAZ09_64__for_object__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64__(
+        public void Given_EN_AddKeyTableToCompositeObject_9A1D9FBF_AA93_4E52_B8CB_1BF738C9B6B6(
             String table_name,
             String database_config,
             String composite_object

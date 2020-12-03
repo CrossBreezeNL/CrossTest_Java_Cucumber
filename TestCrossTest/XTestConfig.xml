@@ -159,7 +159,11 @@
 				<Attribute name="IsActive" value="1" />
 			</Attributes>
 		</ObjectTemplate>
-		<ObjectTemplate name="source_plain"/>
+		<ObjectTemplate name="source_plain">
+			<Attributes>
+				<Attribute name="CUST_ID" seed="1" increment="2"/> 
+			</Attributes>
+		</ObjectTemplate>
 		<ObjectTemplate name="source_singleprefix" prefix="singleprefix_"/>
 		<ObjectTemplate name="source_singlesuffix" suffix="_singlesuffix"/>
 		<ObjectTemplate name="source_parentwithprefix" parent="source_singleprefix"/>

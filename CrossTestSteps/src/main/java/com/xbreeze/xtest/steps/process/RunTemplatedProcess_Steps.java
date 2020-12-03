@@ -15,7 +15,7 @@ import io.cucumber.java.en.When;
         }
 
         @When("^I run the ([a-zA-Z0-9_@$#]+) process ([a-zA-Z0-9_@$#]+)$")
-        public void When_EN_I_run_the__azAZ09_64__process__azAZ09_64_(
+        public void When_EN_RunTemplatedProcess_E0161D99_224F_4379_B1F8_45298367861A(
             String process_config,
             String process_name
         ) throws Throwable

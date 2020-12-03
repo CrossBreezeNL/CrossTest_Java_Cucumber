@@ -15,7 +15,7 @@ import io.cucumber.java.en.Given;
         }
 
         @Given("^I have a context table named (.+) in ([a-zA-Z0-9_@$#-]+) for object (.+)$")
-        public void Given_EN_I_have_a_context_table_named__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64___in__azAZ09_64__for_object__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64__(
+        public void Given_EN_AddContextTableToCompositeObject_FA5DF318_49F0_4CCD_890F_4B9091B11B27(
             String table_name,
             String database_config,
             String composite_object

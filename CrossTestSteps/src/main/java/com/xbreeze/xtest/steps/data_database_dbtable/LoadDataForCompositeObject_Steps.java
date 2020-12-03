@@ -15,7 +15,7 @@ import io.cucumber.java.en.When;
         }
 
         @When("^I insert the following data for object (.+):$")
-        public void When_EN_I_insert_the_following_data_for_object__azAZ09___azAZ09_64__azAZ09_64___azAZ09_64____azAZ09_64__(
+        public void When_EN_LoadDataForCompositeObject_9B4A37AD_554F_45BD_8CC7_65FBDF7C875B(
             String composite_object,
             DataTable data_to_insert
         ) throws Throwable

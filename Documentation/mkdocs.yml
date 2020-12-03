@@ -28,6 +28,7 @@ nav:
   - 'Query' : 'Steps/Query.md'
   - 'DbTable' : 'Steps/DbTable.md'
   - 'Result' : 'Steps/Result.md'
+  - 'ObjectTemplate' : 'Steps/ObjectTemplate.md'
   - 'Tables'       : 'Steps/Tables.md'
 - Configuration:
   - 'Introduction'       : 'Configuration/index.md'
