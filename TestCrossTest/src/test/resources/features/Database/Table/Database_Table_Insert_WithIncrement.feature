@@ -1,7 +1,7 @@
-@Unit @Database
+@Database
 Feature: Write to and retrieve from database tables using auto increment
 
-  @Positive @Debug
+  @Positive
   Scenario: Insert data in table
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:

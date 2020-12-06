@@ -14,20 +14,15 @@ import io.cucumber.java.en.When;
             _ObjectTemplate_helper = ObjectTemplate_helper;
         }
 
-        @When("^I set ([a-zA-Z0-9_@$#-]+) for attribute ([a-zA-Z0-9_@$#-]+) in template (value|seed|increment) to (.*)$")
+        @When("^I set (value|seed|increment) for attribute ([a-zA-Z0-9_@$#-]+) in template ([a-zA-Z0-9_@$#-]+) to (.*)$")
         public void When_EN_SetAttributeValueForObjectTemplate_67941746_782D_4127_97FC_06AD48168B11(
-            String object_template,
-            String attribute_name,
             String attribute_property,
+            String attribute_name,
+            String object_template,
             String property_value
         ) throws Throwable
         {
-            _ObjectTemplate_helper.SetAttributeValueForObjectTemplate(
-                object_template,
-                attribute_name,
-                attribute_property,
-                property_value
-            );
+            _ObjectTemplate_helper.SetAttributeValueForObjectTemplate(object_template, attribute_name, attribute_property, property_value);
         }
 
     }

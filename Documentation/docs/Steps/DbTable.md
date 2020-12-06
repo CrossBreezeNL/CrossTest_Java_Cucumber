@@ -154,14 +154,22 @@ Insert data into a table and overrule the template that is defined on the databa
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
-| When | en | ^I insert the following data in ([a-zA-Z0-9_@$#-]+) table (.+) using template ([a-zA-Z0-9_@$#-]+):$ |
+| When | en | ^I insert the following data using template ([a-zA-Z0-9_@$#-]+) in ([a-zA-Z0-9_@$#-]+) table (.+):$ |
 
 ### Arguments
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
+|object template | String | The name of the object template to apply |
 |database config | String | The name of the database config |
 |table name | String | The name of the table to insert data into |
-|object template | String | The name of the object template to apply |
 |data to insert | DataTable | The data to load into the table. See [TestDataTable](../Tables#testdatatable). |
 
 ### Examples
+
+
+```gherkin
+ When I insert the following data using template newdemo in demo table CUST_SAT:
+  | Id | Description    |
+  | 1  | 'FirstRow'       |
+  | 2  | 'SecondRow' |
+```

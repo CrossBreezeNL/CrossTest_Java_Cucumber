@@ -20,6 +20,16 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.10 <sup>5-12-2020</sup>
+> New release
+> !!! success "New features"
+>     * [ ] Configuration
+>         * [ ] ObjectTemplate
+>              - [X] Option to perform auto increment inserts on fields by setting seed and increment for Attributes.
+>              - [X] Override or add Attribute defaults for a object template in a specific scenario using a Gherkin sentence.
+>     * [ ] Database
+>         - [X] Apply a specific object template in a scenario when inserting data, overriding the object template setting of the detabase config.
+
 - [ ] 1.0.9 <sup>4-11-2020</sup>
 > New release
 > !!! success "Enhanced features"

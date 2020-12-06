@@ -164,6 +164,21 @@
 				<Attribute name="CUST_ID" seed="1" increment="2"/> 
 			</Attributes>
 		</ObjectTemplate>
+		
+		<ObjectTemplate name="source_currentperiod" parent="source_plain">
+			<Attributes>
+				<Attribute name="CREATE_DD" value='2020-01-01'/> 
+			</Attributes>
+		</ObjectTemplate>
+		
+		<ObjectTemplate name="source_nextperiod" parent="source_plain">
+			<Attributes>
+				<Attribute name="CREATE_DD" value='2020-02-01'/> 
+			</Attributes>
+		</ObjectTemplate>
+		
+		
+		
 		<ObjectTemplate name="source_singleprefix" prefix="singleprefix_"/>
 		<ObjectTemplate name="source_singlesuffix" suffix="_singlesuffix"/>
 		<ObjectTemplate name="source_parentwithprefix" parent="source_singleprefix"/>

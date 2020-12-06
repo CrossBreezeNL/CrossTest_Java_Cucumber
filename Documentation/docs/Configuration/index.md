@@ -60,6 +60,12 @@ The configuration can be [splitted in multiple files](./config_include.md)
 		<ObjectTemplate name="demo">
 			<Attributes>
 				<Attribute name="CREATE_DD" value="2010-01-01" />
+				<Attribute name="CUST_ID" seed="1" increment="1">
+			</Attributes>
+		</ObjectTemplate>
+		<ObjectTemplate name="newdemo">
+			<Attributes>
+				<Attribute name="CREATE_DD" value="2020-01-01" />
 			</Attributes>
 		</ObjectTemplate>
 	</ObjectTemplates>

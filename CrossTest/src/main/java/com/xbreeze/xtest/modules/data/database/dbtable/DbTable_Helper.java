@@ -29,7 +29,7 @@ public class DbTable_Helper extends Database_Helper{
 	}
 	
 	public void InsertDataIntoTableUsingTemplate (
-            String dbConfig,String tableName, String objectTemplate, DataTable table) throws Throwable {
+				                String objectTemplate, String dbConfig,String tableName,  DataTable table) throws Throwable {
 			
 			//Temporary overwrite config for table
 			DatabaseConfig databaseConfig = _config.getDatabaseConfig(dbConfig);

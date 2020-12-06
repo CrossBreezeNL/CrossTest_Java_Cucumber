@@ -368,7 +368,7 @@ public class XTestConfig {
 				return otc;
 		}
 		//Throw exception if config was not found
-		throw new XTestDatabaseException(String.format("Object template config config [%s] does not exist", configName));		
+		throw new XTestDatabaseException(String.format("Object template config [%s] does not exist", configName));		
 	}
 	
 	public ProcessConfig getProcessConfig(String configName) throws XTestProcessException {

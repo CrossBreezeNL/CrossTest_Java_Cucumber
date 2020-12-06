@@ -14,18 +14,18 @@ import io.cucumber.java.en.When;
             _DbTable_helper = DbTable_helper;
         }
 
-        @When("^I insert the following data in ([a-zA-Z0-9_@$#-]+) table (.+) using template ([a-zA-Z0-9_@$#-]+):$")
+        @When("^I insert the following data using template ([a-zA-Z0-9_@$#-]+) in ([a-zA-Z0-9_@$#-]+) table (.+):$")
         public void When_EN_InsertDataIntoTableUsingTemplate_93EF7C5A_6C4C_4426_BEED_61F6D417252A(
+            String object_template,
             String database_config,
             String table_name,
-            String object_template,
             DataTable data_to_insert
         ) throws Throwable
         {
             _DbTable_helper.InsertDataIntoTableUsingTemplate(
+                object_template,
                 database_config,
                 table_name,
-                object_template,
                 data_to_insert
             );
         }
