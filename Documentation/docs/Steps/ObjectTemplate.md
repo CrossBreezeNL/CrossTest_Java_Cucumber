@@ -6,7 +6,7 @@ For the given scenario attribute, overwrite the default value set in the object 
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
-| When | en | ^I set (value\|seed\|increment) for attribute ([a-zA-Z0-9_@$#-]+) in template ([a-zA-Z0-9_@$#-]+) to (.*)$ |
+| When | en | ^I set (value|seed|increment) for attribute ([a-zA-Z0-9_@$#-]+) in template ([a-zA-Z0-9_@$#-]+) to (.*)$ |
 
 ### Arguments
 | Parameter    | Datatype          | Description          |

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XTestConfig>	
+	<DatabaseConfigs>
+		<DatabaseConfig 
+			name="demo" 
+			databaseServerConfigName="demoserver"						
+		/>			
+    </DatabaseConfigs>
+	<DatabaseServerConfigs>		
+		<DatabaseServerConfig 
+            name="demoserver" 
+            JDBCUrl="jdbc:sqlserver://localhost;instanceName=localDev2017;databaseName=TestDB"				
+            username="tester" 
+            password ="P@$$w0rd"            
+        />   
+	</DatabaseServerConfigs>
+</XTestConfig>

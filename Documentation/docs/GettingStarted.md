@@ -1,110 +1,137 @@
 # Getting started
 
-On this wiki you will find all needed documentation to get started with CrossTest.
-
-[//]: #(test met comment)
+On this wiki you will find all needed documentation to get started with the Java/Cucumber version of CrossTest.
 
 ## How to get CrossTest
-CrossTest is available as a [NuGet package](https://www.nuget.org/packages/CrossBreeze.CrossTest/).
-If you are new to NuGet, please see the Microsoft documentation on [how to install NuGet packages](https://docs.microsoft.com/en-us/nuget/consume-packages/ways-to-install-a-package).
-When you want to setup a new testing project using CrossTest, follow the instructions on the remainder of this page.
+CrossTest is available as a [Maven package](https://mvnrepository.com/artifact/com.x-breeze.test/CrossTest).
+If you are new to Maven, you can find information about it on the [Apache website](https://maven.apache.org/what-is-maven.html).
+When you want to setup a new testing project using CrossTest, follow the instructions on the remainder of this page. 
 
-## How to use CrossTest
-In order to use CrossTest in your project, you need to include the CrossTest library in a Visual Studio C# Library project. The most convenient way to do so is by using the Visual Studio NuGet package manager.
+Specifics about how to incorporate Crosstest in your environment may vary based on your setup. For example what IDE is being used, what type of CI/CD pipeline etc. But generally speaking it comes down to
 
-### Install the SpecFlow for Visual Studio plugin
-It is recommended to install the SpecFlow for Visual Studio plugin. This will make Visual Studio recognize SpecFlow files and enables auto completion, formatting and syntax highlighting.
+ * including the required dependencies in a maven pom.xml file
+ * use the Cucumber runner or write a java class to run the tests in a framework such as JUnit
 
-To install the plugin:
+Some IDEs such as Eclipse or IntelliJ come with a bundled Maven installation, but in other cases you might have to [install Maven](https://maven.apache.org/install.html) first.
 
- * In the main menu, go to [Tools] > [Extensions and Updates]. The 'Extentions and Update' screen will appear.
- * Now click on the 'Online' category en search for 'SpecFlow'.
- * Install the 'SpecFlow for Visual Studio &lt;your version&gt;' plugin.
+## How to use CrossTest with the Cucumber runner
+To run tests locally on your computer, using the Cucumber cli runner you need the following setup:
+A folder containing:
 
-![Install SpecFlow for Visual Studio plugin](./img/VS_SpecFlow_Plugin.png)
+ * The maven pom file (pom.xml)
+ * A basis CrossTest configuration file (XTestConfig.xml)
+ * A cmd or script file to invoke maven
+ * A subfolder containing the feature testfiles
 
-### Create a Visual Studio project and include the NuGet package.
-Create a new Visual Studio project of type Visual C# Class Library. After the project is created you can remove the default 'Class1.cs' file which is created.
+### Maven Pom file
+The pom.xml should have the following contents:
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>CrossTestRunner</groupId>
+  <artifactId>CrossTestRunner</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <properties>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+	<crosstest.version>1.0.10</crosstest.version>
+	<cucumber.version>4.8.1</cucumber.version>
+  </properties>
+  <dependencies>  		
+  		<dependency>
+			<groupId>com.x-breeze.test</groupId>
+			<artifactId>CrossTest</artifactId>
+			<version>${crosstest.version}</version>
+		</dependency>		
+		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+		<!-- change dependency below to the correct JDBC driver for the specific RDBMS you are using -->
+		<dependency>
+		    <groupId>com.microsoft.sqlserver</groupId>
+		    <artifactId>mssql-jdbc</artifactId>
+		    <version>7.4.1.jre8</version>
+		</dependency>
+  </dependencies>
 
-![Create new Visual Studio project](./img/New_VS_Project.png)
+	<build>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <version>3.7.0</version>
+         <configuration>
+           <source>1.8</source>
+           <target>1.8</target>
+            <encoding>UTF-8</encoding>          
+         </configuration>
+       </plugin>                
+	</plugins>
+  	</build>
+</project>
+```
 
-Open the NuGet package manager on the newly created project.
+### Basic CrossTest configuration
+The XTestConfig.xml should have the following content. Update the DatabaseServerConfig values so it corresponds to an existing database connection in your environment.
+If you are using a different JDBC driver than SQL Server, also update the dependency in the pom.xml (previous section).
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<XTestConfig>	
+	<DatabaseConfigs>
+		<DatabaseConfig 
+			name="demo" 
+			databaseServerConfigName="demoserver"						
+		/>			
+    </DatabaseConfigs>
+	<DatabaseServerConfigs>		
+		<DatabaseServerConfig 
+            name="demoserver" 
+            JDBCUrl="jdbc:sqlserver://localhost;instanceName=localDev2017;databaseName=TestDB"				
+            username="username" 
+            password ="password"            
+        />   
+	</DatabaseServerConfigs>
+</XTestConfig>
+```
 
-![Open NuGet package manager](./img/Open_NuGet_Package_Manager.png)
+This is all configuration needed for running the first test. For an explanation of all configuration options see the [Configuration](../Configuration/) section.
 
-Select the Browse tab, in the search field type 'CrossTest' and hit 'Enter' to find the appropriate package. Select the 'CrossBreeze.CrossTest' package and on the right side click the [Install] button. A summary window of what will be installed will be shown, click 'OK'. Then a license acceptance window will open for the different components, read the licenses and click 'I Accept' (if you do :nerd:). Now CrossTest and all its dependecies will be installed into the new project.
-
-![NuGet CrossTest Package](./img/NuGet_CrossTest_Package.png)
-
-The CrossTest package and dependant packages have now been added to your project. After basic configuration you can create and run your first test.
-
-![Packages are installed](./img/Packages_Installed.png)
-
-You might have some more dependencies in your project, since Visual Studio adds some by default. In the screenshot you see the minimal dependecies needed for executing tests. If you want to execute SSIS packages you also need the 'Microsoft.SqlServer.Diagnostics.Strace' reference.
-
-### Configure CrossTest
-Before we can run our first test we need to setup basic configuration for CrossTest. 
-For our first test, we only need to specify the proper Micosoft SQL Server connection string.
-Open the App.config file in the project and edit the `ExampleMsSqlConnection` key so it contains a valid connection string. In our example there is a database instance installed with the host and instance name 'localhost\LocalDev2017'.
-
-![App config connection string](./img/CrossTest_Basic_Config.png)
-
-This is all configuration needed for running the first test. For an explanation of all configuration options see the [Configuration](./Configuration/) section.
+### Script file to run the tests
+The script should contain the following statement. The example below will run all the feature files that are stored in the testfiles subfolder.
+```
+mvn exec:java -Dexec.classpathScope=test -Dexec.mainClass=io.cucumber.core.cli.Main -Dexec.args="./testfiles --glue com.xbreeze.xtest"
+```
 
 ### Create and run your first test
 
-Add a new SpecFlow Feature file to your project by right clicking on the project name, go to 'Add' and click on 'New item'. The window 'Add New Item' will appear as shown below.
+Add a new feature file in the testfiles folder, be sure to have a file name that ends with the .feature extension and insert the following code:
+```gherkin
+Feature: a first testfeature
+    Scenario: Running a crosstest scenario
+        When I execute the following query on demo:
+            """
+            SELECT 'Hello World' AS FirstResult
+            """
 
-![Add new Specflow Feature file](./img/Create_New_SpecFlow_Feature.png)
-
-Click on the 'SpecFlow Feature File', set the 'Name' to 'FirstTest.feature' and click 'Add'. Now a new feature file is created with a sample SpecFlow test. This test won't be able to execute because there are sentences used which are not implemented. Now we update the contents of the test to the following to use some CrossTest sentenses.
-
-```
-Feature: FirstTest
-
-Scenario: Check msdb version
-	# Make sure the ExampleMsSqlServer server is used.
-	Given the ExampleMsSqlServer database server is used
-	# Use the msdb database.
-	And the msdb database is used
-	# Get the data from the dbo.msdb_version table
-	When I retrieve the contents of the [dbo].[msdb_version] table
-	# Check whether the result of the table is as expected.
-	Then I expect the following results:
-		| version_major | version_minor |
-		| 14            | 0             |
+        Then I expect the following result:
+            | FirstResult |
+            | Hello World |
 ```
 
-In this example we use the connection to a database server as defined in the App.config. We then use the 'msdb' database on that server, execute a function en check it results.
+Now execute the script file from the previous section and the output should finish with something like
+```
+INFO: Loading ObjectFactory via service loader: io.cucumber.picocontainer.PicoFactory
+..
 
-Now open the 'Test Explorer' window by going to the main menu, click on 'Test', then choose 'Windows' and click on 'Test Explorer'. If everything works you should now see the 'CheckMsdbVersion' test.
+1 Scenarios (1 passed)
+2 Steps (2 passed)
+0m1.620s
+```
 
-![Visual Studio Test Explorer - CheckMsdbVersion](./img/VS_TestExporer_CheckMsdbVersion.PNG)
+That's it! you have successfully run a first Cucumber/CrossTest feature.
+For more information about how to use Crosstest look at the [Configuration](../Configuration) and [Step](../Steps) documentation.
 
-!!!tip
-    If the test doesn't appear try to perform a rebuild on the C# project.
-
-Now run the test by right clicking on the test and click on 'Run Selected Test'. If your SQL Server version is 2017 the test will probably succeed and the test should turn green.
-
-![Visual Studio Test Explorer - CheckMsdbVersion Success](./img/VS_TestExporer_CheckMsdbVersion_Success.PNG)
-
-If the test fails (or you make it fail by changing the expected version :smile:) you will see the test will turn red and more information will be shown in the test detail window (below or on the right of the test overview).
-
-![Visual Studio Test Explorer - CheckMsdbVersion Failure](./img/VS_TestExporer_CheckMsdbVersion_Failure.PNG)
-
-To get a more readable version of the output, click on the 'Output' link (in blue) at the bottom of the message. This will open the 'Test Output' window.
-
-![Visual Studio Test Output - CheckMsdbVersion Failure](./img/VS_TestOutput_CheckMsdbVersion_Failure.PNG)
-
-!!!tip
-    By default the output of the test is shown in a smooth font (not all characters have the same width). To make the output even more readable you can choose a font where all characters have the same width, like 'Courier New'. To do this in the main menu go to 'Tools', click on 'Options'. In the 'Options' screen in the 'Environment' category choose 'Font and Colors'. Now at 'Show settings for' choose 'Environment and for the 'Display items' choose 'Plain text'. Now you can change the 'Font' to for example 'Consolas' or 'Courier New' and click 'OK' (all fixed-width fonts are bold in the drop-down).
-    
-    Sadly this will also change the font for almost any menu and window. If you also think this should be a seperate setting in Visual Studio, please vote for it on the following page: [Test explorer UI font](https://developercommunity.visualstudio.com/content/problem/208608/test-explorer-ui-font.html).
-
-    A workaround, to changing the font, is to right click in the output window and choose 'Copy all' and then paste the output in a simple editor like Notepad++.
 
 ## Bugs & issues
-When you encounter an issue while using CrossTest please report it by sending an e-mail to [info@x-breeze.com](mailto:info@x-breeze.com?SUBJECT=CrossTest%20-%20Bug%20report) with the subject 'CrossTest - Bug report'.
+When you encounter an issue while using CrossTest please report it by sending an e-mail to [info@x-breeze.com](mailto:info@x-breeze.com?SUBJECT=CrossTest%20Cucumber%20-%20Bug%20report) with the subject 'CrossTest Cucumber - Bug report'.
 
 Please provide the following information:
 
