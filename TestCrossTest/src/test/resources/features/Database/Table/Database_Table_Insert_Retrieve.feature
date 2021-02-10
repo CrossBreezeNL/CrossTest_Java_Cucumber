@@ -29,9 +29,8 @@ Feature: Write to and retrieve from database tables
     When I retrieve the contents of the source CUST_HUB table
     Then I expect the following result:
       | CUST_ID | CREATE_DD |
-      
 
-	@Negative
+  @Negative
   Scenario: Expect empty result but get a record back
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:
@@ -40,8 +39,7 @@ Feature: Write to and retrieve from database tables
     And I retrieve the contents of the source CUST_HUB table
     Then I expect the following result:
       | CUST_ID | CREATE_DD |
-      
-      
+
   # Note that for this scenario to succeed, when editing in Eclipse the Eclipse file encoding needs to be UTF-8
   # https://stackoverflow.com/questions/9180981/how-to-support-utf-8-encoding-in-eclipse
   @Positive
@@ -49,11 +47,11 @@ Feature: Write to and retrieve from database tables
     Given the source table Table with strangé character$ is empty
     When I insert the following data in source table Table with strangé character$:
       | ID   | Fie#ld with \\Strange namë |
-      | 1234 | Test value                  |
+      | 1234 | Test value                 |
     And I retrieve the contents of the source Table with strangé character$ table
     Then I expect the following result:
       | ID   | Fie#ld with \\Strange namë |
-      | 1234 | Test value                  |
+      | 1234 | Test value                 |
 
   Scenario Outline: Test with <Datatype> field
     Given the source table DataTypeTest is empty
@@ -66,13 +64,15 @@ Feature: Write to and retrieve from database tables
       | <Value>         |
 
     @Positive
+    @Debug
     Examples: 
-      | Datatype | Value               |
-      | BigInt   | 1234567891234512345 |
-      | Boolean  |                   1 |
-      | Varchar  | Some text           |
-      | Char     | Not25Chars          |
-      | Date     | 2019-11-01          |
+      | Datatype | Value                    |
+      | BigInt   |      1234567891234512345 |
+      | Boolean  |                        1 |
+      | Varchar  | Some text                |
+      | Char     | Not25Chars               |
+      | Date     | 2019-11-01               |
+      | Decimal  | 123456789012345678901.02 |
 
   @Negative
   Scenario: Char unexpected result comparison

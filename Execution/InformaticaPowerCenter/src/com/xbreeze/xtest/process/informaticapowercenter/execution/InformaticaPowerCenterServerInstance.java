@@ -1,24 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2019 CrossBreeze
+ * Copyright (c) 2021 CrossBreeze
  *
- *  This file is part of CrossTest.
+ * This file is part of CrossTest.
  *
- *     CrossTest is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * CrossTest is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *     CrossTest is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * CrossTest is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with CrossTest.  If not, see <https://www.gnu.org/licenses/>.
- *     
+ * You should have received a copy of the GNU General Public License
+ * along with CrossTest.  If not, see <https://www.gnu.org/licenses/>.
+ *      
  * Contributors:
- *     Willem Otten - CrossBreeze
- *     Harmen Wessels - CrossBreeze
+ * Willem Otten - CrossBreeze
+ * Harmen Wessels - CrossBreeze
+ * Jacob Siemaszko - CrossBreeze
  *******************************************************************************/
 package com.xbreeze.xtest.process.informaticapowercenter.execution;
 
@@ -36,10 +37,11 @@ import com.xbreeze.xtest.exception.XTestProcessException;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.DIServiceInfo;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.DataIntegrationInterfaceProxy;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.ETaskRunMode;
-import com.xbreeze.xtest.process.informaticapowercenter.wsdl.FaultDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.LoginRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowRequest;
+import com.xbreeze.xtest.process.informaticapowercenter.wsdl.TaskRequest;
+import com.xbreeze.xtest.process.informaticapowercenter.wsdl.TaskDetails;
 
 public class InformaticaPowerCenterServerInstance {
 	private ProcessConfig _processConfig;
@@ -102,12 +104,11 @@ public class InformaticaPowerCenterServerInstance {
 	     wfr.setRequestMode(ETaskRunMode.NORMAL);
 	     
 	     try {
-	    	 
+	    	
 			_proxy.startWorkflow(wfr);
 			_proxy.waitTillWorkflowComplete(wfr);
 			
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+		} catch (RemoteException e) {			
 			System.out.println("Error executing workflow: " + e.getMessage());
 			WorkflowDetails wfd;
 			try {
@@ -118,6 +119,45 @@ public class InformaticaPowerCenterServerInstance {
 				
 			} catch (RemoteException ex) {
 				// TODO Auto-generated catch block
+				ex.printStackTrace();
+				throw new XTestProcessException(ex.getMessage());			
+			}
+		}
+	}
+	
+	public void runTaskFromProcess(ProcessConfig config, String workflowName, String taskPath) throws XTestProcessException {
+		 //Create workflow request
+		ProcessServerConfig serverConfig = config.getProcessServerConfig();			
+		DIServiceInfo dsi = new DIServiceInfo(serverConfig.getProperty("Domain"),  serverConfig.getProperty("IntegrationService"));
+	    TaskRequest tr = new TaskRequest();
+	    tr.setDIServiceInfo(dsi);
+	    tr.setFolderName(config.getContainer());
+	    tr.setWorkflowName(config.getQualifiedProcessName(workflowName));
+	    tr.setRequestMode(ETaskRunMode.NORMAL);
+	    tr.setTaskInstancePath(taskPath);
+	    
+	    //Also create workflow request so we can wait for it to complete
+	    WorkflowRequest wfr = new WorkflowRequest();
+	    wfr.setDIServiceInfo(dsi);
+	    wfr.setFolderName(config.getContainer());
+	    wfr.setWorkflowName(config.getQualifiedProcessName(workflowName));
+	    wfr.setRequestMode(ETaskRunMode.NORMAL);
+	     
+	     try {
+	    	 
+			_proxy.startTask(tr);
+			_proxy.waitTillTaskComplete(tr);
+			_proxy.waitTillWorkflowComplete(wfr);
+			
+		} catch (RemoteException e) {			
+			System.out.println("Error executing task: " + e.getMessage());
+			TaskDetails td;
+			try {
+				td = _proxy.getTaskDetails(tr);		
+				System.out.println("error: " + td.getRunErrorMessage());;
+				throw new XTestProcessException(String.format("Task errorcode: %d, error: %s",td.getRunErrorCode(), td.getRunErrorMessage()));
+				
+			} catch (RemoteException ex) {				// 
 				ex.printStackTrace();
 				throw new XTestProcessException(ex.getMessage());			
 			}

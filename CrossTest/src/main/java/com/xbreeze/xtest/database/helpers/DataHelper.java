@@ -24,6 +24,7 @@ package com.xbreeze.xtest.database.helpers;
 
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -366,7 +367,7 @@ public class DataHelper {
 			}
 			
 			else if ((dataType == java.sql.Types.DECIMAL) || (dataType == java.sql.Types.DOUBLE) || (dataType == java.sql.Types.NUMERIC)) {
-				crs.updateDouble(fieldPosition, Double.valueOf(fieldValue));
+				crs.updateBigDecimal(fieldPosition, new BigDecimal(fieldValue));
 			}
 			
 			else if (
@@ -468,8 +469,8 @@ public class DataHelper {
 			}
 			
 			else if ((dataType == java.sql.Types.DECIMAL) || (dataType == java.sql.Types.DOUBLE) || (dataType == java.sql.Types.NUMERIC)) {
-				Double dblVal = crs.getDouble(fieldPosition);
-				return String.valueOf(dblVal);
+				BigDecimal longVal = crs.getBigDecimal(fieldPosition);
+				return String.valueOf(longVal);
 			}
 			
 			else if (

@@ -72,6 +72,8 @@ The configuration can be [splitted in multiple files](./config_include.md)
 	<ProcessConfigs>
         <!-- The prefix is applied to the process name that is used in the step sentence -->
 		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_m_"/>
+		    <!-- Process config referencing the task execution engine -->
+		<ProcessConfig name="demotask" container="Demo" processServerConfigName="demotask" prefix=""/>
 	</ProcessConfigs>
 	<ProcessServerConfigs>
         <!-- The executionClass specifies the process executor, in this example our Informatica PowerCenter process executor -->
@@ -80,6 +82,18 @@ The configuration can be [splitted in multiple files](./config_include.md)
 		<ProcessServerConfig 
 			name="demo"             
 			executionClass="com.xbreeze.xtest.process.informaticapowercenter.execution.InformaticaPowerCenterExecutor"
+			serverUrl="http://10.1.0.5:7333/wsh/services/BatchServices/DataIntegration">
+				<Properties>
+					<Property name="UserName" value="USER" />
+					<Property name="Password" value="PASSWORD" credentialProvider="testProvider"/>
+					<Property name="Domain" value="InfaDemo"/>
+					<Property name="Repository" value="InfaDemo-RS"/>
+					<Property name="IntegrationService" value = "InfaDemo_IS"/>
+				</Properties>
+			</ProcessServerConfig>
+			<ProcessServerConfig 
+			name="demotask"             
+			executionClass="com.xbreeze.xtest.process.informaticapowercenter.execution.InformaticaPowerCenterTaskExecutor"
 			serverUrl="http://10.1.0.5:7333/wsh/services/BatchServices/DataIntegration">
 				<Properties>
 					<Property name="UserName" value="USER" />

@@ -30,12 +30,13 @@ import com.xbreeze.xtest.config.ProcessServerConfig;
 import com.xbreeze.xtest.exception.XTestProcessException;
 import com.xbreeze.xtest.process.execution.ProcessExecutor;
 
+
 /**
  * 
  * Executor for informatica powercenter processes 
  * @author Willem
  */
-public class InformaticaPowerCenterExecutor implements ProcessExecutor {
+public class InformaticaPowerCenterTaskExecutor implements ProcessExecutor {
 	
 	
 	private HashMap<String, InformaticaPowerCenterServerInstance> _connections;
@@ -43,14 +44,23 @@ public class InformaticaPowerCenterExecutor implements ProcessExecutor {
 	 * Constructor for initializing a executor
 	 *
 	 */
-	public InformaticaPowerCenterExecutor() {
+	public InformaticaPowerCenterTaskExecutor() {
 		_connections = new HashMap<>();
 	}
 
 	public void runProcess(ProcessConfig config, String processName) throws XTestProcessException{
 		
 		InformaticaPowerCenterServerInstance ipsc = initializeConnection(config);
-		ipsc.runProcess(config, processName);		
+		//processName should be:
+		// workflow.taskname or workflow.worklet.taskname
+		int firstPeriod = processName.indexOf("."); 
+		if (firstPeriod < 1) {
+			throw new XTestProcessException(String.format("Invalid processName format: %s the processName should be in format workflowname.taskname or workflowname.workletname.taskname", processName));
+		}		
+		//extract workflow name
+		String workflowName = processName.substring(0, firstPeriod);
+		String taskPath = processName.substring(firstPeriod + 1);
+		ipsc.runTaskFromProcess(config, workflowName, taskPath);		
 	}
 	
 	/**

@@ -20,6 +20,16 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.11 <sup>11-2-2021</sup>
+> New release
+> !!! success "New features"
+>     * [ ] Process
+>         * [ ] PowerCenter engine
+>              - [X] Run individual tasks in a workflow
+> !!! warning "Bug fixes"
+>     * [ ] Database steps
+>         - [X] Fixed issue with decimal datatypes, large numbers where rounded. Now using a bigger Java datatype to prevent this from happening.
+
 - [ ] 1.0.10 <sup>5-12-2020</sup>
 > New release
 > !!! success "New features"
