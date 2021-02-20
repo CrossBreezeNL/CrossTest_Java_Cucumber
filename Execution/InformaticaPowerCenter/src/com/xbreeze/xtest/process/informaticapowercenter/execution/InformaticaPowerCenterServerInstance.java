@@ -24,6 +24,7 @@
 package com.xbreeze.xtest.process.informaticapowercenter.execution;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
@@ -32,6 +33,7 @@ import javax.xml.soap.SOAPFactory;
 import org.apache.axis.message.SOAPHeaderElement;
 
 import com.xbreeze.xtest.config.ProcessConfig;
+import com.xbreeze.xtest.config.ConfigProperty;
 import com.xbreeze.xtest.config.ProcessServerConfig;
 import com.xbreeze.xtest.exception.XTestProcessException;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.DIServiceInfo;
@@ -42,6 +44,7 @@ import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.TaskRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.TaskDetails;
+import com.xbreeze.xtest.process.informaticapowercenter.wsdl.Parameter;
 
 public class InformaticaPowerCenterServerInstance {
 	private ProcessConfig _processConfig;
@@ -103,6 +106,15 @@ public class InformaticaPowerCenterServerInstance {
 	     wfr.setWorkflowName(config.getQualifiedProcessName(processName));
 	     wfr.setRequestMode(ETaskRunMode.NORMAL);
 	     
+	     //Add parameters, set scope to GLOBAL so variables are always applied
+	     if (config.getParameters().size() > 0) {
+		     Parameter[] wfParameters = new Parameter[config.getParameters().size()];
+		     for (int i = 0; i < config.getParameters().size();i++) {
+		    	 ConfigProperty cp = config.getParameters().get(i);
+		    	 wfParameters[i] = (new Parameter("GLOBAL", cp.getName(), cp.getValue()));
+		     }
+		     wfr.setParameters(wfParameters);
+	     }
 	     try {
 	    	
 			_proxy.startWorkflow(wfr);
@@ -135,6 +147,17 @@ public class InformaticaPowerCenterServerInstance {
 	    tr.setWorkflowName(config.getQualifiedProcessName(workflowName));
 	    tr.setRequestMode(ETaskRunMode.NORMAL);
 	    tr.setTaskInstancePath(taskPath);
+
+		  //Add parameters, set scope to GLOBAL so variables are always applied
+	     if (config.getParameters().size() > 0) {
+		     Parameter[] wfParameters = new Parameter[config.getParameters().size()];
+		     for (int i = 0; i < config.getParameters().size();i++) {
+		    	 ConfigProperty cp = config.getParameters().get(i);
+		    	 wfParameters[i] = (new Parameter("GLOBAL", cp.getName(), cp.getValue()));
+		     }
+		     tr.setParameters(wfParameters);
+	     }
+
 	    
 	    //Also create workflow request so we can wait for it to complete
 	    WorkflowRequest wfr = new WorkflowRequest();
@@ -142,12 +165,12 @@ public class InformaticaPowerCenterServerInstance {
 	    wfr.setFolderName(config.getContainer());
 	    wfr.setWorkflowName(config.getQualifiedProcessName(workflowName));
 	    wfr.setRequestMode(ETaskRunMode.NORMAL);
-	     
+	    
 	     try {
-	    	 
+	    	 //Start the task, then wait for the entire workflow to complete
+	    	 //this to prevent subsequent calls to the same workflow since this leads to errors.
 			_proxy.startTask(tr);
-			_proxy.waitTillTaskComplete(tr);
-			_proxy.waitTillWorkflowComplete(wfr);
+			_proxy.waitTillWorkflowComplete(wfr);			
 			
 		} catch (RemoteException e) {			
 			System.out.println("Error executing task: " + e.getMessage());

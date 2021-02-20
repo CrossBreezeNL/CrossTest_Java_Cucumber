@@ -22,9 +22,14 @@
  *******************************************************************************/
 package com.xbreeze.xtest.config;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 import com.xbreeze.xtest.exception.XTestException;
+import com.xbreeze.xtest.exception.XTestProcessException;
 
 public class ProcessConfig {
 
@@ -34,6 +39,7 @@ public class ProcessConfig {
 	private String _processNamePrefix;
 	private String _templateName = "";
 	private ObjectTemplateConfig _template;
+	ArrayList<ConfigProperty> _parameters = new ArrayList<>();
 	
 	private ProcessServerConfig _processServerConfig;
 	
@@ -113,5 +119,14 @@ public class ProcessConfig {
 		this._template = template;
 	}
 	
+	@XmlElement(name="Parameter")
+	@XmlElementWrapper(name="Parameters")
+	public ArrayList<ConfigProperty> getParameters() {
+		return this._parameters;
+	}
+	
+	public void setParameters(ArrayList<ConfigProperty> parameters) {
+		this._parameters = parameters;
+	}
 	
 }
