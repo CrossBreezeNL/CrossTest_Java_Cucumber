@@ -23,6 +23,4 @@ For the given scenario attribute, overwrite the default value set in the object 
  When I set value for attribute LOAD_DTS in template demo to 2020-01-01
  When I set seed for attribute CUST_ID in template demo to 2
  When I set increment for attribute CUST_ID in template demo to 1
- 
-
 ```

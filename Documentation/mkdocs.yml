@@ -29,6 +29,7 @@ nav:
   - 'DbTable' : 'Steps/DbTable.md'
   - 'Result' : 'Steps/Result.md'
   - 'ObjectTemplate' : 'Steps/ObjectTemplate.md'
+  - 'ProcessConfig' : 'Steps/ProcessConfig.md'
   - 'Tables'       : 'Steps/Tables.md'
 - Configuration:
   - 'Introduction'       : 'Configuration/index.md'

@@ -6,7 +6,7 @@ Execute an (ETL) process using the engine configured in a CrossTest process serv
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
-| When | en | ^I run the ([a-zA-Z0-9_@$#]+) process ([a-zA-Z0-9_@$#]+)$ |
+| When | en | ^I run the ([a-zA-Z0-9_@$#]+) process ([a-zA-Z0-9_@$#.]+)$ |
 
 ### Arguments
 | Parameter    | Datatype          | Description          |
