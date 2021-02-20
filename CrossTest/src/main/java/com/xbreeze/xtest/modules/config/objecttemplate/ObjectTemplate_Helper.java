@@ -16,9 +16,9 @@ public class ObjectTemplate_Helper {
 	}
 	
 	public void SetAttributeValueForObjectTemplate (
+			String  attribute_property,
+			String  attribute_name,
           String  object_template,
-          String  attribute_name,
-          String  attribute_property,
           String  property_value
         ) throws Throwable {
 		//Get the object template from the config
