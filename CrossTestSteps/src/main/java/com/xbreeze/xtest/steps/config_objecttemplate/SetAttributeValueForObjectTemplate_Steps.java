@@ -22,7 +22,12 @@ import io.cucumber.java.en.When;
             String property_value
         ) throws Throwable
         {
-            _ObjectTemplate_helper.SetAttributeValueForObjectTemplate(object_template, attribute_name, attribute_property, property_value);
+            _ObjectTemplate_helper.SetAttributeValueForObjectTemplate(
+                attribute_property,
+                attribute_name,
+                object_template,
+                property_value
+            );
         }
 
     }
