@@ -71,7 +71,13 @@ The configuration can be [splitted in multiple files](./config_include.md)
 	</ObjectTemplates>
 	<ProcessConfigs>
         <!-- The prefix is applied to the process name that is used in the step sentence -->
-		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_m_"/>
+		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_m_">
+			<Parameters>
+				<!-- Parameters that are passed to the PowerCenter workflow -->
+				<Parameter name="$$WFL_CustParam1" value="first"/>
+				<Parameter name="$$WFL_CustParam2" value="second"/>
+			</Parameters>
+		</ProcessConfig>
 		    <!-- Process config referencing the task execution engine -->
 		<ProcessConfig name="demotask" container="Demo" processServerConfigName="demotask" prefix=""/>
 	</ProcessConfigs>

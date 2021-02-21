@@ -112,7 +112,7 @@
     <xs:attribute name="commandTimeOut" type="xs:int"/>
     <xs:attribute name="databaseServerConfigName" type="xs:string"/>
     <xs:attribute name="name" type="xs:string"/>
-    <xs:attribute name="quoteObjectNames" type="xs:boolean" />
+    <xs:attribute name="quoteObjectNames" type="xs:boolean"/>
     <xs:attribute name="schema" type="xs:string"/>
     <xs:attribute name="template" type="xs:string"/>
   </xs:complexType>
@@ -170,10 +170,17 @@
 
   <xs:complexType name="processConfig">
     <xs:sequence>
+      <xs:element name="Parameters" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Parameter" type="configProperty" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="template" type="objectTemplateConfig" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="container" type="xs:string"/>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string"/>    
     <xs:attribute name="prefix" type="xs:string"/>
     <xs:attribute name="processServerConfigName" type="xs:string"/>
     <xs:attribute name="template" type="xs:string"/>

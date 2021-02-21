@@ -20,6 +20,17 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.12 <sup>22-2-2021</sup>
+> New release
+> !!! success "Enhanced features"
+>         * [ ] General
+>             - [X] Use multi-record variables in tables and statements
+>     * [ ] Process
+>         * [ ] PowerCenter engine
+>              - [X] Add parameters to a process config
+>              - [X] Add or modify parameters within a test scenario
+
+
 - [ ] 1.0.11 <sup>11-2-2021</sup>
 > New release
 > !!! success "New features"

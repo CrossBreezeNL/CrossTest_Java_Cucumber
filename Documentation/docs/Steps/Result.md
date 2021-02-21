@@ -21,24 +21,24 @@ Compare expected and actual result
 ```gherkin
  Then I expect the following results:
   | Id | Description    |
-  | 1  | 'FirstRow'       |
-  | 2  | 'SecondRow' |
+  | 1  | FirstRow       |
+  | 2  | SecondRow |
 ```
 
 
 ```gherkin
  Dan verwacht ik het volgende resultaat:         
   | Id | Description    |
-  | 1  | 'FirstRow'       |
-  | 2  | 'SecondRow' |
+  | 1  | FirstRow       |
+  | 2  | SecondRow |
 ```
 
 
 ```gherkin
  Then I expect the following result:
   | Id | Description    |
-  | 1  | 'FirstRow'       |
-  | 2  | 'SecondRow' |
+  | 1  | FirstRow       |
+  | 2  | SecondRow |
 ```
 ## Store contents of field in variable
 Fetch the value of a column in the result and store it in a variable. The result should only contain one record. Variables can be used in data tables using the name prefixed with XTestVariabes.
@@ -65,7 +65,7 @@ Fetch the value of a column in the result and store it in a variable. The result
    And I store the contents of the field Cust_ID into variable CustomerID
    And I insert the following data in demo table CUST_SAT:
   | Id                         | Description |
-  | XTestVariables.CustomerID  | &apos;FirstRow&apos;  |
+  | XTestVariables.CustomerID  | FirstRow  |
  
  Given I execute the following query on source:
     """
@@ -73,7 +73,7 @@ Fetch the value of a column in the result and store it in a variable. The result
     """ 
    And I store the contents of the field Cust_ID into variable CustomerID
    And I insert the following data in demo table CUST_SAT:
-  | Id                         | Description |
-  | XTestVariables.CustomerID[0]  | &apos;FirstRow&apos;  |
-  | XTestVariables.CustomerID[1]  | &apos;SecondRow&apos;  |
+  | Id                            | Description |
+  | XTestVariables.CustomerID[0]  | FirstRow  |
+  | XTestVariables.CustomerID[1]  | SecondRow  |
 ```
