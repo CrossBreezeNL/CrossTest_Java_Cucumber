@@ -66,4 +66,14 @@ Fetch the value of a column in the result and store it in a variable. The result
    And I insert the following data in demo table CUST_SAT:
   | Id                         | Description |
   | XTestVariables.CustomerID  | &apos;FirstRow&apos;  |
+ 
+ Given I execute the following query on source:
+    """
+     SELECT CUST_ID FROM CUST_HUB ORDER BY CUST_ID 
+    """ 
+   And I store the contents of the field Cust_ID into variable CustomerID
+   And I insert the following data in demo table CUST_SAT:
+  | Id                         | Description |
+  | XTestVariables.CustomerID[0]  | &apos;FirstRow&apos;  |
+  | XTestVariables.CustomerID[1]  | &apos;SecondRow&apos;  |
 ```
