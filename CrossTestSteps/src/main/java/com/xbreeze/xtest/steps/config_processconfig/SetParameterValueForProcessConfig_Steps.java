@@ -14,8 +14,8 @@ import io.cucumber.java.en.When;
             _ProcessConfig_helper = ProcessConfig_helper;
         }
 
-        @When("^I set parameter {parameter name} for process config {process config name} to {parameter value}$")
-        public void SetParameterForProcessConfig(
+        @When("^I set parameter ([a-zA-Z0-9_@$#-]+) for process config ([a-zA-Z0-9_@$#-]+) to (.*)$")
+        public void When_EN_SetParameterValueForProcessConfig_B7363A79_CDC1_4E98_AD59_B96552B68FC5(
             String parameter_name,
             String process_config_name,
             String parameter_value

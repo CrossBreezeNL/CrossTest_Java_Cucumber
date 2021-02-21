@@ -6,7 +6,7 @@ Overwrite a parameter value for a process config parameter, or add it as a new e
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
-| When | en | ^I set parameter {parameter name} for process config {process config name} to {parameter value}$ |
+| When | en | ^I set parameter ([a-zA-Z0-9_@$#-]+) for process config ([a-zA-Z0-9_@$#-]+) to (.*)$ |
 
 ### Arguments
 | Parameter    | Datatype          | Description          |
