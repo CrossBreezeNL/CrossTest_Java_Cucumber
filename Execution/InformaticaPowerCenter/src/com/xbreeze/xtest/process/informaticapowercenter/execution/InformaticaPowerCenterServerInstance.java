@@ -111,7 +111,7 @@ public class InformaticaPowerCenterServerInstance {
 		     Parameter[] wfParameters = new Parameter[config.getParameters().size()];
 		     for (int i = 0; i < config.getParameters().size();i++) {
 		    	 ConfigProperty cp = config.getParameters().get(i);
-		    	 wfParameters[i] = (new Parameter("GLOBAL", cp.getName(), cp.getValue()));
+		    	 wfParameters[i] = (new Parameter("GLOBAL", config.getQualifiedParameterName(cp.getName()), cp.getValue()));
 		     }
 		     wfr.setParameters(wfParameters);
 	     }
@@ -153,7 +153,7 @@ public class InformaticaPowerCenterServerInstance {
 		     Parameter[] wfParameters = new Parameter[config.getParameters().size()];
 		     for (int i = 0; i < config.getParameters().size();i++) {
 		    	 ConfigProperty cp = config.getParameters().get(i);
-		    	 wfParameters[i] = (new Parameter("GLOBAL", cp.getName(), cp.getValue()));
+		    	 wfParameters[i] = (new Parameter("GLOBAL", config.getQualifiedParameterName(cp.getName()), cp.getValue()));
 		     }
 		     tr.setParameters(wfParameters);
 	     }

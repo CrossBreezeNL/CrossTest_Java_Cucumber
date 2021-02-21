@@ -62,7 +62,7 @@ Feature: Test powercenter process
       |        1234 | Henk12          | NL      |
       |         431 | Harry12         | USA     |
       
-  Scenario: Starting a powercenter task process in a worklet
+  Scenario: Starting a powercenter task process in a worklet with parameters
     When I run the demotaskWithParameters process wf_m_load_Customer.wklt_loadCustomer.s_m_load_Customer1
     And I retrieve the contents of the pwcTarget Customer table
     Then I expect the following result:
@@ -70,10 +70,22 @@ Feature: Test powercenter process
       |        1234 | Henk34          | NL      |
       |         431 | Harry34         | USA     |     
       
- Scenario: Starting a powercenter worklet
+ Scenario: Starting a powercenter worklet with parameters
     When I run the demotaskWithParameters process wf_m_load_Customer.wklt_loadCustomer
     And I retrieve the contents of the pwcTarget Customer table
     Then I expect the following result:
       | Customer_ID | Customer_Name | Country |
       |        1234 | Henk34          | NL      |
-      |         431 | Harry34         | USA     |     
+      |         431 | Harry34         | USA     |
+      
+      #I set parameter {parameter name} for process config {process config name} to {parameter value}
+  Scenario: Starting a powercenter task process with overridden parameters
+  	When I set parameter WFL_CustParam1 for process config demotaskWithParameters to 2
+    And I run the demotaskWithParameters process wf_m_load_Customer.s_m_load_Customer
+    And I retrieve the contents of the pwcTarget Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country |
+      |        1234 | Henk22          | NL      |
+      |         431 | Harry22         | USA     |
+           
+           
