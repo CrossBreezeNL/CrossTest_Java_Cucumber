@@ -116,6 +116,7 @@ public class ResultContext {
 	 */
 	public void setVariable(String fieldName, String variableName) throws XTestException {
 		int columnToRead = -1;	
+		boolean isArray = false;
 		if (this._result == null) {
 				throw new XTestException("No result is stored to read variable from");
 			}
@@ -123,12 +124,18 @@ public class ResultContext {
 			try {
 				//move cursor to last row, if false no row was found
 				if (this._result.last()==false) {
-					throw new XTestException("The result contains no rows to read variable from");
+					throw new XTestException(String.format("The result contains no rows to read variable %s from", variableName));
 				}		
 				
-				//Get row number of last row, if not one, throw error
+				//Get row number of last row, if not one, isArray is true
 				if (this._result.getRow() != 1) {
-					throw new XTestException(String.format("The result contains %d rows. Can only store result in variable when there is one row.",this._result.getRow()));
+					isArray = true;
+					logger.info(String.format("Reading %d rows into variable %s", this._result.getRow(), variableName));
+				}
+				
+				//Limit records to read to 500
+				if (this._result.getRow() > 500) {
+					throw new XTestException(String.format("Trying to read %d records into variable %s from %s. the max no of records supported is 500", this._result.getRow(), variableName, fieldName));
 				}
 			} catch (SQLException e) {
 				throw new XTestException(XTestException.getCompositeErrorMessage("Error getting last record in result set for setting variable", e));
@@ -145,17 +152,44 @@ public class ResultContext {
 				if (columnToRead == -1) { 
 					throw new XTestException(String.format("Field %s not found in resultset for setting variable", fieldName));
 				}
-				//Get result and store in variables hashmap				
-				String variableValue = this._result.getString(columnToRead);
-				logger.info(String.format("Storing value %s from field %s under variable name %s", variableValue, fieldName, variableName));
-				this._variables.put(ResultContext.VARIABLE_PREFIX.concat(variableName), variableValue);
-				if (this._result.wasNull()) {
-					throw new XTestException(String.format("Result read for %s was null", fieldName));
+				if (isArray == false) {
+					//Get result and store in variables hashmap
+					readVariableFromResult(fieldName, columnToRead, variableName);
+				}
+				else {
+					this._result.beforeFirst();
+					int rowCount = 0;
+					while (this._result.next()) {
+						String arrVariableName = String.format("%s[%d]", variableName, rowCount);
+						readVariableFromResult(fieldName, columnToRead, arrVariableName);						
+						rowCount++;
+					}
 				}
 					
 			} catch (SQLException e) {
 				throw new XTestException(XTestException.getCompositeErrorMessage("Error looking up field in result for setting variable", e));
 			}
+	}
+	
+	/**
+	 * Reads a value from the result set's current record and stores it under the given variable name
+	 * @param fieldName the column name to read
+	 * @param columnToRead the column position to read
+	 * @param variableName the variable name to use
+	 */
+	private void readVariableFromResult(String fieldName, int columnToRead, String variableName) throws XTestException {
+		try {
+			String variableValue = this._result.getString(columnToRead);
+			logger.info(String.format("Storing value %s from field %s under variable name %s", variableValue, fieldName, variableName));
+			this._variables.put(ResultContext.VARIABLE_PREFIX.concat(variableName), variableValue);
+			if (this._result.wasNull()) {
+				logger.info(String.format("Read NULL for %s into %s", fieldName, variableName));
+				throw new XTestException(String.format("Result read for %s was null", fieldName));
+			}
+		}
+		catch (SQLException e) {
+			throw new XTestException(XTestException.getCompositeErrorMessage(String.format("Error reading %s from position %d into variable %s", fieldName, columnToRead, variableName), e));
+		}
 	}
 	
 	/**
@@ -204,7 +238,7 @@ public class ResultContext {
 			String sortedKey = sortedKeys.get(i);
 			logger.info(String.format("Replacing variable %s", sortedKey));
 			String varValue = this._variables.get(sortedKey);
-			text = text.replaceAll(sortedKey, varValue);
+			text = text.replaceAll(sortedKey.replace("[",  "\\[").replace("]", "\\]"), varValue);
 		}
 		logger.info(String.format("Text with substituted variables: %s", text));
 		return text;

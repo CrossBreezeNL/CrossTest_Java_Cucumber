@@ -37,19 +37,17 @@ public class ProcessConfig {
 	private String _container;
 	private String _processServerConfigName;
 	private String _processNamePrefix;
-	private String _parameterNamePrefix ="";
 	private String _templateName = "";
 	private ObjectTemplateConfig _template;
 	ArrayList<ConfigProperty> _parameters = new ArrayList<>();
 	
 	private ProcessServerConfig _processServerConfig;
 	
-	public ProcessConfig(String name, String processServerConfig, String container, String prefix, String parameterNamePrefix) {
+	public ProcessConfig(String name, String processServerConfig, String container, String prefix) {
 		this._name = name;
 		this._container = container;
 		this._processServerConfigName = processServerConfig;
-		this._processNamePrefix = prefix;
-		this._parameterNamePrefix = parameterNamePrefix;
+		this._processNamePrefix = prefix;		
 	}
 	
 	public ProcessConfig() {
@@ -78,9 +76,6 @@ public class ProcessConfig {
 		return this._processNamePrefix.concat(processName);
 	}
 	
-	public String getQualifiedParameterName(String parameterName) {
-		return this._parameterNamePrefix.concat(parameterName);
-	}
 	
 	@XmlAttribute(name="name")
 	public String getName() {
@@ -100,14 +95,6 @@ public class ProcessConfig {
 		this._processNamePrefix = prefix;
 	}
 	
-	@XmlAttribute(name="parameterPrefix")
-	public String getParameterNamePrefix() {
-		return this._parameterNamePrefix;
-	}
-	
-	public void setParameterNamePrefix(String prefix) {
-		this._parameterNamePrefix = prefix;
-	}
 	public void setProcessServerAndTemplateConfig(XTestConfig config) throws XTestException{
 		this._processServerConfig = config.getProcessServerConfig(_processServerConfigName);
 		this._template = config.getObjectTemplateConfig(_templateName);
