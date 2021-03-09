@@ -63,7 +63,7 @@ Feature: Write to and retrieve from database tables
       | Test_<Datatype> |
       | <Value>         |
 
-    @Positive    
+    @Positive
     Examples: 
       | Datatype | Value                    |
       | BigInt   |      1234567891234512345 |
@@ -83,3 +83,32 @@ Feature: Write to and retrieve from database tables
     Then I expect the following result:
       | Test_Char |
       | Output    |
+
+  @Negative
+  Scenario: Shifting empty field should be detected as difference
+    Given the source table Customer is empty
+    When I insert the following data in source table Customer:
+      | Customer_ID | Customer_Name | Country | IsActive |
+      |           1 | Smith         |         |        1 |
+    And I retrieve the contents of the source Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country | IsActive |
+      |           1 |               | Smith   |        1 |
+
+  @Positive 
+  Scenario Outline: Trailing zeroes make no difference <scenario>
+    Given the source table DataTypeTest is empty
+    When I insert the following data in source table DataTypeTest:
+      | Test_Decimal |
+      | <InputValue> |
+    And I retrieve the contents of the source DataTypeTest table
+    Then I expect the following result:
+      | Test_Decimal  |
+      | <OutputValue> |
+
+    Examples: 
+      | scenario      | InputValue | OutputValue |
+      | same decimals |      25.00 |       25.00 |
+      | Less decimals |      25.00 |        25.0 |
+      | No decimals   |      25.00 |          25 |
+      | More decimals |       25.0 |       25.00 |

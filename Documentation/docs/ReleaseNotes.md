@@ -20,6 +20,17 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.13 <sup>9-3-2021</sup>
+> New release
+> !!! success "Enhanced features"         
+>     * [ ] Process
+>         * [ ] PowerCenter engine>              
+>              - [X] Add or modify parameters within a test scenario using XTest variables
+> !!! warning "Bug fixes"
+>     * [ ] Database steps /expected results
+>         - [X] Fixed comparison issue with decimal datatypes that have trailing zeroes.
+>         - [X] Fixed comparison issue with adjecant empty/null field differences not being detected.   
+
 - [ ] 1.0.12 <sup>22-2-2021</sup>
 > New release
 > !!! success "Enhanced features"

@@ -10,7 +10,7 @@ Feature: Test powercenter process
       |         431 | Harry         | USA     |
 
   Scenario: Starting a powercenter workflow process
-    When I run the demo process load_Customer
+    When I run the demo process m_load_Customer
     And I retrieve the contents of the pwcTarget Customer table
     Then I expect the following result:
       | Customer_ID | Customer_Name | Country |
@@ -20,7 +20,7 @@ Feature: Test powercenter process
       |         431 | Harry         | USA     |
 
   Scenario: Starting a powercenter workflow process with parameters
-    When I run the demoWithParameters process load_Customer
+    When I run the demoWithParameters process m_load_Customer
     And I retrieve the contents of the pwcTarget Customer table
     Then I expect the following result:
       | Customer_ID | Customer_Name    | Country |
@@ -106,3 +106,12 @@ Feature: Test powercenter process
       |         431 | Harry12       | USA     |
       |        1234 | Henk123       | NL      |
       |         431 | Harry123      | USA     |
+  
+  Scenario: Starting a powercenter workflow and specify starttime for parameter
+  When I execute the following query on source:
+  """
+  	SELECT CONCAT(CONVERT(VARCHAR, GetDate(), 101),' ', CONVERT(VARCHAR, GetDate(), 108)) as currentDT
+  """
+  And I store the contents of the field currentDT into variable CurrentDT
+  When I set parameter $$wfl_starttime for process config demo to XTestVariables.CurrentDT
+  And I run the demo process test_parameter   

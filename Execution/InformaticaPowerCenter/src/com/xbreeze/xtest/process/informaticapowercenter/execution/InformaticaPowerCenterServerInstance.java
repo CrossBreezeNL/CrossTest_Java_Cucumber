@@ -39,6 +39,7 @@ import com.xbreeze.xtest.exception.XTestProcessException;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.DIServiceInfo;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.DataIntegrationInterfaceProxy;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.ETaskRunMode;
+import com.xbreeze.xtest.process.informaticapowercenter.wsdl.FaultDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.LoginRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowRequest;
@@ -120,8 +121,9 @@ public class InformaticaPowerCenterServerInstance {
 			_proxy.startWorkflow(wfr);
 			_proxy.waitTillWorkflowComplete(wfr);
 			
-		} catch (RemoteException e) {			
-			System.out.println("Error executing workflow: " + e.getMessage());
+		} catch (RemoteException e) {
+			
+			System.out.println("Error executing workflow: " + getRemoteExceptionErrorMessage(e));
 			WorkflowDetails wfd;
 			try {
 				wfd = _proxy.getWorkflowDetails(wfr);
@@ -173,7 +175,7 @@ public class InformaticaPowerCenterServerInstance {
 			_proxy.waitTillWorkflowComplete(wfr);			
 			
 		} catch (RemoteException e) {			
-			System.out.println("Error executing task: " + e.getMessage());
+			System.out.println("Error executing task: " + getRemoteExceptionErrorMessage(e));
 			TaskDetails td;
 			try {
 				td = _proxy.getTaskDetails(tr);		
@@ -185,5 +187,17 @@ public class InformaticaPowerCenterServerInstance {
 				throw new XTestProcessException(ex.getMessage());			
 			}
 		}
+	}
+	
+	private String getRemoteExceptionErrorMessage(RemoteException e) {
+		String msg = "Unknown error";
+		if (e.getMessage() != null) {
+			return e.getMessage();
+		}
+		if (e instanceof FaultDetails) {
+			FaultDetails fd = (FaultDetails) e;
+			return String.format("PowerCenter error: %s %s", fd.getErrorCode(), fd.getFaultString()); 
+		}
+		return msg;
 	}
 }

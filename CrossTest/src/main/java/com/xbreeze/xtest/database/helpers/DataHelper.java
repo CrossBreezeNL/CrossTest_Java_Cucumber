@@ -470,7 +470,9 @@ public class DataHelper {
 			
 			else if ((dataType == java.sql.Types.DECIMAL) || (dataType == java.sql.Types.DOUBLE) || (dataType == java.sql.Types.NUMERIC)) {
 				BigDecimal longVal = crs.getBigDecimal(fieldPosition);
-				return String.valueOf(longVal);
+				//return String.valueOf(longVal);
+				//Use string.format to remove trailing zeroes
+				return String.format("%.0f", longVal);
 			}
 			
 			else if (
@@ -565,7 +567,11 @@ public class DataHelper {
 				StringBuilder hashInput = new StringBuilder();
 				rowCounter++;
 				for (int i = 1; i <= crs.getMetaData().getColumnCount(); i++) {
-					String val = getFieldValue(crs, i);	
+					String val = getFieldValue(crs, i);
+					// If the value is an empty string, set it to a value so adjecant empty fields will not lead to identical hashvalues
+					if (val.equalsIgnoreCase("")) {
+						val = "~XT-EMPTYSTRING";
+					}
 					String fieldName = crs.getMetaData().getColumnName(i).toLowerCase();
 					if (fieldNames.contains(fieldName)) {
 						hashInput.append(val);

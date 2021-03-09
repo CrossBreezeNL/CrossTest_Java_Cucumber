@@ -203,10 +203,10 @@
 			
 	</ObjectTemplates>
 	<ProcessConfigs>
-		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_m_">
+		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_">
 		</ProcessConfig>
 	
-		<ProcessConfig name="demoWithParameters" container="Demo" processServerConfigName="demo" prefix="wf_m_">
+		<ProcessConfig name="demoWithParameters" container="Demo" processServerConfigName="demo" prefix="wf_">
 			<Parameters>
 				<Parameter name="$$WFL_CustParam1" value="first"/>
 				<Parameter name="$$WFL_CustParam2" value="second"/>
