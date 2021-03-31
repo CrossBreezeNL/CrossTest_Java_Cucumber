@@ -129,9 +129,8 @@ public class XTestConfig {
 				
 		try {
 			//Read file into string and resolve any includes
-			URI configFileUri = Paths.get("", file).toAbsolutePath().toUri();
-			HashMap<URI, Integer> resolvedIncludes = new HashMap<>();			
-			String resolvedConfig = getConfigWithResolvedIncludes(FileUtils.getFileContent(configFileUri), configFileUri, 0, resolvedIncludes);
+		
+			String resolvedConfig = getResolvedConfig(file);
 			JAXBContext jaxbContext = JAXBContext.newInstance(XTestConfig.class);
 			Unmarshaller xTestConfigUnmarshaller = jaxbContext.createUnmarshaller();
 			Schema configSchema = getSchema();
@@ -175,7 +174,7 @@ public class XTestConfig {
 				logger.addHandler(outputConsoleHandler);
 			}
 		}	
-		catch (JAXBException | SAXException | ParserConfigurationException | IOException e) {
+		catch (JAXBException | SAXException | ParserConfigurationException e) {
 			String message = e.getMessage();
 			if (message == null && e.getCause() != null) {
 				message  =e.getCause().getMessage();
@@ -205,6 +204,24 @@ public class XTestConfig {
 			return cfg;
 	}
 	
+	/**
+	 * Reads the xtest config file, resolves all includes and returns the content in a string
+	 * @param xtestConfigFileName
+	 * @return the filename found at the given path, with all includes resolved
+	 * @throws  
+	 * @throws XTestException 
+	 */
+	public static String getResolvedConfig(String xtestConfigFileName) throws XTestException {
+		URI configFileUri = Paths.get("", xtestConfigFileName).toAbsolutePath().toUri();
+		HashMap<URI, Integer> resolvedIncludes = new HashMap<>();	
+		try {
+			return getConfigWithResolvedIncludes(FileUtils.getFileContent(configFileUri), configFileUri, 0, resolvedIncludes);
+		} 
+		catch (IOException exc) {
+			throw new XTestException(String.format("Error resolving file %s: %s", xtestConfigFileName, exc.getMessage()));
+		}
+	}
+
 	/**
 	 * Recursively resolve XIncludes in the XTestConfig.xml file 
 	 * @param xTestConfig The config that might include XIncludes to resolve

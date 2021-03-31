@@ -27,7 +27,7 @@
 	<groupId>com.x-breeze.test</groupId>
 	<artifactId>CrossTestCore</artifactId>
 	<properties>
-  		<crosstest.version>1.0.13</crosstest.version>
+  		<crosstest.version>1.0.14</crosstest.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
   	<version>${crosstest.version}</version>	

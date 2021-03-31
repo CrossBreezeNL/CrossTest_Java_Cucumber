@@ -20,11 +20,18 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.14 <sup>31-3-2021</sup>
+> New release
+> !!! success "Enhanced features"         
+>     * [ ] Config
+>         * [ ] Includes              
+>              - [X] Add public method to XTestConfig class to get the XTestConfig xml file with all includes resolved, in case additional preprocessing is needed.
+
 - [ ] 1.0.13 <sup>9-3-2021</sup>
 > New release
 > !!! success "Enhanced features"         
 >     * [ ] Process
->         * [ ] PowerCenter engine>              
+>         * [ ] PowerCenter engine
 >              - [X] Add or modify parameters within a test scenario using XTest variables
 > !!! warning "Bug fixes"
 >     * [ ] Database steps /expected results
