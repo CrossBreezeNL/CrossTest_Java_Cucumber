@@ -90,5 +90,9 @@ public class DbTable_Helper extends Database_Helper{
 			
 		}
 	}
+	
+	public void SetKeyFieldsForCompositeObject(String key_fields, String composite_object) throws XTestDatabaseException {
+		_config.getCompositeObjectConfig(composite_object).setKeyFieldNamesFromString(key_fields);
+	}
 
 }

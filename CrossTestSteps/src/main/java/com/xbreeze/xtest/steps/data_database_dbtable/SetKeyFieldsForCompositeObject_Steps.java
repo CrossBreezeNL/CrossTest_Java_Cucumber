@@ -14,7 +14,7 @@ import io.cucumber.java.en.When;
             _DbTable_helper = DbTable_helper;
         }
 
-        @When("^I set \\(.*\\) as key for object (.+)$")
+        @When("^I set (\\(.*\\)) as key for object (.+)$")
         public void ISetKeyForCompositeObject(
             String key_fields,
             String composite_object

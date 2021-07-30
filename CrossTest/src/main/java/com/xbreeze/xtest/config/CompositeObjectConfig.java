@@ -94,13 +94,13 @@ public class CompositeObjectConfig {
 		
 		//If input is wrapped in (), remove the parenthesis
 		if ((keyFieldNames.charAt(0) == '(') && (keyFieldNames.charAt(keyFieldNames.length()-1) == ')')) {
-			keyFieldNames = keyFieldNames.substring(1, keyFieldNames.length()-2);
+			keyFieldNames = keyFieldNames.substring(1, keyFieldNames.length()-1);
 		}
 		
 		//Add each item as key field. except empty strings
 		for(String keyField: keyFieldNames.split(",")) {
 			if (keyField.trim().length() > 0)
-				this._keyFieldNames.add(keyField);
+				this._keyFieldNames.add(keyField.trim());
 		}	
 	}
 	

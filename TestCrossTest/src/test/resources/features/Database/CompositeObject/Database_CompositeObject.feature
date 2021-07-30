@@ -1,4 +1,4 @@
-@Unit @Database @Debug
+@Unit @Database
 Feature: Write to and retrieve from composite objects
 
   @Positive
@@ -56,3 +56,29 @@ Feature: Write to and retrieve from composite objects
       |    1234 | Mr. Smith | NL        |
       |    1234 | Mr. Smith | BE        |
       |     431 | Ms. Jones | EN        |
+
+  @Positive  
+  Scenario: insert data in composite object with modified key definition
+    Given the object CustomerWithKey is empty
+    When I set (CUST_ID, CREATE_DD) as key for object CustomerWithKey
+        
+    And I insert the following data for object CustomerWithKey:
+      | Cust_ID | Create_DD | Cust_Name | CUST_LANG |
+      |    1234 | 2010-01-01 | Mr. Smith | NL        |
+      |    1234 | 2015-01-01 | Mr. Smith | BE        |
+      |     431 | 2010-01-01 | Ms. Jones | EN        |
+      
+    And I retrieve the contents of the source CUST_HUB table
+    Then I expect the following result:
+      | CUST_ID | CREATE_DD  |
+      |    1234 | 2010-01-01 |
+      |    1234 | 2015-01-01 |
+      |     431 | 2010-01-01 |
+      
+    And I retrieve the contents of the source CUST_SAT table
+    Then I expect the following result:
+      | CUST_ID | Cust_Name | CUST_LANG |
+      |    1234 | Mr. Smith | NL        |
+      |    1234 | Mr. Smith | BE        |
+      |     431 | Ms. Jones | EN        |
+      
