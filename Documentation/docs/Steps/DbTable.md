@@ -173,3 +173,23 @@ Insert data into a table and overrule the template that is defined on the databa
   | 1  | 'FirstRow'       |
   | 2  | 'SecondRow' |
 ```
+## Set key fields for composite object
+Defines the key fields for a composite object, overruling the key fields that might be set in the configuration.
+
+### Sentences
+| Type          | Language         | Sentence      |
+|:---           |:---              |:---           |
+| When | en | ^I set \(.*\) as key for object (.+)$ |
+
+### Arguments
+| Parameter    | Datatype          | Description          |
+|:---          |:---               |:---                  |
+|key fields | String |  |
+|composite object | String |  |
+
+### Examples
+
+
+```gherkin
+ When I set (CUST_ID, SYSTEM_CODE) as key for object Customer
+```
