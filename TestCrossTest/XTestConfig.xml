@@ -17,6 +17,17 @@
             <KeyTable tableName="AA_RHS_SVG_AC" databaseConfigName="dwfr8"/>
          </KeyTables>
       </CompositeObject>
+	  <CompositeObject name="CustomerWithKey">
+			<ContextTables>
+				<ContextTable tableName="CUST_SAT" databaseConfigName="source"/>						
+			</ContextTables>
+			<KeyFields>
+				<KeyField>CUST_ID</KeyField>
+			</KeyFields>
+			<KeyTables>
+				<KeyTable tableName="CUST_HUB" databaseConfigName="source"/>
+			</KeyTables>
+	</CompositeObject>		
    <CompositeObject name="insurancePolicy">
       <ContextTables>
          <ContextTable tableName="AB_RHS_INS_POLCY" databaseConfigName="dwfr37"/>

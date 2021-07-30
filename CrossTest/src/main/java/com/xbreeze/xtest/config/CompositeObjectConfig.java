@@ -32,11 +32,13 @@ public class CompositeObjectConfig {
 	private String _name;
 	private ArrayList<CompositeObjectTableConfig> _keyTables;
 	private ArrayList<CompositeObjectTableConfig> _contextTables;
+	private ArrayList<String> _keyFieldNames;
 	
 	public CompositeObjectConfig() {
 		super();
 		_keyTables = new ArrayList<>();
 		_contextTables = new ArrayList<>();
+		_keyFieldNames = new ArrayList<>();
 	}
 	
 	@XmlAttribute(name="name")
@@ -66,6 +68,41 @@ public class CompositeObjectConfig {
 	public void setContextTables(ArrayList<CompositeObjectTableConfig> contextTables) {
 		this._contextTables = contextTables;
 	}	
+
+	@XmlElement(name="KeyField")
+	@XmlElementWrapper(name="KeyFields")
+	public ArrayList<String> getKeyFieldNames(){
+		return this._keyFieldNames;
+	}
+	
+	public void setKeyFieldNames(ArrayList<String> keyFieldNames) {
+		this._keyFieldNames = keyFieldNames;
+	}
+	
+	/***
+	 * From the comma separated string, set key field names
+	 * @param keyFieldNames comma separated string with the key field names
+	 * If the string contains parenthesis as first and last character, remove them first
+	 */
+	public void setKeyFieldNamesFromString(String keyFieldNames) {
+		//Clear existing key fields
+		this._keyFieldNames.clear();
+		
+		//If string is empty, exit method
+		if (keyFieldNames == null)
+			return;
+		
+		//If input is wrapped in (), remove the parenthesis
+		if ((keyFieldNames.charAt(0) == '(') && (keyFieldNames.charAt(keyFieldNames.length()-1) == ')')) {
+			keyFieldNames = keyFieldNames.substring(1, keyFieldNames.length()-2);
+		}
+		
+		//Add each item as key field. except empty strings
+		for(String keyField: keyFieldNames.split(",")) {
+			if (keyField.trim().length() > 0)
+				this._keyFieldNames.add(keyField);
+		}	
+	}
 	
 	public void addKeyTable(String tableName, String databaseConfigName) {
 		CompositeObjectTableConfig cotc = new CompositeObjectTableConfig(databaseConfigName, tableName);
@@ -73,13 +110,12 @@ public class CompositeObjectConfig {
 			this._keyTables.add(cotc);
 		}
 	}
-	
+		
 	public void addContextTable(String tableName, String databaseConfigName) {
 		CompositeObjectTableConfig cotc = new CompositeObjectTableConfig(databaseConfigName, tableName);
 		if (!this._contextTables.contains(cotc)) {
 			this._contextTables.add(cotc);
 		}
 	}
-	
 	
 }

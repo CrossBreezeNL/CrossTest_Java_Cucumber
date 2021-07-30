@@ -55,6 +55,7 @@ import javax.sql.rowset.CachedRowSet;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.util.logging.Logger;
 
+import com.xbreeze.xtest.config.CompositeObjectConfig;
 import com.xbreeze.xtest.config.DatabaseConfig;
 import com.xbreeze.xtest.config.DatabaseCustomDataTypeConfig;
 import com.xbreeze.xtest.exception.XTestDatabaseException;
@@ -104,7 +105,7 @@ public class DataHelper {
 	
 	public void populateCachedRowSetFromDataTable(CachedRowSet crs, DataTable dataTable, boolean distinct, boolean includeEmptyRows, boolean limitToDefinedColumns, DatabaseConfig dbConfig) throws XTestDatabaseException {
 		List<Map<String, String>> list = dataTable.asMaps(String.class, String.class);
-		populateRowSet(crs, list, distinct, includeEmptyRows, limitToDefinedColumns, dbConfig);
+		populateRowSet(crs, list, distinct, includeEmptyRows, limitToDefinedColumns, dbConfig, null);
 		try {
 			//Move cursor to current row or navigating the rowset will not work
 			crs.moveToCurrentRow();
@@ -121,7 +122,7 @@ public class DataHelper {
 	 * @param dbConfig Connection to use
 	 * @param insertDistinct Determines if distinct rows are written or all rows
 	 */
-	public void writeDataTableToDatabase(String tableName, DataTable dataTable, DatabaseConfig dbConfig, Boolean insertDistinct, Boolean limitToDefinedColumns) throws XTestDatabaseException {
+	public void writeDataTableToDatabase(String tableName, DataTable dataTable, DatabaseConfig dbConfig, Boolean insertDistinct, Boolean limitToDefinedColumns, CompositeObjectConfig coc) throws XTestDatabaseException {
 		List<Map<String, String>> list = dataTable.asMaps(String.class, String.class);
 		if (list.size() > 0) {
 				tableName = dbConfig.getQualifiedTableName(tableName);
@@ -131,7 +132,7 @@ public class DataHelper {
 				CachedRowSet rs = DatabaseCommandExecutor.executeCommandWithCachedResult(getConnection(dbConfig), selectQuery, dbConfig);
 				//Populate so values are converted to proper data types
 				logger.info("Populating cached rowset for inserting");
-				populateRowSet(rs, list, insertDistinct, false, limitToDefinedColumns, dbConfig);
+				populateRowSet(rs, list, insertDistinct, false, limitToDefinedColumns, dbConfig, coc);
 				
 				try {
 					//Construct a batch for inserting rows because some JDBC drivers, such as SAP, do not support updateable rowset or resultset
@@ -238,7 +239,7 @@ public class DataHelper {
 	  * @throws XTestDatabaseException
 	 */
 	
-	public void populateRowSet(RowSet rowSet, List<Map<String, String>> dataTableList, Boolean distinct, Boolean includeEmptyRows, Boolean limitToDefinedColumns, DatabaseConfig dbConfig) throws XTestDatabaseException {
+	public void populateRowSet(RowSet rowSet, List<Map<String, String>> dataTableList, Boolean distinct, Boolean includeEmptyRows, Boolean limitToDefinedColumns, DatabaseConfig dbConfig, CompositeObjectConfig coc) throws XTestDatabaseException {
 		//Populate rowset
 		try {
 			ResultSetMetaData rmd = rowSet.getMetaData();
@@ -279,7 +280,19 @@ public class DataHelper {
 							hasRelevantValueSet = true;
 						}
 						setFieldValue(rowSet, i, cellValue, rmd.getColumnType(i), dbConfig);
-						recordKey = recordKey.concat("|").concat(cellValue);
+						// Create a record hash in case insert needs to be distinct
+						// If key fields are specified in the composite object config, use them otherwise include all fields
+						if (coc == null || coc.getKeyFieldNames().size() == 0 ) {
+							recordKey = recordKey.concat("|").concat(cellValue);	
+						}
+						else {
+							for (String keyField: coc.getKeyFieldNames()) {
+								if (keyField.equalsIgnoreCase(rmd.getColumnName(i))) {
+									recordKey = recordKey.concat("|").concat(cellValue);
+								}
+							}
+						}
+						
 					}
 					else {
 						//If field is not specified, check for default value otherwise set to null						

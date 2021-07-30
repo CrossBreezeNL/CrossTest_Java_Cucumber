@@ -25,7 +25,7 @@ public class DbTable_Helper extends Database_Helper{
 	}
 	
 	public void InsertDataIntoTable(String dbConfig,String tableName, DataTable table) throws Throwable{
-		this._dataHelper.writeDataTableToDatabase(tableName, table, _config.getDatabaseConfig(dbConfig), false, true);
+		this._dataHelper.writeDataTableToDatabase(tableName, table, _config.getDatabaseConfig(dbConfig), false, true, null);
 	}
 	
 	public void InsertDataIntoTableUsingTemplate (
@@ -82,11 +82,11 @@ public class DbTable_Helper extends Database_Helper{
 	public void LoadDataForCompositeObject(String objectName, DataTable table) throws Throwable{
 		CompositeObjectConfig coc = _config.getCompositeObjectConfig(objectName);
 		for (CompositeObjectTableConfig coTable:coc.getKeyTables()) {
-			this._dataHelper.writeDataTableToDatabase(coTable.getTableName(), table, _config.getDatabaseConfig(coTable.getDatabaseConfigName()), true, false );
+			this._dataHelper.writeDataTableToDatabase(coTable.getTableName(), table, _config.getDatabaseConfig(coTable.getDatabaseConfigName()), true, false, coc);
 		}
 		
 		for (CompositeObjectTableConfig coTable:coc.getContextTables()) {
-			this._dataHelper.writeDataTableToDatabase(coTable.getTableName(), table, _config.getDatabaseConfig(coTable.getDatabaseConfigName()), false, false);
+			this._dataHelper.writeDataTableToDatabase(coTable.getTableName(), table, _config.getDatabaseConfig(coTable.getDatabaseConfigName()), false, false, null);
 			
 		}
 	}
