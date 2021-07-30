@@ -15,7 +15,7 @@ import io.cucumber.java.en.When;
         }
 
         @When("^I set \\(.*\\) as key for object (.+)$")
-        public void Step_Expression_1(
+        public void ISetKeyForCompositeObject(
             String key_fields,
             String composite_object
         ) throws Throwable
