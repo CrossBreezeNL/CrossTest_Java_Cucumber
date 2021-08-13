@@ -7,10 +7,14 @@ The configuration can be [splitted in multiple files](./config_include.md)
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<XTestConfig debug="true">
+<!-- Set debug="true" for console debugging output-->
+<!-- Set emptyStringValue to a string constant that can be used to set and check for empty string values -->
+<XTestConfig debug="true" emptyStringValue="''">
 	<CompositeObjects>
         <!-- Composite objects can be configured in the config or defined/modified via step sentences -->
 		<CompositeObject name="Customer">
+			<!-- Composite object without explicit key definition -->
+			<!-- Insert in key tables is distinct based on the fields present in the sample data -->			
 			<ContextTables>
 				<ContextTable tableName="CUST_SAT" databaseConfigName="demo"/>						
 			</ContextTables>
@@ -18,6 +22,20 @@ The configuration can be [splitted in multiple files](./config_include.md)
 				<KeyTable tableName="CUST_HUB" databaseConfigName="demo"/>
 			</KeyTables>
 		</CompositeObject>
+		<CompositeObject name="CustomerWithKeyDefinition">
+			<!-- Composite object with explicit key definition -->
+			<!-- Based on defined key fields, only first occurence of key fields is inserted in key tables -->
+			<ContextTables>
+				<ContextTable tableName="CUST_SAT" databaseConfigName="source"/>						
+			</ContextTables>
+			<!-- Explicitly define key fields for the composite object -->
+			<KeyFields>
+				<KeyField>CUST_ID</KeyField>
+			</KeyFields>
+			<KeyTables>
+				<KeyTable tableName="CUST_HUB" databaseConfigName="source"/>
+			</KeyTables>
+		</CompositeObject>		
 	</CompositeObjects>
 	<CredentialProviders>
 		<!-- A credentialprovider can be used to obtain credentials such as usernames or passwords. By implementing a custom credential Provider -->
