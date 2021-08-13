@@ -20,6 +20,17 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.15 <sup>13-8-2021</sup>
+> New release
+> !!! success "New features"         
+>     * [ ] Composite objects
+>         - [X] Explicitly define key fields for the composite object, either in the config or in a test scenario with a new step definition.
+>     * [ ] Database
+>         - [X] Set a constant in the config that will be used as empty string value to explicitly set and test for empty strings. Without this setting empty string and NULL is treated as being equal.
+> !!! warning "Bug fixes"
+>     * [ ] Database steps /expected results
+>         - [X] Fixed rounding issue in expected results that resulted in false positives
+
 - [ ] 1.0.14 <sup>31-3-2021</sup>
 > New release
 > !!! success "Enhanced features"         

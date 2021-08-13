@@ -92,6 +92,7 @@ public class XTestConfig {
 	private ArrayList<ObjectTemplateConfig> _objectTemplates;
 	private ArrayList<CredentialProviderConfig> _credentialProviders;
 	private Boolean _debug = false; 
+	private String _emptyStringValue;
 	
 	public XTestConfig() throws XTestException {
 		_databaseConfigs = new ArrayList<>();
@@ -428,6 +429,19 @@ public class XTestConfig {
 	
 	public void setDebug(Boolean debug) {
 		this._debug = debug;
+	}
+	
+	@XmlAttribute(name="emptyStringValue", required = false)
+	public String getEmptyStringValue() {
+		return this._emptyStringValue;
+	}
+	
+	public void setEmptyStringValue(String emptyStringValue) {
+		this._emptyStringValue = emptyStringValue;
+	}
+	
+	public boolean hasEmptyStringValue() {
+		return this._emptyStringValue != null;
 	}
 	
 	@XmlElement(name="DatabaseConfig")

@@ -58,29 +58,24 @@ Feature: Override object template
       |      28 | 2020-02-01 |
       |      31 | 2020-03-01 |
 
- 
   Scenario: Use XTest variable to set seed
     Given I insert the following data in source table CUST_HUB:
       | CUST_ID | CREATE_DD  |
       |       1 | 2020-01-01 |
       |       2 | 2020-02-02 |
       |       3 | 2020-03-03 |
-      
     And I execute the following query on source:
       """
       SELECT max(CUST_ID) + 1 as CUST_ID FROM [Source].CUST_HUB
       """
-      
     And I store the contents of the field Cust_ID into variable newSeed
-    
     And I set seed for attribute CUST_ID in template source_plain to XTestVariables.newSeed
     And I insert the following data in source table CUST_HUB:
       | CREATE_DD  |
       | 2020-04-04 |
       | 2020-05-05 |
-    
-     And I retrieve the contents of the source CUST_HUB table
-    	Then I expect the following result:
+    And I retrieve the contents of the source CUST_HUB table
+    Then I expect the following result:
       | CUST_ID | CREATE_DD  |
       |       1 | 2020-01-01 |
       |       2 | 2020-02-02 |

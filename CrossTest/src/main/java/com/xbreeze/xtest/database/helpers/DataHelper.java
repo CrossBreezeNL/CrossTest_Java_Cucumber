@@ -58,6 +58,7 @@ import java.util.logging.Logger;
 import com.xbreeze.xtest.config.CompositeObjectConfig;
 import com.xbreeze.xtest.config.DatabaseConfig;
 import com.xbreeze.xtest.config.DatabaseCustomDataTypeConfig;
+import com.xbreeze.xtest.config.XTestConfig;
 import com.xbreeze.xtest.exception.XTestDatabaseException;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.modules.security.CredentialProvider_Helper;
@@ -71,11 +72,13 @@ public class DataHelper {
 	private ResultContext _resultContext;
 	private CredentialProvider_Helper _credentialProviderHelper;
 	private HashMap<String, Connection> _connections;
-
-	public DataHelper(ResultContext resultContext, CredentialProvider_Helper credentialProviderHelper) {
+	private XTestConfig _config;
+	
+	public DataHelper(ResultContext resultContext, CredentialProvider_Helper credentialProviderHelper, XTestConfig config) throws XTestException {
 		this._resultContext = resultContext;
 		this._credentialProviderHelper = credentialProviderHelper;
-		_connections = new HashMap<>();
+		this._config = config.getConfig();
+		_connections = new HashMap<>();		
 	}
 	
 	/**
@@ -85,9 +88,10 @@ public class DataHelper {
 	 * @param connection connection to use
 	 * @param limitToDefinedColumns indicator that steers if the rowset should only contain fields in the dataTable or all available fields in the table
 	 * @return
-	 * @throws XTestDatabaseException
+	 * @throws XTestException 
+	 * @throws NumberFormatException 
 	 */
-	public CachedRowSet dataTableToRowSet(String tableName, DataTable dataTable, Connection connection, Boolean limitToDefinedColumns, Boolean distinct, Boolean includeEmptyRows, DatabaseConfig dbConfig) throws XTestDatabaseException{
+	public CachedRowSet dataTableToRowSet(String tableName, DataTable dataTable, Connection connection, Boolean limitToDefinedColumns, Boolean distinct, Boolean includeEmptyRows, DatabaseConfig dbConfig) throws NumberFormatException, XTestException{
 			String selectQuery = getSQLQuery(dataTable, tableName, limitToDefinedColumns, dbConfig);
 			
 			//Create and populate rowset
@@ -103,7 +107,7 @@ public class DataHelper {
 			return crs;
 	}
 	
-	public void populateCachedRowSetFromDataTable(CachedRowSet crs, DataTable dataTable, boolean distinct, boolean includeEmptyRows, boolean limitToDefinedColumns, DatabaseConfig dbConfig) throws XTestDatabaseException {
+	public void populateCachedRowSetFromDataTable(CachedRowSet crs, DataTable dataTable, boolean distinct, boolean includeEmptyRows, boolean limitToDefinedColumns, DatabaseConfig dbConfig) throws NumberFormatException, XTestException {
 		List<Map<String, String>> list = dataTable.asMaps(String.class, String.class);
 		populateRowSet(crs, list, distinct, includeEmptyRows, limitToDefinedColumns, dbConfig, null);
 		try {
@@ -121,8 +125,10 @@ public class DataHelper {
 	 * @param dataTable The data to write to the database
 	 * @param dbConfig Connection to use
 	 * @param insertDistinct Determines if distinct rows are written or all rows
+	 * @throws XTestException 
+	 * @throws NumberFormatException 
 	 */
-	public void writeDataTableToDatabase(String tableName, DataTable dataTable, DatabaseConfig dbConfig, Boolean insertDistinct, Boolean limitToDefinedColumns, CompositeObjectConfig coc) throws XTestDatabaseException {
+	public void writeDataTableToDatabase(String tableName, DataTable dataTable, DatabaseConfig dbConfig, Boolean insertDistinct, Boolean limitToDefinedColumns, CompositeObjectConfig coc) throws NumberFormatException, XTestException {
 		List<Map<String, String>> list = dataTable.asMaps(String.class, String.class);
 		if (list.size() > 0) {
 				tableName = dbConfig.getQualifiedTableName(tableName);
@@ -236,10 +242,11 @@ public class DataHelper {
 	 * 
 	 * @param rowSet the rowset to populate
 	 * @param dataTableList Cucumber datatable in list format	
-	  * @throws XTestDatabaseException
+	 * @throws XTestException 
+	 * @throws NumberFormatException 
 	 */
 	
-	public void populateRowSet(RowSet rowSet, List<Map<String, String>> dataTableList, Boolean distinct, Boolean includeEmptyRows, Boolean limitToDefinedColumns, DatabaseConfig dbConfig, CompositeObjectConfig coc) throws XTestDatabaseException {
+	public void populateRowSet(RowSet rowSet, List<Map<String, String>> dataTableList, Boolean distinct, Boolean includeEmptyRows, Boolean limitToDefinedColumns, DatabaseConfig dbConfig, CompositeObjectConfig coc) throws NumberFormatException, XTestException {
 		//Populate rowset
 		try {
 			ResultSetMetaData rmd = rowSet.getMetaData();
@@ -353,9 +360,10 @@ public class DataHelper {
 	 * @param fieldPosition The field ordinal position
 	 * @param fieldValue the value to set
 	 * @param dataType Datatype of the field
-	 * @throws XTestDatabaseException
+	 * @throws XTestException 
+	 * @throws NumberFormatException 
 	 */
-	private void setFieldValue (RowSet crs, int fieldPosition, String fieldValue, int dataType, DatabaseConfig dbConfig) throws XTestDatabaseException{
+	private void setFieldValue (RowSet crs, int fieldPosition, String fieldValue, int dataType, DatabaseConfig dbConfig) throws NumberFormatException, XTestException{
 		try {
 			//For teradata: access fields on index and not on name
 			//https://teradata-docs.s3.amazonaws.com/doc/connectivity/jdbc/reference/current/jdbcug_chapter_4.html
@@ -375,6 +383,7 @@ public class DataHelper {
 			}
 			
 			logger.info(String.format("Setting value %s for field %s with datatype %d", fieldValue, fieldName, dataType));
+			//empty string is evaluated as null
 			if (fieldValue.equalsIgnoreCase("")) {
 				crs.updateNull(fieldPosition);
 			}
@@ -388,7 +397,12 @@ public class DataHelper {
 					(dataType == java.sql.Types.NVARCHAR) || (dataType == java.sql.Types.NCHAR) ||
 					(dataType == java.sql.Types.LONGNVARCHAR) || (dataType == java.sql.Types.LONGVARCHAR) 
 				) {
-				crs.updateString(fieldPosition, fieldValue);
+				if (this._config.hasEmptyStringValue() && this._config.getEmptyStringValue().equals(fieldValue)) {
+					crs.updateString(fieldPosition, "");
+				}
+				else {
+					crs.updateString(fieldPosition, fieldValue);
+				}
 			}
 			
 			else if (dataType == java.sql.Types.BIGINT) {
@@ -477,15 +491,15 @@ public class DataHelper {
 			//Read value as string to determine if the field is null
 			String strVal = crs.getString(fieldPosition);
 			if (crs.wasNull()) {
-				logger.info("Column read was null");
-				return "";			
+				logger.info("Column read was null");				
+					return "";				
 			}
 			
 			else if ((dataType == java.sql.Types.DECIMAL) || (dataType == java.sql.Types.DOUBLE) || (dataType == java.sql.Types.NUMERIC)) {
 				BigDecimal longVal = crs.getBigDecimal(fieldPosition);
 				//return String.valueOf(longVal);
 				//Use string.format to remove trailing zeroes
-				return String.format("%.0f", longVal);
+				return String.valueOf(longVal.stripTrailingZeros());
 			}
 			
 			else if (
@@ -494,7 +508,13 @@ public class DataHelper {
 					(dataType == java.sql.Types.LONGNVARCHAR) || 
 					(dataType == java.sql.Types.LONGVARCHAR) 
 				) {
-				return strVal;
+				//If the config defines an empty string constant, return it if the value is an empty string
+				if (this._config.hasEmptyStringValue() && strVal.equalsIgnoreCase("")) {
+					return this._config.getEmptyStringValue();
+				}
+				else {
+					return strVal;
+				}
 			}
 			//In case of char datatype, trim result obtained from database
 			else if (

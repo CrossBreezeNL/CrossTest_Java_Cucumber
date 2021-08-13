@@ -1,10 +1,15 @@
+cd CucumberDatacomparison
+call mvn clean install
+call mvn deploy -Prelease
+cd ..
 cd Crosstest
 call mvn clean install
 call mvn deploy -Prelease
 cd ..
-cd CucumberDatacomparison
+cd CrosstestSteps
 call mvn clean install
 call mvn deploy -Prelease
+
 cd ..
 cd TeradataCustomDataTypes
 call mvn clean install
@@ -15,8 +20,4 @@ cd Execution\InformaticapowerCenter
 call mvn clean install
 call mvn deploy -Prelease
 cd ..\..
-cd CrossTestSteps
-call mvn clean install
-call mvn deploy -Prelease
-cd ..
 pause done

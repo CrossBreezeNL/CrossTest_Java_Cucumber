@@ -6,8 +6,8 @@ Feature: Execute a query or statement on a database
     Given the object Customer is empty
     When I insert the following data for object Customer:
       | CUST_ID | Cust_Name | CUST_DOB   |
-      | 1234    | Mr. Smith | 1970-10-13 |
-      | 431     | Ms. Jones | 1985-12-01 |
+      |    1234 | Mr. Smith | 1970-10-13 |
+      |     431 | Ms. Jones | 1985-12-01 |
     And I execute the following query on source:
       """
       SELECT CUST_ID, CREATE_DD
@@ -15,16 +15,16 @@ Feature: Execute a query or statement on a database
       """
     Then I expect the following result:
       | CUST_ID | CREATE_DD |
-      | 1234    |           |
-      | 431     |           |
+      |    1234 |           |
+      |     431 |           |
 
   @Positive
   Scenario: Test query with update stament
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:
       | CUST_ID |
-      | 1234    |
-      | 431     |
+      |    1234 |
+      |     431 |
     And I execute the following statement on source:
       """
       UPDATE source.CUST_HUB
@@ -34,8 +34,8 @@ Feature: Execute a query or statement on a database
     And I retrieve the contents of the source CUST_HUB table
     Then I expect the following result:
       | CUST_ID |
-      | 1234    |
-      | 444     |
+      |    1234 |
+      |     444 |
 
   @Positive
   Scenario: Only one column with NULL
@@ -55,39 +55,38 @@ Feature: Execute a query or statement on a database
       """
     Then I expect the following result:
       | firstField |
-      | 1          |
+      |          1 |
 
- @Positive 
+  @Positive
   Scenario: Compare on empty result of select
     When I execute the following query on source:
       """
       SELECT 1 as firstField
       WHERE 1 = 0
-			
+
       """
     Then I expect the following result:
       | firstField |
-  
- @Negative
+
+  @Negative
   Scenario: Expect empty result but get data back
     When I execute the following query on source:
       """
       SELECT 1 as firstField      
-			
+
       """
     Then I expect the following result:
       | firstField |
-      
 
-	@Negative
-	Scenario: Test the command timeout
-		When I execute the following query on source:
-			"""
-			WAITFOR DELAY '00:00:05'
-			SELECT *
-			FROM [Source].[CUST_HUB]
+  @Negative
+  Scenario: Test the command timeout
+    When I execute the following query on source:
+      """
+      WAITFOR DELAY '00:00:05'
+      SELECT *
+      FROM [Source].[CUST_HUB]
 
-			"""
+      """
 
   # Note that for this scenario to succeed, when editing in Eclipse the Eclipse file encoding needs to be UTF-8
   # https://stackoverflow.com/questions/9180981/how-to-support-utf-8-encoding-in-eclipse
@@ -106,4 +105,4 @@ Feature: Execute a query or statement on a database
       """
     Then I expect the following result:
       | ID | Fie#ld with \\Strange namë |
-      |  1 | Test                       |
+      |  1 | Test                        |

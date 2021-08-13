@@ -13,7 +13,7 @@ Feature: Write to and retrieve from database tables
       |    1234 | 2019-11-01 |
 
   @Positive
-  Scenario: Insert and retrieve a null
+  Scenario: Insert and retrieve a
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:
       | CUST_ID | CREATE_DD |
@@ -47,11 +47,11 @@ Feature: Write to and retrieve from database tables
     Given the source table Table with strangé character$ is empty
     When I insert the following data in source table Table with strangé character$:
       | ID   | Fie#ld with \\Strange namë |
-      | 1234 | Test value                 |
+      | 1234 | Test value                  |
     And I retrieve the contents of the source Table with strangé character$ table
     Then I expect the following result:
       | ID   | Fie#ld with \\Strange namë |
-      | 1234 | Test value                 |
+      | 1234 | Test value                  |
 
   Scenario Outline: Test with <Datatype> field
     Given the source table DataTypeTest is empty
@@ -72,6 +72,23 @@ Feature: Write to and retrieve from database tables
       | Char     | Not25Chars               |
       | Date     | 2019-11-01               |
       | Decimal  | 123456789012345678901.02 |
+
+  Scenario Outline: Test with Bigdecimal field <Scenario>
+    Given the source table DataTypeTest is empty
+    When I insert the following data in source table DataTypeTest:
+      | Test_BigDecimal |
+      | <Value>         |
+    And I retrieve the contents of the source DataTypeTest table
+    Then I expect the following result:
+      | Test_BigDecimal |
+      | <OutValue>      |
+
+    @Positive
+    Examples: 
+      | Scenario  | Value | OutValue |
+      | Correct   |  0.55 |     0.55 |
+      # The example below is actually negative, should result in error
+      | Incorrect |  0.55 |     0.78 |
 
   @Negative
   Scenario: Char unexpected result comparison
@@ -95,7 +112,18 @@ Feature: Write to and retrieve from database tables
       | Customer_ID | Customer_Name | Country | IsActive |
       |           1 |               | Smith   |        1 |
 
-  @Positive 
+  @Positive
+  Scenario: Set empty string
+    Given the source table Customer is empty
+    When I insert the following data in source table Customer:
+      | Customer_ID | Customer_Name | Country | IsActive |
+      |           1 | Smith         | ''      |        1 |
+    And I retrieve the contents of the source Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country | IsActive |
+      |           1 | Smith         | ''      |        1 |
+
+  @Positive
   Scenario Outline: Trailing zeroes make no difference <scenario>
     Given the source table DataTypeTest is empty
     When I insert the following data in source table DataTypeTest:
