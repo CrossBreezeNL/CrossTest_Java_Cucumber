@@ -22,6 +22,9 @@ public class DatabaseHooks {
 	}
 	
 	@After
+	/***
+	 * Cleanup all database connections after every scenario.
+	 */
 	public void cleanupDatabaseConnections() {
 		this._dataHelper.closeConnections();
 	}

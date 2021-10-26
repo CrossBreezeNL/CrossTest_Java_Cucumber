@@ -1,32 +1,34 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>TestCrossTest</groupId>
-  <artifactId>TestCrossTest</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <properties>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
-	<crosstest.version>1.0.15</crosstest.version>
-	<cucumber.version>4.8.1</cucumber.version>
-  </properties>
-  <dependencies>
-  		<dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>TestCrossTest</groupId>
+	<artifactId>TestCrossTest</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<properties>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
+		<crosstest.version>1.0.15</crosstest.version>
+		<cucumber.version>4.8.1</cucumber.version>
+	</properties>
+	<dependencies>
+		<dependency>
 			<groupId>com.x-breeze.test</groupId>
 			<artifactId>CrossTestInformaticaPowerCenter</artifactId>
 			<version>${crosstest.version}</version>
-		</dependency>		
-  		<dependency>
+		</dependency>
+		<dependency>
 			<groupId>com.x-breeze.test</groupId>
 			<artifactId>CrossTestCore</artifactId>
 			<version>${crosstest.version}</version>
-		</dependency>		
-		
-  		<dependency>
+		</dependency>
+
+		<dependency>
 			<groupId>com.x-breeze.test</groupId>
 			<artifactId>CrossTest</artifactId>
 			<version>${crosstest.version}</version>
-		</dependency>		
-		
+		</dependency>
+
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java8</artifactId>
@@ -34,15 +36,15 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
 		<dependency>
-		    <groupId>io.cucumber</groupId>
-		    <artifactId>cucumber-junit</artifactId>
-		    <version>${cucumber.version}</version> 
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<dependency>
-		    <groupId>com.microsoft.sqlserver</groupId>
-		    <artifactId>mssql-jdbc</artifactId>
-		    <version>7.4.1.jre8</version>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>7.4.1.jre8</version>
 		</dependency>
 
 		<dependency>
@@ -51,16 +53,17 @@
 			<version>4.13</version>
 		</dependency>
 
-		<!-- We use the cucumber reporting plugin to generate a nice report. We use version 3, since 4 is not compatible with cucumber 4.* -->
+		<!-- We use the cucumber reporting plugin to generate a nice report. We 
+			use version 3, since 4 is not compatible with cucumber 4.* -->
 		<dependency>
 			<groupId>de.monochromata.cucumber</groupId>
 			<artifactId>reporting-plugin</artifactId>
 			<version>3.0.18</version>
 		</dependency>
-  </dependencies>
+	</dependencies>
 
 	<build>
-		<plugins>			
+		<plugins>
 			<plugin>
 				<groupId>net.masterthought</groupId>
 				<artifactId>maven-cucumber-reporting</artifactId>
@@ -75,7 +78,7 @@
 						<configuration>
 							<projectName>${project.name}</projectName>
 							<outputDirectory>${project.build.directory}</outputDirectory>
-							<jsonFiles>								
+							<jsonFiles>
 								<jsonFile>${project.build.directory}/cucumber-unit.json</jsonFile>
 							</jsonFiles>
 						</configuration>

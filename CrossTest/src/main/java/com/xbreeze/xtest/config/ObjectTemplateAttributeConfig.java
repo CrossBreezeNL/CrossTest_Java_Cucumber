@@ -23,7 +23,6 @@
 package com.xbreeze.xtest.config;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
 
 public class ObjectTemplateAttributeConfig {
 

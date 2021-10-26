@@ -27,15 +27,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Struct;
 import java.sql.Time;
 import java.sql.Timestamp;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,20 +41,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.sql.RowSet;
 import javax.sql.rowset.CachedRowSet;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import java.util.logging.Logger;
 
 import com.xbreeze.xtest.config.CompositeObjectConfig;
 import com.xbreeze.xtest.config.DatabaseConfig;
-import com.xbreeze.xtest.config.DatabaseCustomDataTypeConfig;
+import com.xbreeze.xtest.config.DatabaseServerConfig;
 import com.xbreeze.xtest.config.XTestConfig;
 import com.xbreeze.xtest.exception.XTestDatabaseException;
 import com.xbreeze.xtest.exception.XTestException;
@@ -71,14 +67,14 @@ public class DataHelper {
 	static final Logger logger = Logger.getLogger(DataHelper.class.getName());
 	private ResultContext _resultContext;
 	private CredentialProvider_Helper _credentialProviderHelper;
-	private HashMap<String, Connection> _connections;
+	private HashMap<String, ConnectionHelper> _connectionHelpers;
 	private XTestConfig _config;
 	
 	public DataHelper(ResultContext resultContext, CredentialProvider_Helper credentialProviderHelper, XTestConfig config) throws XTestException {
 		this._resultContext = resultContext;
 		this._credentialProviderHelper = credentialProviderHelper;
 		this._config = config.getConfig();
-		_connections = new HashMap<>();		
+		_connectionHelpers = new HashMap<>();		
 	}
 	
 	/**
@@ -135,7 +131,8 @@ public class DataHelper {
 				String selectQuery = getSQLQuery(dataTable, tableName, false, dbConfig);				
 				//Create empty rowset
 				logger.info("Retrieving target data structure");
-				CachedRowSet rs = DatabaseCommandExecutor.executeCommandWithCachedResult(getConnection(dbConfig), selectQuery, dbConfig);
+				Connection connection = getConnection(dbConfig);
+				CachedRowSet rs = DatabaseCommandExecutor.executeCommandWithCachedResult(connection, selectQuery, dbConfig);
 				//Populate so values are converted to proper data types
 				logger.info("Populating cached rowset for inserting");
 				populateRowSet(rs, list, insertDistinct, false, limitToDefinedColumns, dbConfig, coc);
@@ -585,7 +582,7 @@ public class DataHelper {
 	}
 	
 	/**
-	 * Returns a hashmap containing al hashes with pointer to row number in the rowset
+	 * Returns a hashmap containing all hashes with pointer to row number in the rowset
 	 * @param crs The rowset for which hashes need to be calculated
 	 * @param fieldNames The field names that need to be included in the hash
 	 * @return the hashmap with hashes
@@ -660,125 +657,42 @@ public class DataHelper {
 		}
 		return header;
 	}
-	
-	public Connection getConnection(DatabaseConfig dbConfig) throws XTestDatabaseException{
-		return this.getConnection(dbConfig, dbConfig.getName());
-	}
-	
-	private Connection getConnection(DatabaseConfig dbConfig, String configName) throws XTestDatabaseException {
-		if (!_connections.containsKey(configName)) {
-			_connections.put(configName, this.getNewConnection(dbConfig));
-		}
-		return _connections.get(configName);
-	}
-	
-	
-	private String getResolvedCredential(DatabaseConfig dbConfig, String credential) throws XTestDatabaseException {
-		//If no credential provider was given, return the credential unprocessed
-		if (dbConfig.getDatabaseServerConfig().getCredentialProvider() == null || dbConfig.getDatabaseServerConfig().getCredentialProvider().equalsIgnoreCase("")) {
-			return credential;
-		} else {
-			//Resolve the credential via the credentialprovider
-			try {
-				return this._credentialProviderHelper.resolveCredential(dbConfig.getDatabaseServerConfig().getCredentialProvider(), credential);
-			}catch(XTestException exc) {
-				throw new XTestDatabaseException(String.format("Could not resolve %s using credential provider %s: %s", credential, dbConfig.getDatabaseServerConfig().getCredentialProvider(), exc.getMessage()));
-			}
-		}
-	}
-	
-	private Connection getNewConnection(DatabaseConfig dbConfig) throws XTestDatabaseException {
-		Connection conn = null;
-	    Properties connectionProps = new Properties();
-	    //Set username and password if given
-	    if (dbConfig.getDatabaseServerConfig().getUsername() != null) {
-	    	
-	    	connectionProps.put("user", getResolvedCredential(dbConfig, dbConfig.getDatabaseServerConfig().getUsername()));
-	    }
-	    if (dbConfig.getDatabaseServerConfig().getPassword() != null) {		    
-	    	connectionProps.put("password", getResolvedCredential(dbConfig, dbConfig.getDatabaseServerConfig().getPassword()));
-	    }
-	    
-	    try {
-			conn = DriverManager.getConnection(dbConfig.getDatabaseServerConfig().getJDBCUrl(), connectionProps);
-			//If scenario is run in a transaction set autocommit to false on the connection
-			if (this._resultContext.isInTransaction()) {
-				logger.info(String.format("Running in a transaction, setting autocommit off for %s", dbConfig.getName()));
-				conn.setAutoCommit(false);
-			}
 
+	/**
+	 * Get the connection using the configuration and database config name.
+	 * @param dbConfig The Database Configuration.
+	 * @return A connection object which can be used for the database configuration.
+	 * @throws XTestDatabaseException
+	 */
+	public Connection getConnection(DatabaseConfig dbConfig) throws XTestDatabaseException {
+		// Find the connection using the server connection name, since we only want 1 connection per server.
+		DatabaseServerConfig databaseServerConfig = dbConfig.getDatabaseServerConfig();
+		String serverConnName = databaseServerConfig.getName();
+		// If the connection doesn't exist yet, create it.
+		if (!_connectionHelpers.containsKey(serverConnName)) {
+			_connectionHelpers.put(serverConnName, ConnectionHelper.fromDatabaseServerConfig(databaseServerConfig, this._credentialProviderHelper));
+			logger.info("Created new connection, since it wasn't found.");
+		}
+		// Retrieve the connection.
+		ConnectionHelper serverConn = _connectionHelpers.get(serverConnName);
+		// Now we have the connection, configurate it for the current database configuration (of the current phrase).
+		serverConn.configureServerConnection(dbConfig, _resultContext.isInTransaction());
+		// Log the connection state.
+		try {
+			logger.info(String.format("Using connection '%s'; isClosed: %b; autoCommit: %b", serverConnName, serverConn.getConnection().isClosed(), serverConn.getConnection().getAutoCommit()));
 		} catch (SQLException e) {
 			throw new XTestDatabaseException(e.getMessage());
 		}
-	    
-	    //If a schema was given on the database config, try to set it as a default catalog or schema
-	    //behaviour is DB platform specific
-	    if (dbConfig.getSchema().trim().length() > 0) {
-	    	//If a custom statement is specified for set schema, subsitute database name in template and execute statement
-	    	if (dbConfig.getDatabaseServerConfig().getSetSchemaTemplate() != null) {	    		
-	    		String stmtText = dbConfig.getDatabaseServerConfig().getSetSchemaTemplate().replace("{SCHEMA}",dbConfig.getSchema());
-	    		logger.info(String.format("Setting default catalog using setSchema template, statement is %s", stmtText));
-	    		try {
-	    		  Statement stmt = conn.createStatement() ;
-	    		  stmt.executeUpdate (stmtText);
-	    		  stmt.close(); 
-	    		}
-	    		catch (SQLException exc) {
-	    			throw new XTestDatabaseException(String.format("Could not set default catalog using setSchema template: %s", exc.getMessage()));	    			
-	    		}
-	    	}
-	    	//If no custom statement is specified, try to set db using setSchema and setCatalog
-	    	else {
-		    	boolean schemaSet = false;
-		    	boolean dbSet = false; 
-			    try {
-			    	//Set the catalog based on the schema
-			    	logger.info(String.format("Setting default catalog to %s", dbConfig.getSchema()));
-					conn.setCatalog(dbConfig.getSchema());
-					dbSet = true;
-			    }
-			    catch (SQLException | AbstractMethodError exc){
-			    	logger.info(String.format("Could not set catalog based on schema %s: %s", dbConfig.getSchema(), exc.getMessage()));		    	
-			    }
-			    
-			    try {
-		    		logger.info(String.format("Setting default schema to: %s", dbConfig.getSchema()));
-		    		conn.setSchema(dbConfig.getSchema());
-		    		schemaSet = true;
-		    	}
-		    	catch (SQLException | AbstractMethodError excs) {
-		    		logger.info(String.format("Could not set schema to %s: %s", dbConfig.getSchema(), excs.getMessage()));
-		    		if (dbSet == false && schemaSet == false) {
-		    			throw new XTestDatabaseException(String.format("Could not set default catalog or schema to %s", dbConfig.getSchema()));
-		    		}
-		    	}
-	    	}
-	    }
-	    
-	    //Set custom type map custom data types defined in config		
-	 	HashMap<String, Class<?>> cTypes  = new HashMap<>();
-	 	for(DatabaseCustomDataTypeConfig cdt: dbConfig.getDatabaseServerConfig().getCustomDataTypes()) {
-			
-				
-				cTypes.put(cdt.getDataType(), cdt.getClassRef());
-				
-			
-	 	}
-		try {
-			conn.setTypeMap(cTypes);
-		}catch (SQLException exc){
-			throw new XTestDatabaseException(String.format("Could not set custom typemap on connection %s: %s", dbConfig.getName(), exc.getMessage()));
-		}
-	    logger.info(String.format("Connected to database %s", dbConfig.getName()));
-	    return conn;
+		// Return the connection.
+		return serverConn.getConnection();
 	}
 	
 	/***
 	 * Close all connections, if running in a transaction, rollback on all open database connections
 	 */
 	public void closeConnections() {
-		for(Entry<String, Connection> connectionEntry:_connections.entrySet()) {
-			Connection con = connectionEntry.getValue();
+		for(Entry<String, ConnectionHelper> connectionEntry : _connectionHelpers.entrySet()) {
+			Connection con = connectionEntry.getValue().getConnection();
 			String conName = connectionEntry.getKey();
 			logger.info(String.format("Closing connection %s", conName));
 			try {
