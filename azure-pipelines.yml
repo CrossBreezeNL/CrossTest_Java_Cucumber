@@ -11,13 +11,13 @@ trigger:
       - features/*
       - hotfix/*
 
-  # paths:
-  #     include:
-  #     - ./CrossTest_Java
-  #     - ./Generation
-  #     - ./Java
-  #     - ./Model
-  #     - ./Old
+  paths:
+      include:
+      - ./CrossTest_Java
+      - ./Generation
+      - ./Java
+      - ./Model
+      - ./Old
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -32,7 +32,7 @@ stages:
       - task: Maven@3
         inputs:
           mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
-          goals: 'spotbugs:check'
+          goals: 'check'
           publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
@@ -48,7 +48,9 @@ stages:
       - task: Maven@3
         inputs:
           mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
+          goals: 'package'
           publishJUnitResults: true
+          testResultsFiles: '**/surefire-reports/TEST-*.xml'
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
           mavenVersionOption: 'Default'
