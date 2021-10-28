@@ -31,7 +31,7 @@ stages:
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
+          mavenPomFile: '$(System.DefaultWorkingDirectory)/**/pom.xml'
           goals: 'validate'
           publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
@@ -42,15 +42,32 @@ stages:
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
 
+- stage: Package
+  jobs:
     - job: PackageCode
       displayName: Package code
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
+          mavenPomFile: '$(System.DefaultWorkingDirectory)/**/pom.xml'
           goals: 'package'
           publishJUnitResults: true
-          testResultsFiles: '**/surefire-reports/TEST-*.xml'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.8'
+          mavenVersionOption: 'Default'
+          mavenOptions: '-Xmx3072m'
+          mavenAuthenticateFeed: false
+          effectivePomSkip: false
+          sonarQubeRunAnalysis: false
+
+    - job: TestCode
+      displayName: Test code
+      steps:
+      - task: Maven@3
+        inputs:
+          mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
+          goals: 'test'
+          publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
           mavenVersionOption: 'Default'
