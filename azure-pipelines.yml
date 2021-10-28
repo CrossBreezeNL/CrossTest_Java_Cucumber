@@ -31,7 +31,7 @@ stages:
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: '**/pom.xml'
+          mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
           goals: 'validate'
           publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
@@ -49,7 +49,7 @@ stages:
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: '**/pom.xml'
+          mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
           goals: 'package'
           publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
