@@ -32,7 +32,7 @@ stages:
       - task: Maven@3
         inputs:
           mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
-          goals: 'check'
+          goals: 'validate'
           publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
