@@ -31,7 +31,7 @@ stages:
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: '$(defaultworkingdirectory)/CrossTest/pom.xml'
+          mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
           goals: 'spotbugs:check'
           publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
@@ -47,7 +47,7 @@ stages:
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: '$(defaultworkingdirectory)/CrossTest/pom.xml'
+          mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
           publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
