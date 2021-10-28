@@ -11,13 +11,13 @@ trigger:
       - features/*
       - hotfix/*
 
-  paths:
-      include:
-      - ./CrossTest_Java
-      - ./Generation
-      - ./Java
-      - ./Model
-      - ./Old
+  # paths:
+  #     include:
+  #     - ./CrossTest_Java
+  #     - ./Generation
+  #     - ./Java
+  #     - ./Model
+  #     - ./Old
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -31,23 +31,28 @@ stages:
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: './Crosstest_Java/CrossTest/pom.xml'
-          mavenOptions: '-Xmx3072m'
+          mavenPomFile: '$(defaultworkingdirectory)/CrossTest/pom.xml'
+          goals: 'spotbugs:check'
+          publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
-          jdkArchitectureOption: 'x64'
-          publishJUnitResults: 'true'
-          goals: 'spotbugs:check'
-- stage: Package
-  jobs:
+          mavenVersionOption: 'Default'
+          mavenOptions: '-Xmx3072m'
+          mavenAuthenticateFeed: false
+          effectivePomSkip: false
+          sonarQubeRunAnalysis: false
+
     - job: PackageCode
       displayName: Package code
       steps:
       - task: Maven@3
         inputs:
-          mavenPomFile: './Crosstest_Java/CrossTest/pom.xml'
-          mavenOptions: '-Xmx3072m'
+          mavenPomFile: '$(defaultworkingdirectory)/CrossTest/pom.xml'
+          publishJUnitResults: true
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
-          jdkArchitectureOption: 'x64'
-          goals: 'package'
+          mavenVersionOption: 'Default'
+          mavenOptions: '-Xmx3072m'
+          mavenAuthenticateFeed: false
+          effectivePomSkip: false
+          sonarQubeRunAnalysis: false
