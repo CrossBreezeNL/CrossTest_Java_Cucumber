@@ -1,12 +1,10 @@
-# Transaction support is not yet supported, so this test scenaro is not labeled unit
-# @Unit
+@Unit @Database 
 Feature: Running a test in a transaction
   
-  Scenario: Empty the source table
-		Given the source table Customer is empty  
-
+  @Positive
   Scenario: Insert and rollback in transaction check nothing happened
-    Given the test is being executed within a transaction
+  	Given the source table Customer is empty  
+    And the test is being executed within a transaction
     When I execute the following statement on source:
       """
       	BEGIN TRANSACTION;
@@ -22,10 +20,10 @@ Feature: Running a test in a transaction
     Then I expect the following result:
       | Customer_ID | Customer_Name | Country | IsActive |
 
-	@Debug
-	# It looks like when we retrieve data a implicit commit is performed on the transaction, since the previous scenario works and the following one doesn't.
+	@Positive
   Scenario: Insert, check and rollback in transaction check nothing happened
-    Given the test is being executed within a transaction
+  	Given the source table Customer is empty  
+    And the test is being executed within a transaction
     When I execute the following statement on source:
       """
       	BEGIN TRANSACTION;

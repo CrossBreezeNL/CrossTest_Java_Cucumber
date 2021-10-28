@@ -80,7 +80,12 @@ public class DatabaseCommandExecutor {
 				crs.setQueryTimeout(dbConfig.getCommandTimeOut());
 			}
 			crs.setTypeMap(connection.getTypeMap());
-			crs.execute(connection);
+			// Execute the cashed rowset using an uncommitable connection, so transactions are not committed.
+			// Otherwise we cannot perform tests within transactions.
+			// For some unknown reason a commit is called on the connection during the readData method.
+			//  com.sun.rowset.CachedRowSetImpl:816 > CachedRowSetReader::readData()
+	        //  com.sun.rowset.internal.CachedRowSetReader::readData:230 -> con.commit()
+			crs.execute(UncommittableConnection.fromConnection(connection));
 			//crs.setUrl(connection.getMetaData().getURL());
 			return crs;
 		}
