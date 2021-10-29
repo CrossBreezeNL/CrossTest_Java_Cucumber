@@ -22,7 +22,7 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-stages:
+
 # - stage: Check
 #   jobs:
 #     - job: CheckCode
@@ -41,10 +41,11 @@ stages:
 #           effectivePomSkip: false
 #           sonarQubeRunAnalysis: false
 
-- stage: Package
   jobs:
     - job: CheckCode
       displayName: Check code
+      pool:
+        vmImage: 'ubuntu-latest'
       steps:
       - task: Maven@3
         inputs:
@@ -58,9 +59,6 @@ stages:
           mavenAuthenticateFeed: false
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
-    - job: PackageCode
-      displayName: Package code
-      steps:
       - task: Maven@3
         inputs:
           mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
@@ -73,10 +71,6 @@ stages:
           mavenAuthenticateFeed: false
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
-
-    - job: TestCode
-      displayName: Test code
-      steps:
       - task: Maven@3
         inputs:
           mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
