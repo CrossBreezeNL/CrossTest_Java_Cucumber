@@ -22,9 +22,26 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-
 stages:
-- stage: Check
+# - stage: Check
+#   jobs:
+#     - job: CheckCode
+#       displayName: Check code
+#       steps:
+#       - task: Maven@3
+#         inputs:
+#           mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
+#           goals: 'validate'
+#           publishJUnitResults: true
+#           javaHomeOption: 'JDKVersion'
+#           jdkVersionOption: '1.8'
+#           mavenVersionOption: 'Default'
+#           mavenOptions: '-Xmx3072m'
+#           mavenAuthenticateFeed: false
+#           effectivePomSkip: false
+#           sonarQubeRunAnalysis: false
+
+- stage: Package
   jobs:
     - job: CheckCode
       displayName: Check code
@@ -41,9 +58,6 @@ stages:
           mavenAuthenticateFeed: false
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
-
-- stage: Package
-  jobs:
     - job: PackageCode
       displayName: Package code
       steps:
