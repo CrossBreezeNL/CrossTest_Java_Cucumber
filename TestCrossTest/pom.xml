@@ -78,6 +78,7 @@
 							<jsonFiles>								
 								<jsonFile>${project.build.directory}/cucumber-unit.json</jsonFile>
 							</jsonFiles>
+							<testFailureIgnore>true</testFailureIgnore>
 						</configuration>
 					</execution>
 				</executions>
