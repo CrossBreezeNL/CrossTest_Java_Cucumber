@@ -75,10 +75,10 @@
 						<configuration>
 							<projectName>${project.name}</projectName>
 							<outputDirectory>${project.build.directory}</outputDirectory>
-							<jsonFiles>								
+							<!-- <jsonFiles>								
 								<jsonFile>${project.build.directory}/cucumber-unit.json</jsonFile>
-							</jsonFiles>
-							<testFailureIgnore>true</testFailureIgnore>
+							</jsonFiles> -->
+							<cucumberOutput>${project.build.directory}/cucumber-unit.json</cucumberOutput>
 						</configuration>
 					</execution>
 				</executions>
