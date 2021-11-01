@@ -47,7 +47,7 @@ jobs:
     - task: Maven@3
       inputs:
         mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
-        goals: 
+        goals: 'test'
         publishJUnitResults: false
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.8'
