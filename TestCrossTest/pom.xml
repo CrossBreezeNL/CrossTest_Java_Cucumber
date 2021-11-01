@@ -79,6 +79,7 @@
 								<jsonFile>${project.build.directory}/cucumber-unit.json</jsonFile>
 							</jsonFiles> -->
 							<cucumberOutput>${project.build.directory}/cucumber-unit.json</cucumberOutput>
+							<buildNumber>1</buildNumber>
 						</configuration>
 					</execution>
 				</executions>
