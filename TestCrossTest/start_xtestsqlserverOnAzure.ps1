@@ -12,4 +12,4 @@ sleep 15
 
 
 #Create database TestDB
-docker exec xtestsqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Test1234! -i /testdb.sql
+#docker exec xtestsqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Test1234! -i /testdb.sql
