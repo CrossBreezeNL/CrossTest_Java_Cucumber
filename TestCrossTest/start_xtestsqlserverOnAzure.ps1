@@ -8,7 +8,7 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Test1234!" -p 1533:1433 --name xte
 #wait for docker to be running
 sleep 15
 
-docker cp testdb.sql xtestsqlserver:temp/db/testdb.sql
+docker cp testdb.sql xtestsqlserver:/home/vsts/work/1/s/testdb.sql
 
 
 #Create database TestDB
