@@ -48,17 +48,6 @@ jobs:
     - task: PowerShell@2
       inputs:
         filePath: '$(System.DefaultWorkingDirectory)/TestCrossTest/start_xtestsqlserverOnAzure.ps1'
-
-    - task: Docker@2
-      inputs:
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-
-    - task: PowerShell@2
-      inputs:
-        filePath: '$(System.DefaultWorkingDirectory)/TestCrossTest/runSql.ps1'
-
-
     - task: Maven@3
       inputs:
         mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
