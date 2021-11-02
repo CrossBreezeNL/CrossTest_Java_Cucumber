@@ -65,7 +65,7 @@ jobs:
 
     - task: Maven@3
       inputs:
-        mavenPomFile: '$(System.DefaultWorkingDirectory)/InformaticaPowerCenter/pom.xml'
+        mavenPomFile: '$(System.DefaultWorkingDirectory)/Execution/InformaticaPowerCenter/pom.xml'
         goals: 'install'
         publishJUnitResults: false
         javaHomeOption: 'JDKVersion'
