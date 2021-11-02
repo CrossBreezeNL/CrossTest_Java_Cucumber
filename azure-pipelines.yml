@@ -93,9 +93,9 @@ jobs:
         jdkVersionOption: '1.8'
         mavenVersionOption: 'Default'
         mavenOptions: '-Xmx3072m'
-        mavenAuthenticateFeed: false
+        mavenAuthenticateFeed: true
         effectivePomSkip: false
-        sonarQubeRunAnalysis: true
+        sonarQubeRunAnalysis: false
         
 
     - task: PublishPipelineArtifact@1
