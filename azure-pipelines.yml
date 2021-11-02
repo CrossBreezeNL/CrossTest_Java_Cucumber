@@ -26,10 +26,6 @@ jobs:
       vmImage: 'ubuntu-latest'
     steps:
     
-    - task: PowerShell@2
-      inputs:
-        filePath: '$(System.DefaultWorkingDirectory)/TestCrossTest/start_xtestsqlserver.ps1'
-
     - task: Maven@3
       inputs:
         mavenPomFile: '$(System.DefaultWorkingDirectory)/CucumberDataComparison/pom.xml'
@@ -90,6 +86,10 @@ jobs:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
+
+    - task: PowerShell@2
+      inputs:
+        filePath: '$(System.DefaultWorkingDirectory)/TestCrossTest/start_xtestsqlserver.ps1'
 
     - task: Maven@3
       inputs:
