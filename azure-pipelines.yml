@@ -88,14 +88,23 @@ jobs:
         mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
         goals: 'test'
         publishJUnitResults: true
-        testResultsFiles: '**/target/TEST-*.xml'
+        testResultsFiles: '$(System.DefaultWorkingDirectory)/target/TESTresults.xml'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.8'
         mavenVersionOption: 'Default'
         mavenOptions: '-Xmx3072m'
         mavenAuthenticateFeed: false
         effectivePomSkip: false
-        sonarQubeRunAnalysis: false
+        sonarQubeRunAnalysis: true
+        
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: '$(Build.DefinitionName)'
+        publishLocation: 'pipeline'
+
+
 
     # - task: Maven@3
     #   inputs:
