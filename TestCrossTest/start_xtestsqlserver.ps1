@@ -8,5 +8,7 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Test1234!" -p 1533:1433 --name xte
 #wait for docker to be running
 sleep 15
 
+
+docker exec -t -i xtestsqlserver ls -la /
 #Create database TestDB
-docker exec xtestsqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Test1234! -i /scripts/testdb.sql
+#docker exec xtestsqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Test1234! -i /scripts/testdb.sql
