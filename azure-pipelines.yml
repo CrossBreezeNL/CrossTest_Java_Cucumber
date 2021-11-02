@@ -82,7 +82,7 @@ jobs:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Build.ArtifactStagingDirectory)'
+        targetPath: '$(System.DefaultWorkingDirectory)'
         artifact: '$(Build.DefinitionName)'
         publishLocation: 'pipeline'
 
