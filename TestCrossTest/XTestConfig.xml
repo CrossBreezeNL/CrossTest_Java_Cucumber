@@ -164,7 +164,12 @@
 		<DatabaseConfig 
 			name="target" 
 			databaseServerConfigName="test"		
-			schema="target" />		
+			schema="target" />
+			
+		<DatabaseConfig 
+			name="teradata" 
+			databaseServerConfigName="teradata"		
+			schema="CrossTest" />
 	</DatabaseConfigs>
 	<DatabaseServerConfigs>		
 		<!--  Get the server configuration from a separate config file -->

@@ -154,7 +154,7 @@ public class DataHelper {
 						              + columns.stream().collect(Collectors.joining(", "))
 						              + ") VALUES ("
 						              + columns.stream().map(c -> "?").collect(Collectors.joining(", "))
-						              + ")"
+						              + ");"
 						        );
 			        
 		            while (rs.next()) {

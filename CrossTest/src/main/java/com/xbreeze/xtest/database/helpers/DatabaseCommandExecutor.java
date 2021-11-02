@@ -85,7 +85,7 @@ public class DatabaseCommandExecutor {
 			// For some unknown reason a commit is called on the connection during the readData method.
 			//  com.sun.rowset.CachedRowSetImpl:816 > CachedRowSetReader::readData()
 	        //  com.sun.rowset.internal.CachedRowSetReader::readData:230 -> con.commit()
-			crs.execute(UncommittableConnection.fromConnection(connection));
+			crs.execute(ImmutableConnection.fromConnection(connection));
 			//crs.setUrl(connection.getMetaData().getURL());
 			return crs;
 		}

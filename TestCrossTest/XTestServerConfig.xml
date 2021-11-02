@@ -18,6 +18,12 @@
 				 username="tester" 
 				password ="P@$$w0rd"
 				 />
+		<DatabaseServerConfig 
+				name="teradata" 
+				JDBCUrl="jdbc:teradata://10.120.0.124/DATABASE=dbc,DBS_PORT=1025,TMODE=TERA"				
+				 username="dbc" 
+				password ="dbc"
+				 />
 	</DatabaseServerConfigs>
 	<ProcessServerConfigs>
 		<ProcessServerConfig 

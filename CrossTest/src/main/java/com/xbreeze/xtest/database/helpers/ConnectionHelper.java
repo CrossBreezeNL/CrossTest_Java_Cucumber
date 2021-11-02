@@ -143,8 +143,8 @@ public class ConnectionHelper {
 				logger.info(String.format("Running in a transaction, setting AutoCommit off for connection '%s'", this._connectionName));
 				// If scenario is run in a transaction set autocommit to false on the connection.
 				this._connection.setAutoCommit(false);
-				// Set the isolation level to repeatable read.
-				this._connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+				// Set the isolation level to serializable.
+				this._connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			}
 		} catch (SQLException e) {
 			throw new XTestDatabaseException(String.format("Error while starting transaction on connection '%s': %s", this._connectionName, e.getMessage()));
