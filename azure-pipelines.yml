@@ -47,17 +47,17 @@ jobs:
 
     - task: PowerShell@2
       inputs:
-        filePath: '$(System.DefaultWorkingDirectory)/TestCrossTest/start_xtestsqlserverOnAzure.ps1'
+        filePath: '$(System.DefaultWorkingDirectory)/TestCrossTest/start_xtestsqlserver.ps1'
 
-    - task: SqlDacpacDeploymentOnMachineGroup@0
-      inputs:
-        TaskType: 'sqlQuery'
-        SqlFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/testdb.sql'
-        ServerName: 'localhost'
-        DatabaseName: 'master'
-        AuthScheme: 'sqlServerAuthentication'
-        SqlUsername: 'SA'
-        SqlPassword: 'Test1234!'
+    # - task: SqlDacpacDeploymentOnMachineGroup@0
+    #   inputs:
+    #     TaskType: 'sqlQuery'
+    #     SqlFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/testdb.sql'
+    #     ServerName: 'localhost'
+    #     DatabaseName: 'master'
+    #     AuthScheme: 'sqlServerAuthentication'
+    #     SqlUsername: 'SA'
+    #     SqlPassword: 'Test1234!'
 
     # - task: Docker@2
     #   inputs:
