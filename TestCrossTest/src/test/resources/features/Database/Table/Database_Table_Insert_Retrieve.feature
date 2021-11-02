@@ -47,11 +47,11 @@ Feature: Write to and retrieve from database tables
     Given the source table Table with strangé character$ is empty
     When I insert the following data in source table Table with strangé character$:
       | ID   | Fie#ld with \\Strange namë |
-      | 1234 | Test value                  |
+      | 1234 | Test value                 |
     And I retrieve the contents of the source Table with strangé character$ table
     Then I expect the following result:
       | ID   | Fie#ld with \\Strange namë |
-      | 1234 | Test value                  |
+      | 1234 | Test value                 |
 
   Scenario Outline: Test with <Datatype> field
     Given the source table DataTypeTest is empty
@@ -65,13 +65,14 @@ Feature: Write to and retrieve from database tables
 
     @Positive
     Examples: 
-      | Datatype | Value                    |
-      | BigInt   |      1234567891234512345 |
-      | Boolean  |                        1 |
-      | Varchar  | Some text                |
-      | Char     | Not25Chars               |
-      | Date     | 2019-11-01               |
-      | Decimal  | 123456789012345678901.02 |
+      | Datatype   | Value                    |
+      | BigInt     |      1234567891234512345 |
+      | Boolean    |                        1 |
+      | Varchar    | Some text                |
+      | Char       | Not25Chars               |
+      | Date       | 2019-11-01               |
+      | Decimal    | 123456789012345678901.02 |
+      | BigDecimal |                     0.55 |
 
   Scenario Outline: Test with Bigdecimal field <Scenario>
     Given the source table DataTypeTest is empty
@@ -83,11 +84,10 @@ Feature: Write to and retrieve from database tables
       | Test_BigDecimal |
       | <OutValue>      |
 
-    @Positive
+    # The example below is actually negative, should result in error
+    @Negative
     Examples: 
       | Scenario  | Value | OutValue |
-      | Correct   |  0.55 |     0.55 |
-      # The example below is actually negative, should result in error
       | Incorrect |  0.55 |     0.78 |
 
   @Negative
