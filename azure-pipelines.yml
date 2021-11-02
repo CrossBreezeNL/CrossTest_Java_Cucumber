@@ -81,7 +81,7 @@ jobs:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-        options: '-DskipTests=true'
+#        options: '-DskipTests=true'
 
     - task: Maven@3
       inputs:
