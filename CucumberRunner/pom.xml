@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>CrossTestRunner</groupId>
   <artifactId>CrossTestRunner</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <properties>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
-	<crosstest.version>1.0.10</crosstest.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+	<crosstest.version>1.0.0-SNAPSHOT</crosstest.version>
 	<cucumber.version>4.8.1</cucumber.version>
   </properties>
+  <version>${crosstest.version}</version>
   <dependencies>  		
   		<dependency>
 			<groupId>com.x-breeze.test</groupId>
