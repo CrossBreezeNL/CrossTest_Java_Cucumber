@@ -89,7 +89,7 @@
 			    <version>2.11</version>
 			    <configuration>
  					<test>**/RunXtestUnitTest.java</test>
-<!-- 					<testFailureIgnore>true</testFailureIgnore> -->
+					<testFailureIgnore>true</testFailureIgnore>
 			    </configuration>
 			    <executions>
 			       <execution>
