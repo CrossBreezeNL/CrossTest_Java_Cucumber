@@ -25,6 +25,7 @@ nav:
 - Steps:
   - 'Introduction'       : 'Steps/index.md'
   - 'Process' : 'Steps/Process.md'
+  - 'Context' : 'Steps/Context.md'
   - 'Query' : 'Steps/Query.md'
   - 'DbTable' : 'Steps/DbTable.md'
   - 'Result' : 'Steps/Result.md'

@@ -24,7 +24,7 @@ public class DbTable_Helper extends Database_Helper{
 		DatabaseCommandExecutor.emptyDatabaseObject(super.getConnection(dbConfig), _config.getDatabaseConfig(dbConfig).getQualifiedTableName(tableName), _config.getDatabaseConfig(dbConfig));
 	}
 	
-	public void InsertDataIntoTable(String dbConfig,String tableName, DataTable table) throws Throwable{
+	public void InsertDataIntoTable(String dbConfig, String tableName, DataTable table) throws Throwable{
 		this._dataHelper.writeDataTableToDatabase(tableName, table, _config.getDatabaseConfig(dbConfig), false, true, null);
 	}
 	
@@ -39,7 +39,7 @@ public class DbTable_Helper extends Database_Helper{
 			databaseConfig.setTemplateName(newTemplate.getName());
 			
 			//Then insert data
-			InsertDataIntoTable (dbConfig, tableName, table);
+			InsertDataIntoTable(dbConfig, tableName, table);
 			
 			//Restore config
 			databaseConfig.setTemplate(originalTemplate);

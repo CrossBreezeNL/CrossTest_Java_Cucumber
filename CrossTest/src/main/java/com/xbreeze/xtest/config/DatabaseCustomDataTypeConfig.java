@@ -3,7 +3,6 @@ package com.xbreeze.xtest.config;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.xbreeze.xtest.exception.XTestDatabaseException;
-import com.xbreeze.xtest.exception.XTestException;
 
 public class DatabaseCustomDataTypeConfig {
 	private String _dataType;
