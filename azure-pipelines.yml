@@ -19,9 +19,6 @@ trigger:
       - ./Model
       - ./Old
 
-
-
-
 jobs:
   - job: CheckCode
     displayName: Check code
@@ -29,22 +26,70 @@ jobs:
       vmImage: 'ubuntu-latest'
     steps:
     
+    - task: Maven@3
+      inputs:
+        mavenPomFile: '$(System.DefaultWorkingDirectory)/CucumberDataComparison/pom.xml'
+        goals: 'install'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+
+
+    - task: Maven@3
+      inputs:
+        mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTest/pom.xml'
+        goals: 'install'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+
+    - task: Maven@3
+      inputs:
+        mavenPomFile: '$(System.DefaultWorkingDirectory)/CrossTestSteps/pom.xml'
+        goals: 'install'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+
+    - task: Maven@3
+      inputs:
+        mavenPomFile: '$(System.DefaultWorkingDirectory)/Execution/InformaticaPowerCenter/pom.xml'
+        goals: 'install'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+      
+    - task: Maven@3
+      inputs:
+        mavenPomFile: '$(System.DefaultWorkingDirectory)/TeradataCustomDataTypes/pom.xml'
+        goals: 'install'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+
     - task: PowerShell@2
       inputs:
         filePath: '$(System.DefaultWorkingDirectory)/TestCrossTest/start_xtestsqlserver.ps1'
-
-    # - task: Maven@3
-    #   inputs:
-    #     mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
-    #     goals: 'validate'
-    #     publishJUnitResults: true
-    #     javaHomeOption: 'JDKVersion'
-    #     jdkVersionOption: '1.8'
-    #     mavenVersionOption: 'Default'
-    #     mavenOptions: '-Xmx3072m'
-    #     mavenAuthenticateFeed: false
-    #     effectivePomSkip: false
-    #     sonarQubeRunAnalysis: false
 
     - task: Maven@3
       inputs:
@@ -60,20 +105,6 @@ jobs:
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
 
-    # - task: Maven@3
-    #   inputs:
-    #     mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
-    #     goals: 'test'
-    #     publishJUnitResults: true
-    #     testResultsFiles: '$(System.DefaultWorkingDirectory)/TestCrossTest/target/TESTresults.xml'
-    #     javaHomeOption: 'JDKVersion'
-    #     jdkVersionOption: '1.8'
-    #     mavenVersionOption: 'Default'
-    #     mavenOptions: '-Xmx3072m'
-    #     mavenAuthenticateFeed: false
-    #     effectivePomSkip: false
-    #     sonarQubeRunAnalysis: false
-
 #     - task: Maven@3
 #       inputs:
 #         mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
@@ -86,54 +117,10 @@ jobs:
 #         mavenAuthenticateFeed: false
 #         effectivePomSkip: false
 #         sonarQubeRunAnalysis: false
-# #        options: '-DskipTests=true'
-
-
-        
+# #        options: '-DskipTests=true' 
 
     # - task: PublishPipelineArtifact@1
     #   inputs:
     #     targetPath: '$(System.DefaultWorkingDirectory)'
     #     artifact: '$(Build.DefinitionName)'
     #     publishLocation: 'pipeline'
-
-
-
-    # - task: Maven@3
-    #   inputs:
-    #     mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
-    #     goals: 'compile'
-    #     publishJUnitResults: false
-    #     javaHomeOption: 'JDKVersion'
-    #     jdkVersionOption: '1.8'
-    #     mavenVersionOption: 'Default'
-    #     mavenOptions: '-Xmx3072m'
-    #     mavenAuthenticateFeed: false
-    #     effectivePomSkip: false
-    #     sonarQubeRunAnalysis: false
-
-    # - task: Maven@3
-    #   inputs:
-    #     mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
-    #     goals: 'package'
-    #     publishJUnitResults: false
-    #     javaHomeOption: 'JDKVersion'
-    #     jdkVersionOption: '1.8'
-    #     mavenVersionOption: 'Default'
-    #     mavenOptions: '-Xmx3072m'
-    #     mavenAuthenticateFeed: false
-    #     effectivePomSkip: false
-    #     sonarQubeRunAnalysis: false
-    #     options: '-DskipTests=true'
-    # - task: Maven@3
-    #   inputs:
-    #     mavenPomFile: '$(System.DefaultWorkingDirectory)/TestCrossTest/pom.xml'
-    #     goals: 'test'
-    #     publishJUnitResults: false
-    #     javaHomeOption: 'JDKVersion'
-    #     jdkVersionOption: '1.8'
-    #     mavenVersionOption: 'Default'
-    #     mavenOptions: '-Xmx3072m'
-    #     mavenAuthenticateFeed: false
-    #     effectivePomSkip: false
-    #     sonarQubeRunAnalysis: false
