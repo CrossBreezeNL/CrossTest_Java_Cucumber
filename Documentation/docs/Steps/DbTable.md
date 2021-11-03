@@ -179,7 +179,7 @@ Defines the key fields for a composite object, overruling the key fields that mi
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
-| When | en | ^I set \(.*\) as key for object (.+)$ |
+| When | en | ^I set (\(.*\)) as key for object (.+)$ |
 
 ### Arguments
 | Parameter    | Datatype          | Description          |

@@ -20,6 +20,15 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.16 <sup>11-3-2021</sup>
+> New release
+> !!! success "New features"         
+>     * [ ] Database
+>         - [X] Enable running tests in a transaction.
+> !!! success "Enhanced features"
+>     * [ ] Database 
+>         - [X] Reduced no of open connections used in database test steps
+
 - [ ] 1.0.15 <sup>13-8-2021</sup>
 > New release
 > !!! success "New features"         
