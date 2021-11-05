@@ -141,6 +141,7 @@
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="password" type="xs:string"/>
     <xs:attribute name="setSchemaTemplate" type="xs:string"/>
+    <xs:attribute name="transactional" type="xs:boolean"/>
     <xs:attribute name="username" type="xs:string"/>
   </xs:complexType>
 

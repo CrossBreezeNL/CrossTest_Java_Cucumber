@@ -170,6 +170,15 @@
 			name="teradata" 
 			databaseServerConfigName="teradata"		
 			schema="CrossTest" />
+			
+		<DatabaseConfig 
+			name="transactional_source" 
+			databaseServerConfigName="transactional_test"			
+			schema="source"
+			commandTimeOut ="4"			
+			template="source_plain"
+			quoteObjectNames="true"
+			/>	
 	</DatabaseConfigs>
 	<DatabaseServerConfigs>		
 		<!--  Get the server configuration from a separate config file -->

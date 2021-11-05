@@ -670,8 +670,8 @@ public class DataHelper {
 		String serverConnName = databaseServerConfig.getName();
 		// If the connection doesn't exist yet, create it.
 		if (!_connectionHelpers.containsKey(serverConnName)) {
+			logger.info(String.format("Creating new connection for server '%s'.", serverConnName));
 			_connectionHelpers.put(serverConnName, ConnectionHelper.fromDatabaseServerConfig(databaseServerConfig, this._credentialProviderHelper));
-			logger.info("Created new connection, since it wasn't found.");
 		}
 		// Retrieve the connection.
 		ConnectionHelper serverConn = _connectionHelpers.get(serverConnName);

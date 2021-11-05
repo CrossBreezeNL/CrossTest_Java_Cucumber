@@ -27,25 +27,23 @@ import javax.xml.bind.annotation.XmlAttribute;
 import com.xbreeze.xtest.exception.XTestException;
 
 public class DatabaseConfig {
-	private String _name;	
+	private String _name;
 	private String _schema;
-	private String _databaseServerConfigName;	
+	private String _databaseServerConfigName;
 	private DatabaseServerConfig _databaseServerConfig;
 	private String _templateName = "";
 	private ObjectTemplateConfig _template;
-	private boolean _quoteObjectNames;	
+	private boolean _quoteObjectNames = false;	
 	private Integer _commandTimeOut = 0;
 	
 	public DatabaseConfig(String name, String JDBCUrl, String username, String password, String schema) {
 		this._name = name;		
 		this._schema = schema;
-		this._quoteObjectNames = false;
 	}
 	
 	public DatabaseConfig() {
 		super();
 		this._schema = "";
-		this._quoteObjectNames = false;
 	}
 	
 	@XmlAttribute(name="name")
@@ -63,7 +61,7 @@ public class DatabaseConfig {
 		return this._schema;
 	}
 	
-	@XmlAttribute(name="quoteObjectNames")
+	@XmlAttribute(name="quoteObjectNames", required=false)
 	public boolean getQuoteObjectNames() {
 		return this._quoteObjectNames;
 	}

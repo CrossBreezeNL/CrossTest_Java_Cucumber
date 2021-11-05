@@ -38,6 +38,7 @@ public class DatabaseServerConfig {
 	private String _password;
 	private String _setSchemaTemplate;
 	private String _credentialProvider;
+	private boolean _transactional = false;
 	
 	
 	private ArrayList<DatabaseCustomDataTypeConfig> _customDataTypes;
@@ -143,6 +144,20 @@ public class DatabaseServerConfig {
 
 	public void setCredentialProvider(String credentialProvider) {
 		this._credentialProvider = credentialProvider;
+	}
+	
+	/**
+	 * @return the _transactional.
+	 */
+	@XmlAttribute(name="transactional", required=false)
+	public boolean isTransactional() {
+		return _transactional;
+	}
+	/**
+	 * @param isTransaction specifies whether the connection should start a transaction by default (and rollback at the end of every test).
+	 */
+	public void setTransactional(boolean isTransactional) {
+		this._transactional = isTransactional;
 	}
 	
 	@XmlElement(name="CustomDataType")

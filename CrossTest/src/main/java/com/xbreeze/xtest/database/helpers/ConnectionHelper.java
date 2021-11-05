@@ -66,7 +66,17 @@ public class ConnectionHelper {
 			throw new XTestDatabaseException(String.format("Could not set custom typemap on connection '%s': %s", databaseServerConfig.getName(), exc.getMessage()));
 		}
 	    logger.info(String.format("Connected to database server '%s'", databaseServerConfig.getName()));
-	    return new ConnectionHelper(databaseServerConfig.getName(), conn);
+
+	    // Create the ConnectionHelper object.
+	    ConnectionHelper connectionHelper = new ConnectionHelper(databaseServerConfig.getName(), conn);
+	    
+	    // If the configuration specifies on server configuration it should execute in transactional mode, enable it here.
+	    if (databaseServerConfig.isTransactional()) {
+	    	connectionHelper.beginTransactionIfNotStarted();
+	    }
+	    
+	    // Return the connection helper.
+		return connectionHelper;
 	}
 	
 	private static String getResolvedCredential(CredentialProvider_Helper credentialProviderHelper, String credentialProvider, String credential) throws XTestDatabaseException {
@@ -138,13 +148,32 @@ public class ConnectionHelper {
 	    }
 	    
 		// If transaction mode is enabled on the scenario context, but it's not enabled yet on the connection, enable it here.
+		if (scenarioIsInTransaction) {
+			beginTransactionIfNotStarted();
+		}
+
+	}
+
+	/**
+	 * Helper method to start a transaction on the server connection, if it isn't started yet.
+	 * This is called when:
+	 *  - creating a connection of on the DatabaseServerConfig the transactional attribute is true
+	 *  - in the text scenario the step 'SpecifyTestTansaction' is used.
+	 *  - The @Transactional tag is used on a scenario.
+	 * @throws XTestDatabaseException
+	 */
+	private void beginTransactionIfNotStarted() throws XTestDatabaseException {
 		try {
-			if (scenarioIsInTransaction && this._connection.getAutoCommit() != false) {
+			// Only begin change AutoCommit if it isn't true yet.
+			if (this._connection.getAutoCommit() != false) {
 				logger.info(String.format("Running in a transaction, setting AutoCommit off for connection '%s'", this._connectionName));
 				// If scenario is run in a transaction set autocommit to false on the connection.
 				this._connection.setAutoCommit(false);
 				// Set the isolation level to serializable.
-				this._connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+				if (this._connection.getTransactionIsolation() != Connection.TRANSACTION_SERIALIZABLE) {
+					logger.info(String.format("Changing isolation level to serializable for connection '%s'", this._connectionName));
+					this._connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+				}
 			}
 		} catch (SQLException e) {
 			throw new XTestDatabaseException(String.format("Error while starting transaction on connection '%s': %s", this._connectionName, e.getMessage()));
