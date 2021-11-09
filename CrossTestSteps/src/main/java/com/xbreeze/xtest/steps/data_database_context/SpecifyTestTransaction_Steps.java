@@ -1,8 +1,9 @@
 package com.xbreeze.xtest.steps.data_database_context;
+
 import com.xbreeze.xtest.modules.data.database.context.Context_Helper;
 
 import io.cucumber.datatable.DataTable;
-
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.nl.Gegeven;
@@ -15,6 +16,15 @@ import io.cucumber.java.nl.Wanneer;
         
         public SpecifyTestTransaction_Steps(Context_Helper Context_helper) {
             _Context_helper = Context_helper;
+        }
+        
+        // TODO: The following hook is added manually, and should be generated using the PowerDesigner model and CrossGenerate.
+        @Before("@Transactional")
+        public void Hook_SpecifyTestTransaction(
+        ) throws Throwable
+        {
+            _Context_helper.SpecifyTestTransaction(
+            );
         }
 
         @Given("the test has been executed within a transaction")

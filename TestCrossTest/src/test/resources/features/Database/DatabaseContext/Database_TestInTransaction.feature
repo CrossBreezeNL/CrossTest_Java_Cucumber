@@ -57,7 +57,7 @@ Feature: Running a test in a transaction
     Then I expect the following result:
       | Customer_ID | Customer_Name | Country | IsActive |
       
-	@Positive @Transactional @Debug
+	@Positive @Transactional
   Scenario: Insert, check and rollback in transaction configured using hook
   	Given the source table Customer is empty
     When I insert the following data in source table Customer:
