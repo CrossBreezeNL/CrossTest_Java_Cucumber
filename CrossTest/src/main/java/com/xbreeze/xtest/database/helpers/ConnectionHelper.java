@@ -83,7 +83,7 @@ public class ConnectionHelper {
 	
 	private static String getResolvedCredential(CredentialProvider_Helper credentialProviderHelper, String credentialProvider, String credential) throws XTestDatabaseException {
 		//If no credential provider was given, return the credential unprocessed
-		if (credentialProvider == null || credentialProvider.equalsIgnoreCase("")) {
+		if (credentialProvider == null || credentialProvider.isEmpty()) {
 			return credential;
 		} else {
 			//Resolve the credential via the credentialprovider

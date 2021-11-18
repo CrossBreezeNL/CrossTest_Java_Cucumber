@@ -17,10 +17,10 @@ import io.cucumber.junit.CucumberOptions;
 		features = "src/test/resources/features",
 		glue = "com.xbreeze.xtest",
 		plugin = {"pretty", "json:target/cucumber-unit.json"},
-		tags = {"@Unit"}
+		tags = {"@Unit and @Negative"}
 )
 
-public class RunXtestUnitTest {
+public class RunXtestPositiveNegativeTest {
 
 }
 

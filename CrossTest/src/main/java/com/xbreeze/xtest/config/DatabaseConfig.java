@@ -29,10 +29,10 @@ import com.xbreeze.xtest.exception.XTestException;
 public class DatabaseConfig {
 	private String _name;
 	private String _catalog;
-	private String _schema = "";
+	private String _schema;
 	private String _databaseServerConfigName;
 	private DatabaseServerConfig _databaseServerConfig;
-	private String _templateName = "";
+	private String _templateName;
 	private ObjectTemplateConfig _template;
 	private boolean _quoteObjectNames = false;	
 	private Integer _commandTimeOut = 0;
@@ -132,19 +132,21 @@ public class DatabaseConfig {
 	
 	public String getQualifiedTableName(String tableName) {
 		// Apply template naming if needed
-		if (this._template != null) {
+		if (this.getTemplate() != null) {
 			tableName = this._template.applyTemplateToName(tableName);
 		}
 		
-		if (_schema.equalsIgnoreCase("")) {
-			if (_quoteObjectNames) {
+		// If the schema is empty, return only the table name.
+		if (this.getSchema() == null || this.getSchema().isEmpty()) {
+			if (this.getQuoteObjectNames()) {
 				return String.format("\"%s\"", tableName);
 			}
 			else {				
 				return tableName;
 			}
 		}
-		if (_quoteObjectNames) {
+		// Otherwise if the schema is set, return the table with it's schema name.
+		else if (this.getQuoteObjectNames()) {
 			return String.format("\"%s\".\"%s\"", this._schema, tableName);
 		}
 		else {
@@ -153,7 +155,7 @@ public class DatabaseConfig {
 	}
 	
 	public String getFormattedColumnName(String columnName) {
-		if (_quoteObjectNames) {
+		if (this.getQuoteObjectNames()) {
 			return String.format("\"%s\"", columnName);
 		}
 		else {

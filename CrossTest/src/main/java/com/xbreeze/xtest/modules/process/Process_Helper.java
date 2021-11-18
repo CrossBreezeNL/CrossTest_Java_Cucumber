@@ -30,7 +30,7 @@ public class Process_Helper {
 	
 	private String getResolvedCredential(String credentialProvider, String credential) throws XTestProcessException {
 		//If no credential provider was given, return the credential unprocessed
-		if (credentialProvider == null || credentialProvider.equalsIgnoreCase("")) {
+		if (credentialProvider == null || credentialProvider.isEmpty()) {
 			return credential;
 		} else {
 			//Resolve the credential via the credentialprovider
