@@ -178,7 +178,13 @@
 			commandTimeOut ="4"			
 			template="source_plain"
 			quoteObjectNames="true"
-			/>	
+			/>
+			
+		<DatabaseConfig 
+			name="other" 
+			databaseServerConfigName="test"
+			catalog="TestOtherDB"
+			/>
 	</DatabaseConfigs>
 	<DatabaseServerConfigs>		
 		<!--  Get the server configuration from a separate config file -->

@@ -117,6 +117,7 @@
       <xs:element name="databaseServerConfig" type="databaseServerConfig" minOccurs="0"/>
       <xs:element name="template" type="objectTemplateConfig" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="catalog" type="xs:string"/>
     <xs:attribute name="commandTimeOut" type="xs:int"/>
     <xs:attribute name="databaseServerConfigName" type="xs:string"/>
     <xs:attribute name="name" type="xs:string"/>
@@ -219,4 +220,3 @@
     </xs:complexContent>
   </xs:complexType>
 </xs:schema>
-

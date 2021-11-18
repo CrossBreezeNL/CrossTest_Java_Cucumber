@@ -28,7 +28,8 @@ import com.xbreeze.xtest.exception.XTestException;
 
 public class DatabaseConfig {
 	private String _name;
-	private String _schema;
+	private String _catalog;
+	private String _schema = "";
 	private String _databaseServerConfigName;
 	private DatabaseServerConfig _databaseServerConfig;
 	private String _templateName = "";
@@ -43,7 +44,6 @@ public class DatabaseConfig {
 	
 	public DatabaseConfig() {
 		super();
-		this._schema = "";
 	}
 	
 	@XmlAttribute(name="name")
@@ -51,14 +51,26 @@ public class DatabaseConfig {
 		return this._name;
 	}
 	
-	
 	public void setName(String name) {
 		this._name = name;
+	}
+	
+	@XmlAttribute(name="catalog")
+	public String getCatalog() {
+		return this._catalog;
+	}
+	
+	public void setCatalog(String catalog) {
+		this._catalog = catalog;
 	}
 	
 	@XmlAttribute(name="schema")
 	public String getSchema() {
 		return this._schema;
+	}
+	
+	public void setSchema(String schema) {
+		this._schema = schema;
 	}
 	
 	@XmlAttribute(name="quoteObjectNames", required=false)
@@ -94,11 +106,6 @@ public class DatabaseConfig {
 	public DatabaseServerConfig getDatabaseServerConfig() {
 		return this._databaseServerConfig;
 	}
-	
-	public void setSchema(String schema) {
-		this._schema = schema;
-	}
-	
 	
 	@XmlAttribute(name="template")
 	public String getTemplateName() {

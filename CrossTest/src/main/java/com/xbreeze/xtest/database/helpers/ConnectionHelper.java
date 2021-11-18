@@ -20,8 +20,10 @@ public class ConnectionHelper {
 	
 	private String _connectionName;
 	private Connection _connection;
+	// Store the current catalog, so we know when to switch catalog during test execution.
+	private String _currentCatalog = null;
 	// Store the current schema, so we know when to switch schema during test execution.
-	private String _currentSchema = null; 
+	private String _currentSchema = null;
 
 	private ConnectionHelper(String connectionName, Connection connection) {
 		this._connectionName = connectionName;
@@ -100,52 +102,69 @@ public class ConnectionHelper {
 	 * @throws XTestDatabaseException
 	 */
 	public void configureServerConnection(DatabaseConfig dbConfig, boolean scenarioIsInTransaction) throws XTestDatabaseException {
-	    //If a schema was given on the database config, try to set it as a default catalog or schema behavior is DB platform specific
-	    String schemaName = dbConfig.getSchema().trim();
-	    // If the schema name is specified and it differs from the current schema, switch from schema.
-		if (schemaName.length() > 0 && (this._currentSchema == null || !schemaName.equals(this._currentSchema))) { 
-	    	//If a custom statement is specified for set schema, substitute database name in template and execute statement
-	    	if (dbConfig.getDatabaseServerConfig().getSetSchemaTemplate() != null) {	    		
-	    		String stmtText = dbConfig.getDatabaseServerConfig().getSetSchemaTemplate().replace("{SCHEMA}", schemaName);
-	    		logger.info(String.format("Setting default catalog using setSchema template, statement is '%s'", stmtText));
-	    		try {
-	    		  Statement stmt = this._connection.createStatement() ;
-	    		  stmt.executeUpdate (stmtText);
-	    		  stmt.close(); 
-	    		}
-	    		catch (SQLException exc) {
-	    			throw new XTestDatabaseException(String.format("Could not set default catalog using setSchema template: '%s'", exc.getMessage()));	    			
-	    		}
-	    	}
-	    	//If no custom statement is specified, try to set db using setSchema and setCatalog
-	    	else {
-		    	boolean schemaSet = false;
-		    	boolean dbSet = false; 
+		
+		//If the catalog is given on a database config, try to set it as the default catalog.
+		if (dbConfig.getCatalog() != null) {
+			String catalogName = dbConfig.getCatalog().trim();
+			// If the catalog name is configured and it differs from the current catalog, switch to it.
+			if (catalogName.length() > 0 && (this._currentCatalog == null || !catalogName.equals(this._currentCatalog))) {
 			    try {
-			    	//Set the catalog based on the schema
-			    	logger.fine(String.format("Setting default catalog to '%s'", schemaName));
-			    	this._connection.setCatalog(schemaName);
-					dbSet = true;
+			    	//Set the catalog
+			    	logger.fine(String.format("Setting default catalog to '%s'", catalogName));
+			    	this._connection.setCatalog(catalogName);
 			    }
 			    catch (SQLException | AbstractMethodError exc){
-			    	logger.fine(String.format("Could not set catalog based on schema '%s': %s", schemaName, exc.getMessage()));		    	
+			    	logger.fine(String.format("Could not set catalog to '%s': %s", catalogName, exc.getMessage()));
+			    	// If setting schema using setSchema and setCatalog failed, throw an exception.
+		    		throw new XTestDatabaseException(String.format("Could not set default catalog to '%s'", catalogName));
 			    }
-			    
-			    try {
-		    		logger.fine(String.format("Setting default schema to: '%s'", schemaName));
-		    		this._connection.setSchema(schemaName);
-		    		schemaSet = true;
-		    	}
-		    	catch (SQLException | AbstractMethodError excs) {
-		    		logger.fine(String.format("Could not set schema to '%s': %s", schemaName, excs.getMessage()));
-		    		if (dbSet == false && schemaSet == false) {
-		    			throw new XTestDatabaseException(String.format("Could not set default catalog or schema to '%s'", schemaName));
+			}
+		}
+		
+		//If a schema was given on the database config, try to set it as a schema or default catalog. This behavior is DB platform specific.
+		if (dbConfig.getSchema() != null) {
+		    String schemaName = dbConfig.getSchema().trim();
+		    // If the schema name is specified and it differs from the current schema, switch from schema.
+			if (schemaName.length() > 0 && (this._currentSchema == null || !schemaName.equals(this._currentSchema))) { 
+		    	//If a custom statement is specified for set schema, substitute database name in template and execute statement
+		    	if (dbConfig.getDatabaseServerConfig().getSetSchemaTemplate() != null) {	    		
+		    		String stmtText = dbConfig.getDatabaseServerConfig().getSetSchemaTemplate().replace("{SCHEMA}", schemaName);
+		    		logger.info(String.format("Setting default catalog using setSchema template, statement is '%s'", stmtText));
+		    		try {
+		    		  Statement stmt = this._connection.createStatement() ;
+		    		  stmt.executeUpdate (stmtText);
+		    		  stmt.close(); 
+		    		}
+		    		catch (SQLException exc) {
+		    			throw new XTestDatabaseException(String.format("Could not set default catalog using setSchema template: '%s'", exc.getMessage()));	    			
 		    		}
 		    	}
-	    	}
-	    	// Store the current schema.
-	    	this._currentSchema = schemaName;
-	    }
+		    	//If no custom statement is specified, try to set db using setSchema and setCatalog
+		    	else {
+	    			// First try to set the schema using setSchema.
+				    try {
+			    		logger.fine(String.format("Setting default schema to: '%s'", schemaName));
+			    		this._connection.setSchema(schemaName);
+			    	}
+			    	catch (SQLException | AbstractMethodError excs) {
+			    		logger.fine(String.format("Could not set schema to '%s': %s", schemaName, excs.getMessage()));
+			    		// If setSchema fails, try to do setCatalog.
+					    try {
+					    	//Set the catalog based on the schema
+					    	logger.fine(String.format("Setting default catalog to '%s'", schemaName));
+					    	this._connection.setCatalog(schemaName);
+					    }
+					    catch (SQLException | AbstractMethodError exc){
+					    	logger.fine(String.format("Could not set catalog based on schema to '%s': %s", schemaName, exc.getMessage()));
+					    	// If setting schema using setSchema and setCatalog failed, throw an exception.
+				    		throw new XTestDatabaseException(String.format("Could not set default schema or catalog based on schema to '%s'", schemaName));
+					    }
+			    	}
+		    	}
+		    	// Store the current schema.
+		    	this._currentSchema = schemaName;
+		    }
+		}
 	    
 		// If transaction mode is enabled on the scenario context, but it's not enabled yet on the connection, enable it here.
 		if (scenarioIsInTransaction) {
