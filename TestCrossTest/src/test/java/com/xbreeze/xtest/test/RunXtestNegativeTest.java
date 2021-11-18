@@ -20,7 +20,7 @@ import io.cucumber.junit.CucumberOptions;
 		tags = {"@Unit and @Negative"}
 )
 
-public class RunXtestPositiveNegativeTest {
+public class RunXtestNegativeTest {
 
 }
 

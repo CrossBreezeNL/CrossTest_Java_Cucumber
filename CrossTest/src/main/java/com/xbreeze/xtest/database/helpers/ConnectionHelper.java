@@ -112,6 +112,7 @@ public class ConnectionHelper {
 			    	//Set the catalog
 			    	logger.fine(String.format("Setting default catalog to '%s'", catalogName));
 			    	this._connection.setCatalog(catalogName);
+					this._currentCatalog = catalogName;
 			    }
 			    catch (SQLException | AbstractMethodError exc){
 			    	logger.fine(String.format("Could not set catalog to '%s': %s", catalogName, exc.getMessage()));
