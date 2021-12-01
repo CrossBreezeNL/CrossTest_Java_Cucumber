@@ -12,7 +12,7 @@ For the given scenario attribute, overwrite the default value set in the object 
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |

@@ -12,7 +12,7 @@ Execute an (ETL) process using the engine configured in a CrossTest process serv
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |

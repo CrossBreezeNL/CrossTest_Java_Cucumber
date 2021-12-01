@@ -12,7 +12,7 @@ Deletes data from a table
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -37,7 +37,7 @@ Retrieves data from a table or view
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -62,7 +62,7 @@ Loads data into a table
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -91,7 +91,7 @@ Adds a key table to a composite object. 'Key' means inserts into this table will
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -117,7 +117,7 @@ Adds a context table to a composite object. 'Context' means inserts into this ta
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -143,7 +143,7 @@ Deletes data from all tables belonging to a composite object
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -167,7 +167,7 @@ Loads data into the tables that are configured for the composite object, either 
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -195,7 +195,7 @@ Insert data into a table and overrule the template that is defined on the databa
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -225,7 +225,7 @@ Defines the key fields for a composite object, overruling the key fields that mi
 
 
 ### Arguments
-The details of every argument of the step is listed below.
+The details of every argument of the step are listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
