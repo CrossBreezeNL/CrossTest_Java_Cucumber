@@ -12,7 +12,7 @@ Execute a SQL query on a database and fetch the result (if any) for comparison. 
 
 
 ### Arguments
-The detals of every argument of the step is listed below.
+The details of every argument of the step is listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -41,7 +41,7 @@ Execute a SQL statement on a database without fetching the result. Use this for 
 
 
 ### Arguments
-The detals of every argument of the step is listed below.
+The details of every argument of the step is listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |

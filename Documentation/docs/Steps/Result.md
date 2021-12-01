@@ -14,7 +14,7 @@ Compare expected and actual result
 
 
 ### Arguments
-The detals of every argument of the step is listed below.
+The details of every argument of the step is listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
@@ -57,7 +57,7 @@ Fetch the value of a column in the result and store it in a variable. The result
 
 
 ### Arguments
-The detals of every argument of the step is listed below.
+The details of every argument of the step is listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |

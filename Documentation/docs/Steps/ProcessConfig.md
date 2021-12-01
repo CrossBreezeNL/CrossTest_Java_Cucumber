@@ -12,7 +12,7 @@ Overwrite a parameter value for a process config parameter, or add it as a new e
 
 
 ### Arguments
-The detals of every argument of the step is listed below.
+The details of every argument of the step is listed below.
 
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
