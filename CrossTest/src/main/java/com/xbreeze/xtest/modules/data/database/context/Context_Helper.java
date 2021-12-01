@@ -15,4 +15,8 @@ public class Context_Helper extends Database_Helper {
 	public void SpecifyTestTransaction() throws Throwable {
 		this._resultContext.startTransaction();
 	}
+	
+	public void CloseConnections() throws Throwable {
+		this._dataHelper.closeConnections();
+	}
 }

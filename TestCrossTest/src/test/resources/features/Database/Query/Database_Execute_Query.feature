@@ -80,7 +80,7 @@ Feature: Execute a query or statement on a database
 
   @Negative
   Scenario: Test the command timeout
-    When I execute the following query on source:
+    When I execute the following query on timeout_source:
       """
       WAITFOR DELAY '00:00:05'
       SELECT *

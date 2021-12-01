@@ -27,25 +27,23 @@ import javax.xml.bind.annotation.XmlAttribute;
 import com.xbreeze.xtest.exception.XTestException;
 
 public class DatabaseConfig {
-	private String _name;	
+	private String _name;
+	private String _catalog;
 	private String _schema;
-	private String _databaseServerConfigName;	
+	private String _databaseServerConfigName;
 	private DatabaseServerConfig _databaseServerConfig;
-	private String _templateName = "";
+	private String _templateName;
 	private ObjectTemplateConfig _template;
-	private boolean _quoteObjectNames;	
+	private boolean _quoteObjectNames = false;	
 	private Integer _commandTimeOut = 0;
 	
 	public DatabaseConfig(String name, String JDBCUrl, String username, String password, String schema) {
 		this._name = name;		
 		this._schema = schema;
-		this._quoteObjectNames = false;
 	}
 	
 	public DatabaseConfig() {
 		super();
-		this._schema = "";
-		this._quoteObjectNames = false;
 	}
 	
 	@XmlAttribute(name="name")
@@ -53,9 +51,17 @@ public class DatabaseConfig {
 		return this._name;
 	}
 	
-	
 	public void setName(String name) {
 		this._name = name;
+	}
+	
+	@XmlAttribute(name="catalog")
+	public String getCatalog() {
+		return this._catalog;
+	}
+	
+	public void setCatalog(String catalog) {
+		this._catalog = catalog;
 	}
 	
 	@XmlAttribute(name="schema")
@@ -63,7 +69,11 @@ public class DatabaseConfig {
 		return this._schema;
 	}
 	
-	@XmlAttribute(name="quoteObjectNames")
+	public void setSchema(String schema) {
+		this._schema = schema;
+	}
+	
+	@XmlAttribute(name="quoteObjectNames", required=false)
 	public boolean getQuoteObjectNames() {
 		return this._quoteObjectNames;
 	}
@@ -97,11 +107,6 @@ public class DatabaseConfig {
 		return this._databaseServerConfig;
 	}
 	
-	public void setSchema(String schema) {
-		this._schema = schema;
-	}
-	
-	
 	@XmlAttribute(name="template")
 	public String getTemplateName() {
 		return _templateName;
@@ -127,19 +132,21 @@ public class DatabaseConfig {
 	
 	public String getQualifiedTableName(String tableName) {
 		// Apply template naming if needed
-		if (this._template != null) {
+		if (this.getTemplate() != null) {
 			tableName = this._template.applyTemplateToName(tableName);
 		}
 		
-		if (_schema.equalsIgnoreCase("")) {
-			if (_quoteObjectNames) {
+		// If the schema is empty, return only the table name.
+		if (this.getSchema() == null || this.getSchema().isEmpty()) {
+			if (this.getQuoteObjectNames()) {
 				return String.format("\"%s\"", tableName);
 			}
 			else {				
 				return tableName;
 			}
 		}
-		if (_quoteObjectNames) {
+		// Otherwise if the schema is set, return the table with it's schema name.
+		else if (this.getQuoteObjectNames()) {
 			return String.format("\"%s\".\"%s\"", this._schema, tableName);
 		}
 		else {
@@ -148,7 +155,7 @@ public class DatabaseConfig {
 	}
 	
 	public String getFormattedColumnName(String columnName) {
-		if (_quoteObjectNames) {
+		if (this.getQuoteObjectNames()) {
 			return String.format("\"%s\"", columnName);
 		}
 		else {

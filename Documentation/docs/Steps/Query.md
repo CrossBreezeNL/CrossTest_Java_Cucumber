@@ -1,14 +1,19 @@
-# Step documentation for Query
+# Query
+This page describes the Query steps.
 
 ## Execute the following query on connection
 Execute a SQL query on a database and fetch the result (if any) for comparison. Use this for queries that should return a result
+
 
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
 | When | en | ^I execute the following query on ([a-zA-Z0-9_@$#-]+):$ |
 
+
 ### Arguments
+The details of every argument of the step are listed below.
+
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
 |database config | String | The database config used to execute the query |
@@ -24,15 +29,20 @@ Execute a SQL query on a database and fetch the result (if any) for comparison. 
            FROM CUST_HUB
            """
 ```
+
 ## Execute the following statement on connection
 Execute a SQL statement on a database without fetching the result. Use this for updates, deletes, stored procedures without result set
+
 
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
 | When | en | ^I execute the following statement on ([a-zA-Z0-9_@$#-]+):$ |
 
+
 ### Arguments
+The details of every argument of the step are listed below.
+
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
 |database config | String | The database config used to execute the query |
@@ -49,3 +59,5 @@ Execute a SQL statement on a database without fetching the result. Use this for 
            WHERE CUST_ID = 432
            """
 ```
+
+

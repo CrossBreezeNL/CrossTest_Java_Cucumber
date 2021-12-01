@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XTestConfig xmlns:xi="http://www.w3.org/2001/XInclude" debug="true" emptyStringValue="''">
+
 	<CompositeObjects>
 		<CompositeObject name="Customer">
 			<ContextTables>
@@ -9,15 +10,15 @@
 				<KeyTable tableName="CUST_HUB" databaseConfigName="source"/>
 			</KeyTables>
 		</CompositeObject>
-		 <CompositeObject name="savingsAccount">
-         <ContextTables>
-            <ContextTable tableName="AA_RH_SVG_AC" databaseConfigName="dwfr8"/>                  
-         </ContextTables>
-         <KeyTables>
-            <KeyTable tableName="AA_RHS_SVG_AC" databaseConfigName="dwfr8"/>
-         </KeyTables>
-      </CompositeObject>
-	  <CompositeObject name="CustomerWithKey">
+		<CompositeObject name="savingsAccount">
+         	<ContextTables>
+            	<ContextTable tableName="AA_RH_SVG_AC" databaseConfigName="dwfr8"/>                  
+         	</ContextTables>
+         	<KeyTables>
+            	<KeyTable tableName="AA_RHS_SVG_AC" databaseConfigName="dwfr8"/>
+         	</KeyTables>
+      	</CompositeObject>
+	  	<CompositeObject name="CustomerWithKey">
 			<ContextTables>
 				<ContextTable tableName="CUST_SAT" databaseConfigName="source"/>						
 			</ContextTables>
@@ -27,29 +28,29 @@
 			<KeyTables>
 				<KeyTable tableName="CUST_HUB" databaseConfigName="source"/>
 			</KeyTables>
-	</CompositeObject>		
-   <CompositeObject name="insurancePolicy">
-      <ContextTables>
-         <ContextTable tableName="AB_RHS_INS_POLCY" databaseConfigName="dwfr37"/>
-         <ContextTable tableName="AB_RHS_INS_POLCY_BK" databaseConfigName="dwfr37"/>
-         <ContextTable tableName="AB_RHS_INS_POLCY_AMT_AND_PCT" databaseConfigName="dwfr37"/>
-         <ContextTable tableName="AB_RHS_INS_POLCY_CODE_AND_FS" databaseConfigName="dwfr37"/>
-      </ContextTables>
-      <KeyTables>
-         <KeyTable tableName="AB_RH_INS_POLCY" databaseConfigName="dwfr37"/>
-      </KeyTables>
-   </CompositeObject>
-   <CompositeObject name="insuranceCCSPolicy">
-
-      <ContextTables>
-         <ContextTable tableName="AB_RHS_INS_POLCY_BK" databaseConfigName="dwfr37"/>
-         <ContextTable tableName="AB_RHS_CCS_INS_POLCY" databaseConfigName="dwfr37"/>
-      </ContextTables>
-      <KeyTables>
-         <KeyTable tableName="AB_RH_INS_POLCY" databaseConfigName="dwfr37"/>
-      </KeyTables>
-   </CompositeObject>
+		</CompositeObject>		
+		<CompositeObject name="insurancePolicy">
+			<ContextTables>
+				<ContextTable tableName="AB_RHS_INS_POLCY" databaseConfigName="dwfr37"/>
+				<ContextTable tableName="AB_RHS_INS_POLCY_BK" databaseConfigName="dwfr37"/>
+				<ContextTable tableName="AB_RHS_INS_POLCY_AMT_AND_PCT" databaseConfigName="dwfr37"/>
+				<ContextTable tableName="AB_RHS_INS_POLCY_CODE_AND_FS" databaseConfigName="dwfr37"/>
+      		</ContextTables>
+			<KeyTables>
+         		<KeyTable tableName="AB_RH_INS_POLCY" databaseConfigName="dwfr37"/>
+			</KeyTables>
+		</CompositeObject>
+   		<CompositeObject name="insuranceCCSPolicy">
+      		<ContextTables>
+				<ContextTable tableName="AB_RHS_INS_POLCY_BK" databaseConfigName="dwfr37"/>
+         		<ContextTable tableName="AB_RHS_CCS_INS_POLCY" databaseConfigName="dwfr37"/>
+      		</ContextTables>
+      		<KeyTables>
+         		<KeyTable tableName="AB_RH_INS_POLCY" databaseConfigName="dwfr37"/>
+      		</KeyTables>
+		</CompositeObject>
 	</CompositeObjects>
+
 	<CredentialProviders>
 		<CredentialProvider name="testProvider" providerClass="com.xbreeze.xtest.test.TestCredentialProvider">
 			<Properties>
@@ -57,15 +58,24 @@
 			</Properties>
 		</CredentialProvider>
 	</CredentialProviders>
+
 	<DatabaseConfigs>
 		<DatabaseConfig 
 			name="source" 
 			databaseServerConfigName="test"			
 			schema="source"
-			commandTimeOut ="4"			
 			template="source_plain"
 			quoteObjectNames="true"
-			/>			
+		/>
+
+		<DatabaseConfig 
+			name="timeout_source" 
+			databaseServerConfigName="test"			
+			schema="source"
+			commandTimeOut="4"
+			template="source_plain"
+			quoteObjectNames="true"
+		/>
 			
 		<DatabaseConfig 
 			name="pwcSource" 
@@ -83,129 +93,154 @@
 			name="NoDB" 
 			databaseServerConfigName="testdbcontext"
 			quoteObjectNames="false"
-			/>			
+		/>			
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="prefix_source" 
 			databaseServerConfigName="test"			
 			schema="source"
-			commandTimeOut ="4"
 			template="source_singleprefix"
 			quoteObjectNames="true"
-			/>		
+		/>		
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="suffix_source" 
 			databaseServerConfigName="test"			
 			schema="source"
 			commandTimeOut ="4"
 			template="source_singlesuffix"
 			quoteObjectNames="true"
-			/>		
+		/>		
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="prefix_parent_source" 
 			databaseServerConfigName="test"			
 			schema="source"
 			commandTimeOut ="4"
 			template="source_parentwithprefix"
 			quoteObjectNames="true"
-			/>		
+		/>		
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="suffix_parent_source" 
 			databaseServerConfigName="test"			
 			schema="source"
 			commandTimeOut ="4"
 			template="source_parentwithsuffix"
 			quoteObjectNames="true"
-			/>	
+		/>	
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="overwrite_prefix_parent_source" 
 			databaseServerConfigName="test"			
 			schema="source"
 			commandTimeOut ="4"
 			template="source_overwriteparentwithprefix"
 			quoteObjectNames="true"
-			/>		
+		/>		
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="overwrite_suffix_parent_source" 
 			databaseServerConfigName="test"			
 			schema="source"
 			commandTimeOut ="4"
 			template="source_overwriteparentwithsuffix"
 			quoteObjectNames="true"
-			/>	
+		/>	
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="composed_prefix_source" 
 			databaseServerConfigName="test"			
 			schema="source"
 			commandTimeOut ="4"
 			template="source_child_addprefix"
 			quoteObjectNames="true"
-			/>	
+		/>	
 			
-			<DatabaseConfig 
+		<DatabaseConfig 
 			name="SQLTestIRCM" 
 			databaseServerConfigName="test"			
 			schema="Zipper"
 			commandTimeOut ="4"
-			>			
-			</DatabaseConfig>
-			<DatabaseConfig 
+		/>
+
+		<DatabaseConfig 
 			name="dwfr37" 
 			databaseServerConfigName="test"			
 			schema="source"
-			>			
-			</DatabaseConfig>
+		/>
+
 		<DatabaseConfig 
 			name="target" 
 			databaseServerConfigName="test"		
-			schema="target" />
+			schema="target"
+		/>
 			
 		<DatabaseConfig 
 			name="teradata" 
 			databaseServerConfigName="teradata"		
-			schema="CrossTest" />
+			schema="CrossTest"
+		/>
+
+		<DatabaseConfig 
+			name="transactional_source" 
+			databaseServerConfigName="transactional_test"			
+			schema="source"
+			commandTimeOut ="4"			
+			template="source_plain"
+			quoteObjectNames="true"
+		/>
+
+		<DatabaseConfig 
+			name="other" 
+			databaseServerConfigName="test"
+			catalog="TestOtherDB"
+		/>
+
+		<DatabaseConfig 
+			name="sys" 
+			databaseServerConfigName="test"			
+			schema="sys"
+		/>	
+
 	</DatabaseConfigs>
+
 	<DatabaseServerConfigs>		
 		<!--  Get the server configuration from a separate config file -->
 		<xi:include href="XTestServerConfig.xml" xpointer="//DatabaseServerConfig"/>		
 	</DatabaseServerConfigs>
+
 	<ObjectTemplates>
 		<ObjectTemplate name="datavault">
 			<Attributes>
 				<Attribute name="LOAD_DTS" value="2019-10-29 0:29:41.995992" />
 			</Attributes>
 		</ObjectTemplate>
+
 		<ObjectTemplate name="demo" prefix="src_" suffix="_tmp">
 			<Attributes>				
 				<Attribute name="IsActive" value="1" />
 			</Attributes>
 		</ObjectTemplate>
+
 		<ObjectTemplate name="source_plain">
 			<Attributes>
 				<Attribute name="CUST_ID" seed="1" increment="2"/> 
 			</Attributes>
 		</ObjectTemplate>
-		
+
 		<ObjectTemplate name="source_currentperiod" parent="source_plain">
 			<Attributes>
 				<Attribute name="CREATE_DD" value='2020-01-01'/> 
 			</Attributes>
 		</ObjectTemplate>
-		
+
 		<ObjectTemplate name="source_nextperiod" parent="source_plain">
 			<Attributes>
 				<Attribute name="CREATE_DD" value='2020-02-01'/> 
 			</Attributes>
 		</ObjectTemplate>
-		
-		
-		
+
 		<ObjectTemplate name="source_singleprefix" prefix="singleprefix_"/>
 		<ObjectTemplate name="source_singlesuffix" suffix="_singlesuffix"/>
 		<ObjectTemplate name="source_parentwithprefix" parent="source_singleprefix"/>
@@ -215,9 +250,9 @@
 		<ObjectTemplate name="source_singlesuffix" suffix="_singlesuffix"/>
 		<ObjectTemplate name="source_parent_addprefix" appendPrefix="parentprefix_"/>
 		<ObjectTemplate name="source_child_addprefix" appendPrefix="childprefix_" parent="source_parent_addprefix"/>
-		
 			
 	</ObjectTemplates>
+
 	<ProcessConfigs>
 		<ProcessConfig name="demo" container="Demo" processServerConfigName="demo" prefix="wf_">
 		</ProcessConfig>
@@ -240,8 +275,10 @@
 		</ProcessConfig>
 		<ProcessConfig name="executordemo" container="Demo" processServerConfigName="executordemo" prefix="wf_m_"/>
 	</ProcessConfigs>
+
 	<ProcessServerConfigs>
 		<!--  Get the server configuration from a separate config file -->
 		<xi:include href="XTestServerConfig.xml" xpointer="//ProcessServerConfig"/>
 	</ProcessServerConfigs>
+
 </XTestConfig>

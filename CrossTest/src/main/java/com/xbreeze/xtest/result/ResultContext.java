@@ -313,8 +313,8 @@ public class ResultContext {
 					}
 				}
 			}						
-			//Assert.assertTrue(findings, findings.equalsIgnoreCase(""));
-			if (!findings.equalsIgnoreCase("")) {
+			//Assert.assertTrue(findings, findings.isEmpty());
+			if (!findings.isEmpty()) {
 				throw new XTestResultComparisonException(findings);
 			}
 		}

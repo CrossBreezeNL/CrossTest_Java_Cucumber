@@ -378,7 +378,7 @@ public class XTestConfig {
 	}
 	
 	public ObjectTemplateConfig getObjectTemplateConfig(String configName) throws XTestException {
-		if (configName.equalsIgnoreCase("")) {
+		if (configName == null || configName.isEmpty()) {
 			return null;
 		}
 		for (ObjectTemplateConfig otc:_objectTemplates) {
@@ -411,7 +411,7 @@ public class XTestConfig {
 	
 	
 	public CredentialProviderConfig getCredentialProviderConfig(String configName) throws XTestException {
-		if (configName==null || configName.equalsIgnoreCase("")) {
+		if (configName==null || configName.isEmpty()) {
 			return null;
 		}
 		for (CredentialProviderConfig cpc:_credentialProviders) {

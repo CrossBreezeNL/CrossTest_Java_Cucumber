@@ -19,7 +19,7 @@ public class Query_Helper extends Database_Helper {
 	
 	public void ExecuteTheFollowingQueryOnConnection(String dbConfig,String query) throws XTestDatabaseException {
 		query = _resultContext.substituteVariables(query);
-		CachedRowSet crs = DatabaseCommandExecutor.executeCommandWithCachedResult(_dataHelper.getConnection(_config.getDatabaseConfig(dbConfig)), query, _config.getDatabaseConfig(dbConfig));
+		CachedRowSet crs = DatabaseCommandExecutor.executeCommandWithCachedResult(getConnection(dbConfig), query, _config.getDatabaseConfig(dbConfig));
 		//Set result context if the query resulted in a result set.
 		if (crs != null) {
 			_resultContext.setResult(crs);
