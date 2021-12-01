@@ -20,7 +20,19 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
-- [ ] 1.0.16 <sup>11-3-2021</sup>
+
+- [ ] 1.0.17 <sup>1-12-2021</sup>
+> New release
+> !!! success "New features"         
+>     * [ ] Database
+>         - [X] Added @Transactional hook for transactional tests.
+>         - [X] Added option to enable transactions for all tests on a certain database server configuration.
+>         - [X] Added option to specify catalog (next to schema) on database configuration.
+> !!! warning "Bug fixes"
+>     * [ ] Database 
+>         - [X] Added missing after hook for closing all database connections (and performing rollback if needed).
+
+- [ ] 1.0.16 <sup>3-11-2021</sup>
 > New release
 > !!! success "New features"         
 >     * [ ] Database

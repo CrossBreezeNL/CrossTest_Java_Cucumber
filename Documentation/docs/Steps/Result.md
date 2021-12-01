@@ -1,7 +1,9 @@
-# Step documentation for Result
+# Result
+This page describes the Result steps.
 
 ## Compare expected and actual result
 Compare expected and actual result
+
 
 ### Sentences
 | Type          | Language         | Sentence      |
@@ -10,7 +12,10 @@ Compare expected and actual result
 | Then | nl | verwacht ik het volgende resultaat: |
 | Then | en | I expect the following result: |
 
+
 ### Arguments
+The detals of every argument of the step is listed below.
+
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
 |expected results | DataTable | The table with the expected results. See [TestDataTable](../Tables#testdatatable). |
@@ -40,15 +45,20 @@ Compare expected and actual result
   | 1  | 'FirstRow'       |
   | 2  | 'SecondRow' |
 ```
+
 ## Store contents of field in variable
 Fetch the value of a column in the result and store it in a variable. The result should only contain one record. Variables can be used in data tables using the name prefixed with XTestVariabes.
+
 
 ### Sentences
 | Type          | Language         | Sentence      |
 |:---           |:---              |:---           |
 | Given | en | ^I store the contents of the field (.+) into variable ([a-zA-Z0-9_@$#]+)$ |
 
+
 ### Arguments
+The detals of every argument of the step is listed below.
+
 | Parameter    | Datatype          | Description          |
 |:---          |:---               |:---                  |
 |field name | String | Name of the field that holds the value to store |
@@ -77,3 +87,5 @@ Fetch the value of a column in the result and store it in a variable. The result
   | XTestVariables.CustomerID[0]  | &apos;FirstRow&apos;  |
   | XTestVariables.CustomerID[1]  | &apos;SecondRow&apos;  |
 ```
+
+
