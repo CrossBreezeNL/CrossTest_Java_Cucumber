@@ -1,3 +1,4 @@
+@Debug
 Feature: Test powercenter process
   I want to test if the powercenter process steps work
 
@@ -18,6 +19,11 @@ Feature: Test powercenter process
       |         431 | Harry         | USA     |
       |        1234 | Henk          | NL      |
       |         431 | Harry         | USA     |
+
+
+
+
+
 
   Scenario: Starting a powercenter workflow process with parameters
     When I run the demoWithParameters process m_load_Customer

@@ -2,10 +2,12 @@ package com.xbreeze.xtest.modules.process;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import com.xbreeze.xtest.config.ProcessServerConfig;
 import com.xbreeze.xtest.config.SecurableConfigProperty;
 import com.xbreeze.xtest.config.XTestConfig;
+import com.xbreeze.xtest.database.helpers.DataHelper;
 import com.xbreeze.xtest.exception.XTestException;
 import com.xbreeze.xtest.exception.XTestProcessException;
 import com.xbreeze.xtest.modules.security.CredentialProvider_Helper;
@@ -15,7 +17,7 @@ public class Process_Helper {
 
 	private XTestConfig _config;
 	private CredentialProvider_Helper _credentialProviderHelper;
-	
+	static final Logger logger = Logger.getLogger(DataHelper.class.getName());
 	private HashMap<String, ProcessExecutor> _executors;
 	
 	public Process_Helper(CredentialProvider_Helper credentialProviderHelper, XTestConfig cfg) throws XTestException{
@@ -26,6 +28,13 @@ public class Process_Helper {
 	
 	public void RunTemplatedProcess(String processConfig, String processName) throws Throwable{	
 		getProcessExecutor(processConfig).runProcess(_config.getProcessConfig(processConfig), processName);		
+	}
+	
+	public void CloseProcessConnections() throws Throwable {
+		logger.info("Closing process connections");
+		for (ProcessExecutor pe :_executors.values()) {			
+			pe.cleanUp();
+		}
 	}
 	
 	private String getResolvedCredential(String credentialProvider, String credential) throws XTestProcessException {
@@ -43,7 +52,8 @@ public class Process_Helper {
 	}
 		
 	private ProcessExecutor getProcessExecutor(String processConfig) throws XTestProcessException{
-		if (!_executors.containsKey(processConfig)) {
+		String executorClass = _config.getProcessConfig(processConfig).getProcessServerConfig().getExecutionClass();
+		if (!_executors.containsKey(executorClass)) {
 			//Initialize executor and add to collection
 			try {
 				ProcessServerConfig pc = _config.getProcessConfig(processConfig).getProcessServerConfig();
@@ -53,7 +63,7 @@ public class Process_Helper {
 				}				
 				Class<?> c = this.getClass().getClassLoader().loadClass(_config.getProcessConfig(processConfig).getProcessServerConfig().getExecutionClass());
 				ProcessExecutor pe = (ProcessExecutor)c.getDeclaredConstructor().newInstance();
-				_executors.put(processConfig, pe);
+				_executors.put(executorClass, pe);
 			} catch (ClassNotFoundException e) {			
 				throw new XTestProcessException(String.format("Execution class %s for process config %s was not found",_config.getProcessConfig(processConfig).getProcessServerConfig().getExecutionClass(), processConfig));
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
@@ -61,7 +71,7 @@ public class Process_Helper {
 			}
 			
 		}
-		return _executors.get(processConfig);
+		return _executors.get(executorClass);
 	}
 	
 }

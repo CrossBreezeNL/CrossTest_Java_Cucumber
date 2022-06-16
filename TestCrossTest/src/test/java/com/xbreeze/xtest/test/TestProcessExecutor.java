@@ -19,4 +19,10 @@ public class TestProcessExecutor implements ProcessExecutor {
 		}
 	}
 
+	@Override
+	public void cleanUp() throws XTestProcessException {
+		logger.info("Cleanup invoked");
+		
+	}
+
 }

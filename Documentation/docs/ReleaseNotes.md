@@ -20,6 +20,11 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.18 <sup>16-6-2022</sup>
+> New release
+> !!! warning "Bug fixes"
+>     * [ ] Process execution 
+>         - [X] Fix issue that caused PowerCenter executor to use too many connections and leave them open.
 
 - [ ] 1.0.17 <sup>1-12-2021</sup>
 > New release

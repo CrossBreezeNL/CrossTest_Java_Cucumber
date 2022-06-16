@@ -28,5 +28,6 @@ import com.xbreeze.xtest.exception.XTestProcessException;
 public interface ProcessExecutor {
 	
 	public void runProcess(ProcessConfig config, String name) throws XTestProcessException;
+	public void cleanUp() throws XTestProcessException;
 
 }

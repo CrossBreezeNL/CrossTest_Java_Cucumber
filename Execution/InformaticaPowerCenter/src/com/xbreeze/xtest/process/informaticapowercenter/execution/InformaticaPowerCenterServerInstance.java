@@ -44,6 +44,7 @@ import com.xbreeze.xtest.process.informaticapowercenter.wsdl.LoginRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.TaskRequest;
+import com.xbreeze.xtest.process.informaticapowercenter.wsdl.VoidRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.TaskDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.Parameter;
 
@@ -199,5 +200,14 @@ public class InformaticaPowerCenterServerInstance {
 			return String.format("PowerCenter error: %s %s", fd.getErrorCode(), fd.getFaultString()); 
 		}
 		return msg;
+	}
+	
+	public void closeConnection() throws XTestProcessException {
+		try {
+			_proxy.logout(new VoidRequest());
+		} catch (RemoteException ex) {
+			// TODO Auto-generated catch block
+			throw new XTestProcessException(ex.getMessage());		
+		}
 	}
 }

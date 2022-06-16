@@ -79,9 +79,12 @@ public class InformaticaPowerCenterTaskExecutor implements ProcessExecutor {
 	     return ipcs;	     
 	}
 
-
-
-	
-	
+	@Override
+	public void cleanUp() throws XTestProcessException {
+		//Close all existing connections
+		for (InformaticaPowerCenterServerInstance ipcs : _connections.values()) {
+			ipcs.closeConnection();
+		}
+	}
 	
 }

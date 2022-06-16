@@ -26,9 +26,9 @@
   <groupId>com.x-breeze.test</groupId>
   <artifactId>CrossTestInformaticaPowerCenter</artifactId>
   <properties>
-  	<crosstest.version>1.0.17</crosstest.version>
+  	<crosstest.version>1.0.18</crosstest.version>
   </properties>
-  <version>${crosstest.version}</version>
+  <version>${crosstest.version}</version>  
   <name>${project.groupId}:${project.artifactId}</name>
 	<description>CrossTestInformaticaPowerCenter is part of CrossTest, a test library for data solutions, implementing Gherkin/Cucumber. CrossTestInformaticaPowerCenter enables invoking Informatica PowerCenter workflows from within CrossTest/Cucumber test scenarios.</description>
 	<url>http://x-test.nl</url>	
