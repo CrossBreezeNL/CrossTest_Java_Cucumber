@@ -27,7 +27,7 @@
 	<groupId>com.x-breeze.test</groupId>
 	<artifactId>CrossTestCore</artifactId>
 	<properties>
-  		<crosstest.version>1.0.18</crosstest.version>
+  		<crosstest.version>1.0.19</crosstest.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
   	<version>${crosstest.version}</version>	
@@ -80,12 +80,12 @@
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-core</artifactId>
-			<version>4.7.2</version>
+			<version>4.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
-			<version>4.7.2</version>
+			<version>4.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -121,7 +121,7 @@
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-picocontainer</artifactId>
-			<version>4.7.2</version>
+			<version>4.8.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.ximpleware/vtd-xml -->
 		<dependency>
