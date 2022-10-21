@@ -1,17 +1,40 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>TestCrossTest</groupId>
 	<artifactId>TestCrossTest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<properties>
+		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<crosstest.version>1.0.19</crosstest.version>
-		<cucumber.version>4.8.1</cucumber.version>
-		<junit.version>4.13</junit.version>
+		<crosstest.version>1.0.20</crosstest.version>
+		<cucumber.version>7.8.1</cucumber.version>
+		<junit.version>5.9.1</junit.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>cucumber-bom</artifactId>
+				<version>${cucumber.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>${junit.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.x-breeze.test</groupId>
@@ -23,7 +46,6 @@
 			<artifactId>CrossTestCore</artifactId>
 			<version>${crosstest.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.x-breeze.test</groupId>
 			<artifactId>CrossTest</artifactId>
@@ -32,15 +54,15 @@
 
 		<dependency>
 			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-java8</artifactId>
-			<version>${cucumber.version}</version>
+			<artifactId>cucumber-java</artifactId>
+			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
 		<dependency>
 			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit</artifactId>
-			<version>${cucumber.version}</version>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<scope>test</scope>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
@@ -54,53 +76,55 @@
 			<version>17.0.0.03</version>
 		</dependency>
 
+		<!-- JUnit dependencies. -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- We use the cucumber reporting plugin to generate a nice report. We 
 			use version 3, since 4 is not compatible with cucumber 4.* -->
 		<dependency>
-			<groupId>de.monochromata.cucumber</groupId>
+			<groupId>me.jvt.cucumber</groupId>
 			<artifactId>reporting-plugin</artifactId>
-			<version>3.0.18</version>
+			<version>7.3.0</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>net.masterthought</groupId>
-				<artifactId>maven-cucumber-reporting</artifactId>
-				<version>3.15.0</version>
-				<executions>
-					<execution>
-						<id>execution</id>
-						<phase>test</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<projectName>${project.name}</projectName>
-							<outputDirectory>${project.build.directory}</outputDirectory>
-							<jsonFiles>
-								<jsonFile>${project.build.directory}/cucumber-unit.json</jsonFile>
-							</jsonFiles>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M7</version>
 			</plugin>
 		</plugins>
 	</build>
 
 	<repositories>
-		<!-- Add the local repo folder as maven repository for the jars which are not available in a public maven repository. -->
+		<!-- Add the local repo folder as maven repository for the jars which are 
+			not available in a public maven repository. -->
 		<repository>
-		  <id>data-local</id>
-		  <name>data</name>
-		  <url>file://${project.basedir}/repo</url>
+			<id>data-local</id>
+			<name>data</name>
+			<url>file://${project.basedir}/repo</url>
 		</repository>
-	  </repositories>
+	</repositories>
+
 </project>

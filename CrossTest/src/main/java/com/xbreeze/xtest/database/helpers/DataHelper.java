@@ -271,7 +271,7 @@ public class DataHelper {
 				//Convert the map to a treemap in order for the keys to be case insensitive
 				TreeMap<String, String> dataRecord = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 				dataRecord.putAll(dRecord);
-				String recordKey= "";
+				StringBuffer recordKeyBuff= new StringBuffer();
 				//Check if a relevant value is set at all, otherwise do not insert row
 				Boolean hasRelevantValueSet = false;
 				rowSet.moveToInsertRow();
@@ -280,19 +280,19 @@ public class DataHelper {
 					if (dataRecord.containsKey(rmd.getColumnName(i))) {
 						String cellValue = dataRecord.get(rmd.getColumnName(i));
 						// TODO: Disable this behaviour for non composite inserts.
-						if (!cellValue.equalsIgnoreCase("")) {
+						if (!(cellValue == null || cellValue.equalsIgnoreCase(""))) {
 							hasRelevantValueSet = true;
 						}
 						setFieldValue(rowSet, i, cellValue, rmd.getColumnType(i), dbConfig);
 						// Create a record hash in case insert needs to be distinct
 						// If key fields are specified in the composite object config, use them otherwise include all fields
 						if (coc == null || coc.getKeyFieldNames().size() == 0 ) {
-							recordKey = recordKey.concat("|").concat(cellValue);	
+							recordKeyBuff.append("|").append(cellValue);	
 						}
 						else {
 							for (String keyField: coc.getKeyFieldNames()) {
 								if (keyField.equalsIgnoreCase(rmd.getColumnName(i))) {
-									recordKey = recordKey.concat("|").concat(cellValue);
+									recordKeyBuff.append("|").append(cellValue);
 								}
 							}
 						}
@@ -318,6 +318,7 @@ public class DataHelper {
 				}		
 				
 				//Only add record when either distinct is false or the record is not added previously
+				String recordKey = recordKeyBuff.toString();
 				if ((hasRelevantValueSet || includeEmptyRows) && (distinct == false || !processedRecords.contains(recordKey))) {
 					//Insert the new row
 					logger.info("Inserting row in rowSet");
@@ -369,7 +370,7 @@ public class DataHelper {
 			String fieldName = crs.getMetaData().getColumnName(fieldPosition);
 			
 			//if fieldValue references a variable, replace it with variable contents first
-			if (fieldValue.startsWith(ResultContext.VARIABLE_PREFIX)) {
+			if (fieldValue != null && fieldValue.startsWith(ResultContext.VARIABLE_PREFIX)) {
 				logger.info(String.format("Field %s is set with variable %s", fieldName, fieldValue));
 				try {
 					fieldValue = _resultContext.getVariable(fieldValue);
@@ -381,7 +382,7 @@ public class DataHelper {
 			
 			logger.info(String.format("Setting value %s for field %s with datatype %d", fieldValue, fieldName, dataType));
 			//empty string is evaluated as null
-			if (fieldValue.equalsIgnoreCase("")) {
+			if (fieldValue == null || fieldValue.equalsIgnoreCase("")) {
 				crs.updateNull(fieldPosition);
 			}
 			

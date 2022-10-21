@@ -20,6 +20,14 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.20 <sup>21-10-2022</sup>
+> New release
+> !!! warning "Bug fixes"
+>     * [ ] General 
+>         - [X] Updated Cucumber dependencies to latest version (7.8.1)
+>         - [X] Updated JUnit dependencies to latest version (5.9.1)
+>         - [X] Updated commons dependencies to latest versions.
+
 - [ ] 1.0.19 <sup>20-6-2022</sup>
 > New release
 > !!! warning "Bug fixes"

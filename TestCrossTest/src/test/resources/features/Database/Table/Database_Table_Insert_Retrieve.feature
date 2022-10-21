@@ -13,7 +13,7 @@ Feature: Write to and retrieve from database tables
       |    1234 | 2019-11-01 |
 
   @Positive
-  Scenario: Insert and retrieve a
+  Scenario: Insert and retrieve a null
     Given the source table CUST_HUB is empty
     When I insert the following data in source table CUST_HUB:
       | CUST_ID | CREATE_DD |
@@ -72,7 +72,9 @@ Feature: Write to and retrieve from database tables
       | Char     | Not25Chars               |
       | Date     | 2019-11-01               |
       | Decimal  | 123456789012345678901.02 |
+      | BigDecimal |  0.55 |
 
+  @Negative
   Scenario Outline: Test with Bigdecimal field <Scenario>
     Given the source table DataTypeTest is empty
     When I insert the following data in source table DataTypeTest:
@@ -83,10 +85,8 @@ Feature: Write to and retrieve from database tables
       | Test_BigDecimal |
       | <OutValue>      |
 
-    @Positive
     Examples: 
       | Scenario  | Value | OutValue |
-      | Correct   |  0.55 |     0.55 |
       # The example below is actually negative, should result in error
       | Incorrect |  0.55 |     0.78 |
 

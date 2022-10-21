@@ -26,77 +26,91 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.x-breeze.test</groupId>
 	<artifactId>CrossTestCore</artifactId>
+
 	<properties>
-  		<crosstest.version>1.0.19</crosstest.version>
-  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	</properties>
-  	<version>${crosstest.version}</version>	
+		<crosstest.version>1.0.20</crosstest.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cucumber.version>7.8.1</cucumber.version>
+	</properties>
+
+	<version>${crosstest.version}</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>CrossTest is a test library for data solutions, implementing Gherkin/Cucumber.</description>
-	<url>http://x-test.nl</url>	
+	<url>http://x-test.nl</url>
 	<licenses>
-	  <license>
-	    <name>The GNU General Public License, Version 3</name>
-	    <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
-	  </license>
+		<license>
+			<name>The GNU General Public License, Version 3</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+		</license>
 	</licenses>
 	<developers>
-	    <developer>
-	      <name>Willem Otten</name>
-	      <email>willem@x-breeze.com</email>
-	      <organization>CrossBreeze</organization>
-	      <organizationUrl>http://x-breeze.com</organizationUrl>
-	    </developer>
-	    <developer>
-	      <name>Harmen Wessels</name>
-	      <email>harmen@x-breeze.com</email>
-	      <organization>CrossBreeze</organization>
-	      <organizationUrl>http://x-breeze.com</organizationUrl>
-	    </developer>
-	    <developer>
-	      <name>Jacob Siemaszko</name>
-	      <email>jacob@x-breeze.com</email>
-	      <organization>CrossBreeze</organization>
-	      <organizationUrl>http://x-breeze.com</organizationUrl>
-	    </developer>
-  	</developers>
-  	<scm>
-	  <connection>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</connection>
-	  <developerConnection>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</developerConnection>
-	  <url>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</url>
+		<developer>
+			<name>Willem Otten</name>
+			<email>willem@x-breeze.com</email>
+			<organization>CrossBreeze</organization>
+			<organizationUrl>http://x-breeze.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Harmen Wessels</name>
+			<email>harmen@x-breeze.com</email>
+			<organization>CrossBreeze</organization>
+			<organizationUrl>http://x-breeze.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Jacob Siemaszko</name>
+			<email>jacob@x-breeze.com</email>
+			<organization>CrossBreeze</organization>
+			<organizationUrl>http://x-breeze.com</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<connection>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</connection>
+		<developerConnection>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</developerConnection>
+		<url>https://dev.azure.com/x-breeze/CrossTest_Community_Edition/_git/CrossTest_CE_Java_Cucumber</url>
 	</scm>
 
 	<distributionManagement>
-	  <snapshotRepository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-	  </snapshotRepository>
-	  <repository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-	  </repository>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 	</distributionManagement>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>cucumber-bom</artifactId>
+				<version>${cucumber.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-core</artifactId>
-			<version>4.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
-			<version>4.8.1</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.9.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.13</version>
+			<version>1.15</version>
 		</dependency>
 		<dependency>
 			<groupId>com.x-breeze.test</groupId>
@@ -117,75 +131,74 @@
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
 			<version>2.3.1</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-picocontainer</artifactId>
-			<version>4.8.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.ximpleware/vtd-xml -->
 		<dependency>
-		    <groupId>com.ximpleware</groupId>
-		    <artifactId>vtd-xml</artifactId>
-		    <version>2.13.4</version>
-		</dependency>		
+			<groupId>com.ximpleware</groupId>
+			<artifactId>vtd-xml</artifactId>
+			<version>2.13.4</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>2.11.0</version>
 		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
 			<id>release</id>
-				<build>
-					<plugins>
-						<plugin>
-						<!--  build jar file with sources (Sonatype requirement) -->
-						  <groupId>org.apache.maven.plugins</groupId>
-						  <artifactId>maven-source-plugin</artifactId>
-						  <executions>
-						    <execution>
-						      <id>attach-sources</id>
-						      <goals>
-						        <goal>jar</goal>
-						      </goals>
-						    </execution>
-						  </executions>
-						</plugin>
+			<build>
+				<plugins>
 					<plugin>
-						<!--  Build jar file with javadocs (Sonatype requirement) -->
-					  <groupId>org.apache.maven.plugins</groupId>
-					  <artifactId>maven-javadoc-plugin</artifactId>
-					  <configuration>
-				          <show>protected</show>
-				          <failOnError>false</failOnError>
-				          <source>1.8</source>
-			          </configuration>
-					  <executions>
-					    <execution>
-					      <id>attach-javadocs</id>
-					      <goals>
-					        <goal>jar</goal>
-					      </goals>
-					    </execution>
-					  </executions>
-					</plugin>		 
-				    <plugin>
-				    	<!--  Sign artifacts with gpg (Sonatype requirement) -->
-				      <groupId>org.apache.maven.plugins</groupId>
-				      <artifactId>maven-gpg-plugin</artifactId>
-				      <version>1.5</version>
-				      <executions>
-				        <execution>
-				          <id>sign-artifacts</id>
-				          <phase>verify</phase>
-				          <goals>
-				            <goal>sign</goal>
-				          </goals>
-				        </execution>
-				      </executions>
-				    </plugin>
+						<!-- build jar file with sources (Sonatype requirement) -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<!-- Build jar file with javadocs (Sonatype requirement) -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<show>protected</show>
+							<failOnError>false</failOnError>
+							<source>1.8</source>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<!-- Sign artifacts with gpg (Sonatype requirement) -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -195,34 +208,24 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.10.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<!-- WO: Disabled for now 
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.0.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin> 
-			-->	
+			<!-- WO: Disabled for now <plugin> <groupId>com.github.spotbugs</groupId> 
+				<artifactId>spotbugs-maven-plugin</artifactId> <version>4.0.0</version> <executions> 
+				<execution> <goals> <goal>check</goal> </goals> </execution> </executions> 
+				</plugin> -->
 		</plugins>
 	</build>
 	<reporting>
-    	<plugins>
+		<plugins>
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.0.0</version>
+				<version>4.7.2.1</version>
 			</plugin>
 		</plugins>
 	</reporting>
