@@ -35,7 +35,7 @@ public class ProcessConfig {
 	private String _name;
 	private String _container;
 	private String _processServerConfigName;
-	private String _processNamePrefix;
+	private String _processNamePrefix="";
 	private String _templateName = "";
 	private ObjectTemplateConfig _template;
 	ArrayList<ConfigProperty> _parameters = new ArrayList<>();
@@ -46,7 +46,7 @@ public class ProcessConfig {
 		this._name = name;
 		this._container = container;
 		this._processServerConfigName = processServerConfig;
-		this._processNamePrefix = prefix;		
+		this._processNamePrefix = prefix;
 	}
 	
 	public ProcessConfig() {
@@ -71,7 +71,7 @@ public class ProcessConfig {
 		this._processServerConfigName = processServerConfigName;
 	}
 	
-	public String getQualifiedProcessName(String processName) {
+	public String getQualifiedProcessName(String processName) {		
 		return this._processNamePrefix.concat(processName);
 	}
 	
@@ -90,7 +90,7 @@ public class ProcessConfig {
 		return this._processNamePrefix;
 	}
 	
-	public void setPrefix(String prefix) {
+	public void setPrefix(String prefix) {		
 		this._processNamePrefix = prefix;
 	}
 	

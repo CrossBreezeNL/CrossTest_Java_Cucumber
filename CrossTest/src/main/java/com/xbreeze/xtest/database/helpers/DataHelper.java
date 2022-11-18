@@ -253,8 +253,16 @@ public class DataHelper {
 				Map<String, String> record = dataTableList.get(0);
 				for (String field:record.keySet()) {
 					Boolean found = false;
-					for (int i = 1; i <= rmd.getColumnCount(); i++) {
-						if (rmd.getColumnName(i).equalsIgnoreCase(field)) {
+					for (int i = 1; i <= rmd.getColumnCount(); i++) {	
+						// Compare column names from rowset and datatable, taking empty string or whitespace column names into account
+						if (rmd.getColumnName(i) == null || rmd.getColumnName(i).trim().length()==0) {
+							// Datatable column name cannot contain only whitespace so trim is not needed on field variable 
+							if (field == null || field.length()==0) {
+								found = true;
+								break;
+							}
+						}
+						else if (rmd.getColumnName(i).equalsIgnoreCase(field)) {
 							//If the field was found, break the for loop
 							found = true;
 							break;
@@ -270,7 +278,21 @@ public class DataHelper {
 			for (Map<String, String> dRecord:dataTableList) {
 				//Convert the map to a treemap in order for the keys to be case insensitive
 				TreeMap<String, String> dataRecord = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-				dataRecord.putAll(dRecord);
+				
+				//if the datatable contains a unnamed column, it is not possible to create the treemap at once
+				if (dRecord.containsKey(null)) {
+					for (String key: dRecord.keySet()) {
+						if (key==null) {
+							dataRecord.put("", dRecord.get(null));
+						}
+						else {
+							dataRecord.put(key, dRecord.get(key));
+						}
+					}
+				}
+				else {
+					dataRecord.putAll(dRecord);
+				}
 				StringBuffer recordKeyBuff= new StringBuffer();
 				//Check if a relevant value is set at all, otherwise do not insert row
 				Boolean hasRelevantValueSet = false;
@@ -280,7 +302,7 @@ public class DataHelper {
 					if (dataRecord.containsKey(rmd.getColumnName(i))) {
 						String cellValue = dataRecord.get(rmd.getColumnName(i));
 						// TODO: Disable this behaviour for non composite inserts.
-						if (!(cellValue == null || cellValue.equalsIgnoreCase(""))) {
+						if (!(cellValue == null || cellValue.length()==0)) {
 							hasRelevantValueSet = true;
 						}
 						setFieldValue(rowSet, i, cellValue, rmd.getColumnType(i), dbConfig);
@@ -382,11 +404,17 @@ public class DataHelper {
 			
 			logger.info(String.format("Setting value %s for field %s with datatype %d", fieldValue, fieldName, dataType));
 			//empty string is evaluated as null
-			if (fieldValue == null || fieldValue.equalsIgnoreCase("")) {
+			if (fieldValue == null || fieldValue.length()==0) {
 				crs.updateNull(fieldPosition);
 			}
 			
-			else if ((dataType == java.sql.Types.DECIMAL) || (dataType == java.sql.Types.DOUBLE) || (dataType == java.sql.Types.NUMERIC)) {
+			else if (
+					(dataType == java.sql.Types.DECIMAL) || 
+					(dataType == java.sql.Types.DOUBLE) ||
+					(dataType == java.sql.Types.REAL) ||
+					(dataType == java.sql.Types.FLOAT) ||
+					(dataType == java.sql.Types.NUMERIC)
+					) {
 				crs.updateBigDecimal(fieldPosition, new BigDecimal(fieldValue));
 			}
 			
@@ -493,7 +521,13 @@ public class DataHelper {
 					return "";				
 			}
 			
-			else if ((dataType == java.sql.Types.DECIMAL) || (dataType == java.sql.Types.DOUBLE) || (dataType == java.sql.Types.NUMERIC)) {
+			else if (
+					(dataType == java.sql.Types.DECIMAL) || 
+					(dataType == java.sql.Types.DOUBLE) || 
+					(dataType == java.sql.Types.REAL) ||
+					(dataType == java.sql.Types.FLOAT) ||
+					(dataType == java.sql.Types.NUMERIC)
+					) {
 				BigDecimal longVal = crs.getBigDecimal(fieldPosition);
 				//return String.valueOf(longVal);
 				//Use string.format to remove trailing zeroes
@@ -507,7 +541,7 @@ public class DataHelper {
 					(dataType == java.sql.Types.LONGVARCHAR) 
 				) {
 				//If the config defines an empty string constant, return it if the value is an empty string
-				if (this._config.hasEmptyStringValue() && strVal.equalsIgnoreCase("")) {
+				if (this._config.hasEmptyStringValue() && strVal.length()==0) {
 					return this._config.getEmptyStringValue();
 				}
 				else {
@@ -600,7 +634,7 @@ public class DataHelper {
 				for (int i = 1; i <= crs.getMetaData().getColumnCount(); i++) {
 					String val = getFieldValue(crs, i);
 					// If the value is an empty string, set it to a value so adjecant empty fields will not lead to identical hashvalues
-					if (val.equalsIgnoreCase("")) {
+					if (val.length()==0) {
 						val = "~XT-EMPTYSTRING";
 					}
 					String fieldName = crs.getMetaData().getColumnName(i).toLowerCase();

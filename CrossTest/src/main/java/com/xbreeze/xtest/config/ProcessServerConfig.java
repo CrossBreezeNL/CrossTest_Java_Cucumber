@@ -97,4 +97,12 @@ public class ProcessServerConfig {
 	public void setProperties(ArrayList<SecurableConfigProperty> properties) {
 		this._properties = properties;
 	}
+	
+	public boolean hasProperty(String propertyKey) {
+		for(ConfigProperty cp:_properties) {
+			if (cp.getName().equalsIgnoreCase(propertyKey)) 
+				return true;
+		}
+		return false;
+	}
 }

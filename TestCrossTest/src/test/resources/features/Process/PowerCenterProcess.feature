@@ -1,4 +1,5 @@
 @PowerCenter
+
 Feature: Test powercenter process
   I want to test if the powercenter process steps work
 
@@ -10,9 +11,43 @@ Feature: Test powercenter process
       |        1234 | Henk          | NL      |
       |         431 | Harry         | USA     |
 
-	@Positive
+  @Positive
   Scenario: Starting a powercenter workflow process
     When I run the demo process m_load_Customer
+    And I retrieve the contents of the pwcTarget Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+
+  @Negative
+  Scenario: Starting a powercenter workflow process that has error
+    When I run the demo process workflow_with_error
+    And I retrieve the contents of the pwcTarget Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+
+
+	@Positive
+	Scenario: Starting a powercenter workflow process using security domain
+    When I run the demoWithUserNamespace process m_load_Customer
+    And I retrieve the contents of the pwcTarget Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+
+	@Positive
+	Scenario: Starting a powercenter workflow without prefix
+    When I run the demoWithoutPrefix process wf_m_load_Customer
     And I retrieve the contents of the pwcTarget Customer table
     Then I expect the following result:
       | Customer_ID | Customer_Name | Country |
@@ -40,7 +75,37 @@ Feature: Test powercenter process
       | Customer_ID | Customer_Name | Country |
       |        1234 | Henk          | NL      |
       |         431 | Harry         | USA     |
+      
+  
+  @Positive
+  Scenario: Starting a correct powercenter worklet within a workflow process that has error
+    When I run the demotask process wf_workflow_with_error.wklt_loadcustomer
+    And I retrieve the contents of the pwcTarget Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+     
+  
+  @Negative
+  Scenario: Starting a faulty powercenter worklet within a workflow process that has error
+     When I run the demotask process wf_workflow_with_error.wklt_loadcustomer1
+    And I retrieve the contents of the pwcTarget Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+  
 
+	@Positive
+	Scenario: Starting a powercenter task process using a prefix
+    When I run the demotaskWithPrefix process load_Customer
+    And I retrieve the contents of the pwcTarget Customer table
+    Then I expect the following result:
+      | Customer_ID | Customer_Name | Country |
+      |        1234 | Henk          | NL      |
+      |         431 | Harry         | USA     |
+      
 	@Positive
   Scenario: Starting a powercenter task process in a worklet
     When I run the demotask process wf_m_load_Customer.wklt_loadCustomer.s_m_load_Customer1

@@ -45,6 +45,19 @@
 				</Properties>
 		</ProcessServerConfig>
 		<ProcessServerConfig 
+				name="demoWithUserNamespace" 
+				executionClass="com.xbreeze.xtest.process.informaticapowercenter.execution.InformaticaPowerCenterExecutor"
+				serverUrl="http://10.1.0.5:7333/wsh/services/BatchServices/DataIntegration">
+				<Properties>
+					<Property name="UserName" value="Infademo" />
+					<Property name="Password" value="ZBvi9LD8Yk9T63QEgHxK"/>
+					<Property name="UserNameSpace" value="Native"/>
+					<Property name="Domain" value="InfaDemo"/>
+					<Property name="Repository" value="InfaDemo-RS"/>
+					<Property name="IntegrationService" value = "InfaDemo_IS"/>
+				</Properties>
+		</ProcessServerConfig>
+		<ProcessServerConfig 
 				name="demotask" 
 				executionClass="com.xbreeze.xtest.process.informaticapowercenter.execution.InformaticaPowerCenterTaskExecutor"
 				serverUrl="http://10.1.0.5:7333/wsh/services/BatchServices/DataIntegration">

@@ -276,8 +276,13 @@ public class ResultContext {
 			if (list.size() > 0) {
 				//Get column names from first row			}
 				LinkedList<String>columnNames = new LinkedList<>();
-				for (String s: list.get(0)) {
-					columnNames.addLast(s.toLowerCase());
+				for (String colName: list.get(0)) {
+					if (colName == null) {
+						columnNames.addLast("");
+					}
+					else {
+						columnNames.addLast(colName.toLowerCase());
+					}
 				}				
 				resultSetDataIsEqual(expectedRowSet, columnNames);
 			}

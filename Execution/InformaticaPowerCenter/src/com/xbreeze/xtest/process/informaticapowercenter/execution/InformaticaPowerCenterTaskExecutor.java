@@ -53,6 +53,9 @@ public class InformaticaPowerCenterTaskExecutor implements ProcessExecutor {
 		InformaticaPowerCenterServerInstance ipsc = initializeConnection(config);
 		//processName should be:
 		// workflow.taskname or workflow.worklet.taskname
+		// Apply prefix to processName before evaluating
+		processName = config.getQualifiedProcessName(processName);
+		
 		int firstPeriod = processName.indexOf("."); 
 		if (firstPeriod < 1) {
 			throw new XTestProcessException(String.format("Invalid processName format: %s the processName should be in format workflowname.taskname or workflowname.workletname.taskname", processName));

@@ -83,6 +83,8 @@ The example below illustrates the use of xpointer for referring to a certain sel
 				<Properties>
 					<Property name="UserName" value="USER" />
 					<Property name="Password" value="PASSWORD" />
+					<!-- Optional parameter to specify the security domain used to log in -->
+					<Property name="UserNameSpace" value="Native"/>
 					<Property name="Domain" value="InfaDemo"/>
 					<Property name="Repository" value="InfaDemo-RS"/>
 					<Property name="IntegrationService" value = "InfaDemo_IS"/>

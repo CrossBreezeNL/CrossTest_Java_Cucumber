@@ -20,6 +20,18 @@ Here you can find the release notes of all Java CrossTest releases up till the r
 [//]: # (>         * [X] Some issue...)
 
 ## Version 1.0
+- [ ] 1.0.21 <sup>18-11-2022</sup>
+> New release
+> !!! warning "Bug fixes"
+>     * [ ] Process execution 
+>         - [X] Support security domain for PowerCenter login
+>         - [X] Support having a process config without prefix
+>         - [X] Apply prefix properly on worklet/session execution
+>         - [X] Check on workflow completion status and not only on thrown errors
+>     * [ ] Database
+>         - [X] Support float and real datatypes
+>         - [X] Support empty column name in expected and actual result
+
 - [ ] 1.0.20 <sup>21-10-2022</sup>
 > New release
 > !!! warning "Bug fixes"

@@ -65,14 +65,20 @@ Feature: Write to and retrieve from database tables
 
     @Positive
     Examples: 
-      | Datatype | Value                    |
-      | BigInt   |      1234567891234512345 |
-      | Boolean  |                        1 |
-      | Varchar  | Some text                |
-      | Char     | Not25Chars               |
-      | Date     | 2019-11-01               |
-      | Decimal  | 123456789012345678901.02 |
-      | BigDecimal |  0.55 |
+      | Datatype   | Value                    |
+      | BigInt     |      1234567891234512345 |
+      | Boolean    |                        1 |
+      | Varchar    | Some text                |
+      | Char       | Not25Chars               |
+      | Date       | 2019-11-01               |
+      | Decimal    | 123456789012345678901.02 |
+      | BigDecimal |                     0.55 |
+      | FloatSmall |                       12 |
+      | FloatBig   |                       12 |
+      | FloatSmall |                   12.501 |
+      | FloatBig   |                   12.399 |
+      | Real       |                   12.399 |
+      | Real       |                       12 |
 
   @Negative
   Scenario Outline: Test with Bigdecimal field <Scenario>

@@ -48,6 +48,26 @@ Feature: Execute a query or statement on a database
       |        |
 
   @Positive
+  Scenario: One column with no name
+    When I execute the following query on source:
+      """
+      SELECT 'Test' 
+      """
+    Then I expect the following result:
+      |      |
+      | Test |
+
+  @Positive
+	Scenario: One column with whitespace as name
+    When I execute the following query on source:
+      """
+      SELECT 'Test' AS ' '
+      """
+    Then I expect the following result:
+      |      |
+      | Test |
+      
+  @Positive
   Scenario: Compare on partial result of select
     When I execute the following query on source:
       """

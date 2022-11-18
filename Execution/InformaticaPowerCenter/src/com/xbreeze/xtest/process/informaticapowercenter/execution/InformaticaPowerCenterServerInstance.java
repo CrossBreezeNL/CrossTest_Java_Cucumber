@@ -39,6 +39,7 @@ import com.xbreeze.xtest.exception.XTestProcessException;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.DIServiceInfo;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.DataIntegrationInterfaceProxy;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.ETaskRunMode;
+import com.xbreeze.xtest.process.informaticapowercenter.wsdl.EWorkflowRunStatus;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.FaultDetails;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.LoginRequest;
 import com.xbreeze.xtest.process.informaticapowercenter.wsdl.WorkflowDetails;
@@ -67,6 +68,9 @@ public class InformaticaPowerCenterServerInstance {
 	   
 	   lr.setUserName(psc.getProperty("UserName"));
 	   lr.setPassword(psc.getProperty("Password"));
+	   if (psc.hasProperty("UserNameSpace")) {
+		   lr.setUserNameSpace(psc.getProperty("UserNameSpace"));
+	   }
 	   lr.setRepositoryDomainName(psc.getProperty("Domain"));
 	   lr.setRepositoryName(psc.getProperty("Repository"));
 	     
@@ -121,6 +125,8 @@ public class InformaticaPowerCenterServerInstance {
 	    	
 			_proxy.startWorkflow(wfr);
 			_proxy.waitTillWorkflowComplete(wfr);
+			//Get workflow details to obtain the status
+			checkWorkflowStatus(wfr);
 			
 		} catch (RemoteException e) {
 			
@@ -147,7 +153,7 @@ public class InformaticaPowerCenterServerInstance {
 	    TaskRequest tr = new TaskRequest();
 	    tr.setDIServiceInfo(dsi);
 	    tr.setFolderName(config.getContainer());
-	    tr.setWorkflowName(config.getQualifiedProcessName(workflowName));
+	    tr.setWorkflowName(workflowName);
 	    tr.setRequestMode(ETaskRunMode.NORMAL);
 	    tr.setTaskInstancePath(taskPath);
 
@@ -166,14 +172,16 @@ public class InformaticaPowerCenterServerInstance {
 	    WorkflowRequest wfr = new WorkflowRequest();
 	    wfr.setDIServiceInfo(dsi);
 	    wfr.setFolderName(config.getContainer());
-	    wfr.setWorkflowName(config.getQualifiedProcessName(workflowName));
+	    wfr.setWorkflowName(workflowName);
 	    wfr.setRequestMode(ETaskRunMode.NORMAL);
 	    
 	     try {
 	    	 //Start the task, then wait for the entire workflow to complete
 	    	 //this to prevent subsequent calls to the same workflow since this leads to errors.
 			_proxy.startTask(tr);
-			_proxy.waitTillWorkflowComplete(wfr);			
+			_proxy.waitTillWorkflowComplete(wfr);
+			//Get workflow details to obtain the status
+			checkWorkflowStatus(wfr);
 			
 		} catch (RemoteException e) {			
 			System.out.println("Error executing task: " + getRemoteExceptionErrorMessage(e));
@@ -187,6 +195,25 @@ public class InformaticaPowerCenterServerInstance {
 				ex.printStackTrace();
 				throw new XTestProcessException(ex.getMessage());			
 			}
+		}
+	}
+	
+	private void checkWorkflowStatus(WorkflowRequest wfr) throws XTestProcessException {
+		//Get workflow details to obtain the status
+		try {
+			WorkflowDetails wfd = _proxy.getWorkflowDetails(wfr);
+			if (
+					(wfd.getWorkflowRunStatus() == EWorkflowRunStatus.FAILED) ||
+					wfd.getWorkflowRunStatus() == EWorkflowRunStatus.ABORTED
+				)
+			{
+				System.out.println("Workflow did not complete succesfully");
+				System.out.println("Status: " + wfd.getWorkflowRunStatus().toString());
+				throw new XTestProcessException(String.format("Workflow status: %s consult PowerCenter logging for more information.",wfd.getWorkflowRunStatus().toString()));
+			}
+		}  catch (RemoteException ex) {	
+			ex.printStackTrace();
+			throw new XTestProcessException(ex.getMessage());		
 		}
 	}
 	
