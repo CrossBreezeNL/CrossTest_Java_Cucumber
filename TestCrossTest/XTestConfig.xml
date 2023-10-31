@@ -183,6 +183,11 @@
 		/>
 
 		<DatabaseConfig 
+			name="teradata1" 
+			databaseServerConfigName="teradata1"		
+			schema="dbc"
+		/>
+		<DatabaseConfig 
 			name="transactional_source" 
 			databaseServerConfigName="transactional_test"			
 			schema="source"

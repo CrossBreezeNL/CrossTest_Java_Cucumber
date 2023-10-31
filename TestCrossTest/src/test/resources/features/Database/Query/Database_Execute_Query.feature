@@ -58,7 +58,7 @@ Feature: Execute a query or statement on a database
       | Test |
 
   @Positive
-	Scenario: One column with whitespace as name
+  Scenario: One column with whitespace as name
     When I execute the following query on source:
       """
       SELECT 'Test' AS ' '
@@ -66,7 +66,7 @@ Feature: Execute a query or statement on a database
     Then I expect the following result:
       |      |
       | Test |
-      
+
   @Positive
   Scenario: Compare on partial result of select
     When I execute the following query on source:
@@ -83,7 +83,7 @@ Feature: Execute a query or statement on a database
       """
       SELECT 1 as firstField
       WHERE 1 = 0
-
+      
       """
     Then I expect the following result:
       | firstField |
@@ -93,7 +93,7 @@ Feature: Execute a query or statement on a database
     When I execute the following query on source:
       """
       SELECT 1 as firstField      
-
+      
       """
     Then I expect the following result:
       | firstField |
@@ -105,11 +105,9 @@ Feature: Execute a query or statement on a database
       WAITFOR DELAY '00:00:05'
       SELECT *
       FROM [Source].[CUST_HUB]
-
+      
       """
 
-  # Note that for this scenario to succeed, when editing in Eclipse the Eclipse file encoding needs to be UTF-8
-  # https://stackoverflow.com/questions/9180981/how-to-support-utf-8-encoding-in-eclipse
   @Positive
   Scenario: Insert and select data using a update statement
     Given the source table Table with strangé character$ is empty
@@ -125,4 +123,14 @@ Feature: Execute a query or statement on a database
       """
     Then I expect the following result:
       | ID | Fie#ld with \\Strange namë |
-      |  1 | Test                        |
+      |  1 | Test                       |
+
+  @Positive @Debug
+  Scenario: Float datatype on Teradata
+    When I execute the following query on teradata1:
+      """
+        SELECT CAST (1 as FLOAT) + CAST(0.12345678 AS FLOAT) AS RESLT
+      """
+    Then I expect the following result:
+      | RESLT        |
+      | 1.12345678 |

@@ -61,7 +61,7 @@ Feature: Write to and retrieve from database tables
       | Test_<Datatype> |
       | <Value>         |
 
-    @Positive @Debug
+    @Positive
     Examples: 
       | Datatype   | Value                    |
       | BigInt     |      1234567891234512345 |

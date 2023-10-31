@@ -30,6 +30,12 @@
 				username="dbc" 
 				password ="dbc"
 				 />
+		<DatabaseServerConfig 
+				name="teradata1" 
+				JDBCUrl="jdbc:teradata://td-demo-03zurx4diqtwhhc4.env.clearscape.teradata.com/DATABASE=dbc,DBS_PORT=1025,TMODE=TERA"				
+				username="demo_user" 
+				password ="td-demo!"
+				 />		 
 	</DatabaseServerConfigs>
 	<ProcessServerConfigs>
 		<ProcessServerConfig 
