@@ -125,12 +125,56 @@ Feature: Execute a query or statement on a database
       | ID | Fie#ld with \\Strange namë |
       |  1 | Test                       |
 
-  @Positive @Debug
-  Scenario: Float datatype on Teradata
-    When I execute the following query on teradata1:
+  @Positive
+  Scenario Outline: Operation on Float datatype on <DatabaseConnection>
+    When I execute the following query on <DatabaseConnection>:
       """
-        SELECT CAST (1 as FLOAT) + CAST(0.12345678 AS FLOAT) AS RESLT
+        SELECT CAST (1 as FLOAT) + CAST(<INPUT> AS FLOAT) AS RESLT
       """
     Then I expect the following result:
-      | RESLT        |
-      | 1.12345678 |
+      | RESLT    |
+      | <OUTPUT> |
+
+    Examples: 
+      | DatabaseConnection | INPUT       | OUTPUT      |
+      | teradata1          |       0.123 |       1.123 |
+      | teradata1          |      0.1234 |      1.1234 |
+      | teradata1          |     0.12345 |     1.12345 |
+      | teradata1          |    0.123456 |    1.123456 |
+      | teradata1          |   0.1234567 |   1.1234567 |
+      | teradata1          |  0.12345678 |  1.12345678 |
+      | teradata1          | 0.123456789 | 1.123456789 |
+      | sqlserver          |       0.123 |       1.123 |
+      | sqlserver          |      0.1234 |      1.1234 |
+      | sqlserver          |     0.12345 |     1.12345 |
+      | sqlserver          |    0.123456 |    1.123456 |
+      | sqlserver          |   0.1234567 |   1.1234567 |
+      | sqlserver          |  0.12345678 |  1.12345678 |
+      | sqlserver          | 0.123456789 | 1.123456789 |
+
+  @Positive
+  Scenario Outline: Pass through Float datatype on <DatabaseConnection>
+    When I execute the following query on <DatabaseConnection>:
+      """
+        SELECT CAST(<INPUT> AS FLOAT) AS RESLT
+      """
+    Then I expect the following result:
+      | RESLT    |
+      | <OUTPUT> |
+
+    Examples: 
+      | DatabaseConnection | INPUT       | OUTPUT      |
+      | teradata1          |       0.123 |       0.123 |
+      | teradata1          |      0.1234 |      0.1234 |
+      | teradata1          |     0.12345 |     0.12345 |
+      | teradata1          |    0.123456 |    0.123456 |
+      | teradata1          |   0.1234567 |   0.1234567 |
+      | teradata1          |  0.12345678 |  0.12345678 |
+      | teradata1          | 0.123456789 | 0.123456789 |
+      | sqlserver          |       0.123 |       0.123 |
+      | sqlserver          |      0.1234 |      0.1234 |
+      | sqlserver          |     0.12345 |     0.12345 |
+      | sqlserver          |    0.123456 |    0.123456 |
+      | sqlserver          |   0.1234567 |   0.1234567 |
+      | sqlserver          |  0.12345678 |  0.12345678 |
+      | sqlserver          | 0.123456789 | 0.123456789 |
