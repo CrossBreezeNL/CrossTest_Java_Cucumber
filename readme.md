@@ -4,10 +4,10 @@ With CrossTest you can write test scenario's for data platform solutions using G
 
 For more information on how to use CrossTest see the [online documentation](http://x-test.nl)
 
-#License
+# License
 CrossTest is released as open source software under the [GPL v3](https://opensource.org/licenses/gpl-3.0.html) license. See the COPYING file in the project root for the full license text.
 
-#Example
+# Example
 Below is a simple example of a test scenario where data is inserted into a table, then a ETL proces is run and finally the contents of a table is compared with an expected result.
 
 ```gherkin
